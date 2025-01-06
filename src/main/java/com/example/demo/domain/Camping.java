@@ -34,61 +34,58 @@ public class Camping {
     @Column(name = "roomcount")
     private Integer roomcount;
 
-    @Column(name = "contentId")
-    private String contentid;
-
-    @Column(name = "facltNm")
+    @Column(name = "facltnm")
     private String facltNm;
 
-    @Column(name = "lineIntro")
+    @Column(name = "lineintro", length=2000)
     private String lineIntro;
 
-    @Column(name = "intro")
+    @Column(name = "intro", length=2000)
     private String intro;
 
     @Column(name = "allar")
     private String allar;
 
-    @Column(name = "insrncAt")
+    @Column(name = "insrncat")
     private String insrncAt;
 
-    @Column(name = "trsagntNo")
+    @Column(name = "trsagntno")
     private String trsagntNo;
 
     @Column(name = "bizrno")
     private String bizrno;
 
-    @Column(name = "facltDivNm")
+    @Column(name = "facltdivnm")
     private String facltDivNm;
 
-    @Column(name = "mangeDivNm")
+    @Column(name = "mangedivnm")
     private String mangeDivNm;
 
-    @Column(name = "mgcDiv")
+    @Column(name = "mgcdiv")
     private String mgcDiv;
 
-    @Column(name = "manageSttus")
+    @Column(name = "managesttus")
     private String manageSttus;
 
-    @Column(name = "hvofBgnde")
+    @Column(name = "hvofbgnde")
     private String hvofBgnde;
 
-    @Column(name = "hvofEnddle")
+    @Column(name = "hvofenddle")
     private String hvofEnddle;
 
-    @Column(name = "featureNm")
+    @Column(name = "featurenm", length=2000)
     private String featureNm;
 
     @Column(name = "induty")
     private String induty;
 
-    @Column(name = "lctCl")
+    @Column(name = "lctcl")
     private String lctCl;
 
-    @Column(name = "doNm")
+    @Column(name = "donm")
     private String doNm;
 
-    @Column(name = "sigunguNm")
+    @Column(name = "sigungunm")
     private String sigunguNm;
 
     @Column(name = "zipcode")
@@ -100,10 +97,10 @@ public class Camping {
     @Column(name = "addr2")
     private String addr2;
 
-    @Column(name = "mapX")
+    @Column(name = "mapx")
     private String mapX;
 
-    @Column(name = "mapY")
+    @Column(name = "mapy")
     private String mapY;
 
     @Column(name = "direction")
@@ -115,160 +112,160 @@ public class Camping {
     @Column(name = "homepage")
     private String homepage;
 
-    @Column(name = "resveUrl")
+    @Column(name = "resveurl", length=1000)
     private String resveUrl;
 
-    @Column(name = "resveCl")
+    @Column(name = "resvecl")
     private String resveCl;
 
-    @Column(name = "manageNmpr")
+    @Column(name = "managenmpr")
     private String manageNmpr;
 
-    @Column(name = "gnrlSiteCo")
+    @Column(name = "gnrlsiteco")
     private Integer gnrlSiteCo;
 
-    @Column(name = "autoSiteCo")
+    @Column(name = "autositeco")
     private Integer autoSiteCo;
 
-    @Column(name = "glampSiteCo")
+    @Column(name = "glampsiteco")
     private Integer glampSiteCo;
 
-    @Column(name = "caravSiteCo")
+    @Column(name = "caravsiteco")
     private Integer caravSiteCo;
 
-    @Column(name = "indvdlCaravSiteCo")
+    @Column(name = "indvdlcaravsiteco")
     private Integer indvdlCaravSiteCo;
 
-    @Column(name = "sitedStnc")
+    @Column(name = "sitedstnc")
     private String sitedStnc;
 
-    @Column(name = "siteMg1Width")
+    @Column(name = "sitemg1width")
     private String siteMg1Width;
 
-    @Column(name = "siteMg2Width")
+    @Column(name = "sitemg2width")
     private String siteMg2Width;
 
-    @Column(name = "siteMg3Width")
+    @Column(name = "sitemg3width")
     private String siteMg3Width;
 
-    @Column(name = "siteMg1Vrticl")
+    @Column(name = "sitemg1vrticl")
     private String siteMg1Vrticl;
 
-    @Column(name = "siteMg2Vrticl")
+    @Column(name = "sitemg2vrticl")
     private String siteMg2Vrticl;
 
-    @Column(name = "siteMg3Vrticl")
+    @Column(name = "sitemg3vrticl")
     private String siteMg3Vrticl;
 
-    @Column(name = "siteMg1Co")
+    @Column(name = "sitemg1co")
     private Integer siteMg1Co;
 
-    @Column(name = "siteMg2Co")
+    @Column(name = "sitemg2co")
     private Integer siteMg2Co;
 
-    @Column(name = "siteMg3Co")
+    @Column(name = "sitemg3co")
     private Integer siteMg3Co;
 
-    @Column(name = "siteBottomCl1")
+    @Column(name = "sitebottomcl1")
     private String siteBottomCl1;
 
-    @Column(name = "siteBottomCl2")
+    @Column(name = "sitebottomcl2")
     private String siteBottomCl2;
 
-    @Column(name = "siteBottomCl3")
+    @Column(name = "sitebottomcl3")
     private String siteBottomCl3;
 
-    @Column(name = "siteBottomCl4")
+    @Column(name = "sitebottomcl4")
     private String siteBottomCl4;
 
-    @Column(name = "siteBottomCl5")
+    @Column(name = "sitebottomcl5")
     private String siteBottomCl5;
 
     @Column(name = "tooltip")
     private String tooltip;
 
-    @Column(name = "glampInnerFclty")
+    @Column(name = "glampinnerfclty")
     private String glampInnerFclty;
 
-    @Column(name = "caravInnerFclty")
+    @Column(name = "caravinnerfclty")
     private String caravInnerFclty;
 
-    @Column(name = "prmisnDe")
+    @Column(name = "prmisnde")
     private String prmisnDe;
 
-    @Column(name = "operPdCl")
+    @Column(name = "operpdcl")
     private String operPdCl;
 
-    @Column(name = "operDeCl")
+    @Column(name = "operdecl")
     private String operDeCl;
 
-    @Column(name = "trlerAcmpnyAt")
+    @Column(name = "trleracmpnyat")
     private String trlerAcmpnyAt;
 
-    @Column(name = "caravAcmpnyAt")
+    @Column(name = "caravacmpnyat")
     private String caravAcmpnyAt;
 
-    @Column(name = "toiletCo")
+    @Column(name = "toiletco")
     private Integer toiletCo;
 
-    @Column(name = "swrmCo")
+    @Column(name = "swrmco")
     private Integer swrmCo;
 
-    @Column(name = "wtrplCo")
+    @Column(name = "wtrplco")
     private Integer wtrplCo;
 
-    @Column(name = "brazierCl")
+    @Column(name = "braziercl")
     private String brazierCl;
 
-    @Column(name = "sbrsCl")
+    @Column(name = "sbrscl")
     private String sbrsCl;
 
-    @Column(name = "sbrsEtc")
+    @Column(name = "sbrsetc")
     private String sbrsEtc;
 
-    @Column(name = "posblFcltyCl")
+    @Column(name = "posblfcltycl")
     private String posblFcltyCl;
 
-    @Column(name = "posblFcltyEtc")
+    @Column(name = "posblfcltyetc")
     private String posblFcltyEtc;
 
-    @Column(name = "clturEventAt")
+    @Column(name = "cltureventat")
     private String clturEventAt;
 
-    @Column(name = "clturEvent")
+    @Column(name = "clturevent")
     private String clturEvent;
 
-    @Column(name = "exprnProgrmAt")
+    @Column(name = "exprnprogrmat")
     private String exprnProgrmAt;
 
-    @Column(name = "exprnProgrm")
+    @Column(name = "exprnprogrm")
     private String exprnProgrm;
 
-    @Column(name = "extshrCo")
+    @Column(name = "extshrco")
     private Integer extshrCo;
 
-    @Column(name = "frprvtWrppCo")
+    @Column(name = "frprvtwrppco")
     private Integer frprvtWrppCo;
 
-    @Column(name = "frprvtSandCo")
+    @Column(name = "frprvtsandco")
     private Integer frprvtSandCo;
 
-    @Column(name = "fireSensorCo")
+    @Column(name = "firesensorco")
     private Integer fireSensorCo;
 
-    @Column(name = "themaEnvrnCl")
+    @Column(name = "themaenvrncl")
     private String themaEnvrnCl;
 
-    @Column(name = "eqpmnLendCl")
+    @Column(name = "eqpmnlendcl")
     private String eqpmnLendCl;
 
-    @Column(name = "animalCmgCl")
+    @Column(name = "animalcmgcl")
     private String animalCmgCl;
 
-    @Column(name = "tourEraCl")
+    @Column(name = "toureracl")
     private String tourEraCl;
 
-    @Column(name = "firstImageUrl")
+    @Column(name = "firstimageurl", length=1000)
     private String firstImageUrl;
 
     @CreatedDate

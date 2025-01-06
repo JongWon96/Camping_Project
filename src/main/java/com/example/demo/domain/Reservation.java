@@ -27,7 +27,6 @@ public class Reservation {
     private int person;
 
     private Date checkin;
-
     private Date checkout;
 
     @ManyToOne
