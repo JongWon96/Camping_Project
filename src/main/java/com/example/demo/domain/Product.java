@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
 @DynamicUpdate
 @Entity
 @Getter
