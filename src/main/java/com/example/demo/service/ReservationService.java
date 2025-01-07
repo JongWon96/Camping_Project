@@ -2,9 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Reservation;
 
-import java.util.List;
-
 public interface ReservationService {
-    Reservation saveReservation(Reservation reservation);
-    List<Reservation> getReservationsByMemberId(Long memberId);
+    void save(Reservation reservation);  // 예약 저장
+    Reservation findById(Long id);       // 예약 조회
+    void cancelReservation(Long reservationId);  // 예약 취소
 }

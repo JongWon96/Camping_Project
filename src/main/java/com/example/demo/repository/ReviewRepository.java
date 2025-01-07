@@ -8,7 +8,7 @@ import com.example.demo.domain.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findByCampingId(Long campingId); 
-
-    List<Review> findByMemberId(Long memberId); 
+    List<Review> findByCamping_Id(Long campingId); 
+    
+    List<Review> findByMember_Id(Long memberId); 
 }

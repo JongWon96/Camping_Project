@@ -1,43 +1,104 @@
 package com.example.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
+
 import com.example.demo.domain.Camping;
 import com.example.demo.domain.Product;
 import com.example.demo.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.demo.repository.CampingRepository;
+import com.example.demo.service.ProductService;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepository productRepository; // Product 저장용 리포지토리
 
-    // 캠핑장에 맞는 3개의 상품을 생성하는 메서드
+    @Autowired
+    private CampingRepository campingRepository; // Camping 조회용 리포지토리
+
+//    // 애플리케이션 시작 시 상품 생성
+//    @PostConstruct
+//    public void generateProductsForExistingCampingsAtStartup() {
+//        generateProductsForExistingCampings(); 
+//    }
+
     @Override
-    public void generateProductsForCamping(Camping camping) {
-        // 작은 방 가격 생성
-        Double basePrice = generateRandomPrice(); // 작은 방 가격 (랜덤)
+    public void generateProductsForExistingCampings() {
+        // DB에서 모든 캠핑장 정보 조회
+        List<Camping> campings = campingRepository.findAll();
 
-        // 각 방에 대해 상품 생성 (1: 작은 방, 2: 중간 방, 3: 큰 방)
-        for (int room = 1; room <= 3; room++) {
-            Product product = new Product();
-            product.setCamping(camping);
-            product.setRoom(room);
-            
-            // 가격 설정
-            if (room == 1) {
-                product.setPrice(basePrice); // 작은 방 가격
-            } else if (room == 2) {
-                product.setPrice(basePrice * 1.2); // 중간 방 가격 (1.2배)
-            } else if (room == 3) {
-                product.setPrice(basePrice * 1.4); // 큰 방 가격 (1.4배)
+        // 각 캠핑장에 대해 3개의 상품을 생성
+        for (Camping camping : campings) {
+            // 해당 캠핑장의 상품이 이미 존재하는지 확인
+            List<Product> existingProducts = productRepository.findByCamping_Id(camping.getId());
+
+            // 이미 상품이 존재하면 생성하지 않음
+            if (!existingProducts.isEmpty()) {
+                continue; // 상품이 이미 있으면 생성하지 않고 다음 캠핑장으로 넘어감
             }
-            
-          
-            // 상품 저장
-            productRepository.save(product);
+
+            // 캠핑장별 4개의 컬럼 값 중 가장 큰 값 구하기
+            int maxSiteCount = Math.max(
+                Math.max(camping.getGnrlsiteco(), camping.getAutositeco()),
+                Math.max(camping.getGlampsiteco(), camping.getCaravsiteco())
+            );
+
+            // maxSiteCount가 3보다 작은 경우 처리
+            int room1Count = 0, room2Count = 0, room3Count = 0;
+
+            if (maxSiteCount < 3) {
+                // 각 방에 배정할 수 있는 최소 수량을 맞춤 (방의 수가 부족하면 0개로 설정)
+                room1Count = maxSiteCount > 0 ? 1 : 0;
+                room2Count = maxSiteCount > 1 ? 1 : 0;
+                room3Count = maxSiteCount > 2 ? 1 : 0;
+            } else {
+                // 최소 1개씩 배정 후, 나머지를 랜덤하게 배정
+                int remainingSiteCount = maxSiteCount - 3; // 3개 방에 최소 1개씩 배정했으므로 남은 수
+
+                // 각 방에 최소 1개씩 배정 (남은 방은 랜덤으로 배정)
+                room1Count = 1 + (int)(Math.random() * (remainingSiteCount));
+                room2Count = 1 + (int)(Math.random() * (remainingSiteCount - room1Count));
+                room3Count = maxSiteCount - room1Count - room2Count; // 나머지 방 갯수는 자동으로 계산
+            }
+
+            // 작은 방 가격 생성 (랜덤)
+            Double basePrice = generateRandomPrice(); // 작은 방 가격 (랜덤)
+
+            // 각 방에 대해 상품 생성 (1: 작은 방, 2: 중간 방, 3: 큰 방)
+            for (int room = 1; room <= 3; room++) {
+                Product product = new Product();
+                product.setCamping(camping); // 해당 캠핑장에 속하는 상품
+                product.setRoom(room); // 방 번호 (1: 작은 방, 2: 중간 방, 3: 큰 방)
+
+                // 방 갯수에 맞춰 상품 수량을 설정
+                int roomCount = 0;
+                if (room == 1) {
+                    roomCount = room1Count; // 작은 방 수량
+                } else if (room == 2) {
+                    roomCount = room2Count; // 중간 방 수량
+                } else if (room == 3) {
+                    roomCount = room3Count; // 큰 방 수량
+                }
+                product.setRoomcount(roomCount); // roomCount 컬럼 설정
+
+                // 가격 설정 (작은 방 기준으로 비례)
+                if (room == 1) {
+                    product.setPrice(basePrice); // 작은 방 가격
+                } else if (room == 2) {
+                    product.setPrice(basePrice * 1.2); // 중간 방 가격 (1.2배)
+                } else if (room == 3) {
+                    product.setPrice(basePrice * 1.4); // 큰 방 가격 (1.4배)
+                }
+
+                // 상품 저장 (DB에 추가)
+                productRepository.save(product); // 각 방의 갯수만큼 상품 저장
+            }
         }
     }
 
@@ -46,8 +107,41 @@ public class ProductServiceImpl implements ProductService {
         Random random = new Random();
         int minPrice = 100000;
         int maxPrice = 200000;
-        return (minPrice + (maxPrice - minPrice) * random.nextDouble());
+
+        // 랜덤 가격 생성 (10만 ~ 20만 사이)
+        int price = minPrice + random.nextInt(maxPrice - minPrice + 1);
+
+        // 만원 단위로 변환 (소수점 없이)
+        return (price / 1000) * 1000.0; // 1000으로 나누고 다시 곱해서 만원 단위로
+    }
+
+    // 예약이 성공하면 방 갯수 차감
+    public void reduceRoomCount(Long campingId, int room) {
+        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
+        if (product != null) {
+            if (product.getRoomcount() > 0) {
+                product.setRoomcount(product.getRoomcount() - 1);
+                productRepository.save(product);
+            } else {
+                // 방이 더 이상 없으면 에러 처리나 로그 출력
+                System.out.println("No rooms available for the given product.");
+            }
+        }
     }
 
 
+    // 예약 취소 시 방 갯수 복구
+    public void restoreRoomCount(Long campingId, int room) {
+        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
+        if (product != null) {
+            product.setRoomcount(product.getRoomcount() + 1);
+            productRepository.save(product); // 방 수량 복구 후 저장
+        }
+    }
+    // 캠핑장 ID와 방 이름(room)으로 Product 찾기
+    public Product findByCamping_IdAndRoom(Long campingId, int room) {
+        // ProductRepository에서 캠핑장 ID와 방 이름(room)으로 찾기
+        return productRepository.findByCamping_IdAndRoom(campingId, room);
+    }
+    
 }

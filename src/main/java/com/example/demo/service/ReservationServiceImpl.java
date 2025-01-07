@@ -1,30 +1,42 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Reservation;
-import com.example.demo.repository.ReservationRepository;
-import com.example.demo.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.domain.Reservation;
+import com.example.demo.repository.ReservationRepository;
+import com.example.demo.service.ProductService;
+import com.example.demo.service.ReservationService;
 
-import java.util.List;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
-    private final ReservationRepository reservationRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
+    private ProductService productService;
+
+    @Transactional
+    public void save(Reservation reservation) {
+        // 방 수량 차감
+        productService.reduceRoomCount(reservation.getProduct().getCamping().getId(), reservation.getProduct().getRoom());
+        reservationRepository.save(reservation); // 예약 저장
     }
 
     @Override
-    public Reservation saveReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
+    public Reservation findById(Long id) {
+        return reservationRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Reservation> getReservationsByMemberId(Long memberId) {
-        return reservationRepository.findByMemberId(memberId);
+    public void cancelReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        if (reservation != null) {
+            // 방 수량 복구
+            productService.restoreRoomCount(reservation.getProduct().getCamping().getId(), reservation.getProduct().getRoom());
+            reservationRepository.delete(reservation); // 예약 취소
+        }
     }
 }
