@@ -29,8 +29,6 @@ public class Reservation {
     private Date checkin;
     private Date checkout;
 
-    private String bottom;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

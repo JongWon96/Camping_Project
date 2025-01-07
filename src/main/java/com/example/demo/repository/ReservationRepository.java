@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 	public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 	    // 예약 관련 커스텀 쿼리를 추가할 수 있습니다.
 	    // 예: 특정 회원의 예약 내역 조회
-	    List<Reservation> findByMemberId(Long memberId);
+	    List<Reservation> findByMember_Id(Long memberId);
 	}
 
 

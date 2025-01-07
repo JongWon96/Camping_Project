@@ -11,7 +11,4 @@ public class CampingController {
     @Autowired
     private ProductService productService;
 
-    public void generateProductsForCamping(Camping camping) {
-        productService.generateProductsForCamping(camping);
-    }
 }
