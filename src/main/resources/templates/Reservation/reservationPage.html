@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,17 @@
 </head>
 <body>
 
-<h1>${camping.name} 예약 페이지</h1>
+<h1 th:text="${camping.facltnm} + ' 예약 페이지'"></h1>
 
 <form action="/reservation" method="post">
-    <input type="hidden" name="campingId" value="${camping.id}">
-    <input type="hidden" name="room" value="${room}">
+    <input type="hidden" name="campingId" th:value="${camping.id}">
+    <input type="hidden" name="room" th:value="${room}">
     
-    <p><strong>방 타입:</strong> ${room}번 방</p>
+    <p><strong>방 타입:</strong> <span th:text="${room}">방 정보</span>번 방</p>
 
     <!-- 전체 방 개수 및 남은 방 개수 -->
-    <p><strong>전체 방 개수:</strong> ${maxRoomCount}개</p>
-    <p><strong>남은 방 개수:</strong> ${remainingRoomCount}개</p>
+    <p><strong>전체 방 개수:</strong> <span th:text="${maxRoomCount}">방 개수</span>개</p>
+    <p><strong>남은 방 개수:</strong> <span th:text="${remainingRoomCount}">남은 방 개수</span>개</p>
 
     <label for="checkin">체크인 날짜:</label>
     <input type="date" id="checkin" name="checkin" required><br>

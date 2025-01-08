@@ -40,13 +40,14 @@ public class ReservationController {
         Product product = productService.findByCamping_IdAndRoom(campingId, room);
 
         // 전체 방 개수와 남은 방 개수 전달
-      //  int maxRoomCount = product.getMaxRoomCount();  // 전체 방 개수
+        int maxRoomCount = product.getRoomcount();  
         int remainingRoomCount = product.getRoomcount();  // 남은 방 개수
         
         model.addAttribute("camping", camping);
         model.addAttribute("room", room);  // 방 타입
-      //  model.addAttribute("maxRoomCount", maxRoomCount);  // 전체 방 개수
+        model.addAttribute("maxRoomCount", maxRoomCount);  // 전체 방 개수
         model.addAttribute("remainingRoomCount", remainingRoomCount);  // 남은 방 개수
+      
 
         return "/Reservation/reservationPage"; // 예약 페이지
     }
@@ -94,12 +95,12 @@ public class ReservationController {
 
         // 예약 처리
         Reservation reservation = new Reservation();
-        reservation.setProduct(product);  // Product를 외래키로 설정 (Product가 이미 캠핑 정보 포함)
-        reservation.setMember(member);    // 사용자 설정
+        reservation.setProduct(product);  
+        reservation.setMember(member);    
         reservation.setCheckin(checkinDate);  
         reservation.setCheckout(checkoutDate);  
-        reservation.setPerson(person);  // 인원 수 설정
-        reservation.setBottom(bottom);  // 바닥재 선택 값 저장
+        reservation.setPerson(person);  
+        reservation.setBottom(bottom); 
 
         // 방 갯수 차감 (트랜잭션을 고려하여 처리)
         productService.reduceRoomCount(campingId, room);
