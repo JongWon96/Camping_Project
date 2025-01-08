@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>아이디 찾기</title>
+	<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+	<style>
+		/* 전체 배경 및 컨텐츠 스타일 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #28a745, #1e7d34);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .content-wrapper {
+            background: white;
+            color: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        form table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        form table td {
+            padding: 10px 5px;
+        }
+
+        form table td label {
+            font-weight: bold;
+            font-size: 1em;
+            color: #333;
+        }
+
+        form table td input[type="text"],
+        form table td input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        form table td input[type="text"]:focus,
+        form table td input[type="tel"]:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
+
+        form table td input[type="button"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        form table td input[type="button"]:hover {
+            background-color: #218838;
+        }
+	</style>
+	<script>
+		// 아이디 찾기 함수
+        function findMemberId() {
+            const uname = document.getElementById("uname").value;
+            const uphone = document.getElementById("uphone").value;
+
+            if (uname === "" || uphone === "") {
+                alert("이름과 전화번호를 입력해주세요.");
+                return false;
+            }
+
+            alert("아이디 찾기 요청이 성공적으로 전송되었습니다.");
+            document.getElementById("findId").submit();
+        }
+
+        // 전화번호 입력 자동 하이픈 추가
+        function autoHyphen(target) {
+            target.value = target.value
+                .replace(/[^0-9]/g, '')
+                .replace(/(\d{3})(\d{3,4})?(\d{4})?/, function (_, p1, p2, p3) {
+                    return p3 ? `${p1}-${p2}-${p3}` : p2 ? `${p1}-${p2}` : p1;
+                });
+        }
+	</script>
+</head>
+<body>
+<div class="content-wrapper">
+	<h1>아이디 찾기</h1>
+	<form name="findId" id="findId" action="find_id" method="post">
+		<table>
+			<tr>
+				<td align="right"><label for="uname">이름</label></td>
+				<td><input type="text" name="uname" id="uname" placeholder="이름을 입력하세요"></td>
+			</tr>
+			<tr>
+				<td align="right"><label for="uphone">전화번호</label></td>
+				<td><input type="tel" name="uphone" id="uphone" maxlength="13" placeholder="- 없이 숫자만 입력하세요" oninput="autoHyphen(this)"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="button" value="아이디 찾기" onclick="findMemberId()">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body>
+</html>

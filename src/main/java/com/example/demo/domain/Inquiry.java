@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,7 +33,11 @@ public class Inquiry {
 
     private Integer status;
 
+    private LocalDateTime createddate;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+
 }

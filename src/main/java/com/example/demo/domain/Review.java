@@ -25,7 +25,7 @@ public class Review {
 
     private String content;
 
-    private Date date;
+    private Date reviewdate;
 
     private String img;
 

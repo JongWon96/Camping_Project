@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이페이지</title>
+    <meta charset="UTF-8">
+    <style>
+        /* 전체 레이아웃 */
+      body {
+          margin: 0;
+          font-family: 'Roboto', Arial, sans-serif;
+          background: linear-gradient(135deg, #e0e0e0, #b3b3b3);
+          color: #333;
+      }
+
+      header {
+          background: #b3b3b3;
+          color: #333;
+          padding: 20px 0;
+          text-align: center;
+          font-size: 28px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      main {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 30px;
+      }
+
+      .content-wrapper {
+          display: flex;
+          width: 100%;
+          max-width: 1200px;
+          background: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+          overflow: hidden;
+      }
+
+      .side-menu {
+          background-color: #d9d9d9;
+          width: 220px;
+          padding: 25px;
+          border-right: 3px solid #b3b3b3;
+      }
+
+      .side-menu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .side-menu ul li {
+          margin: 20px 0;
+      }
+
+      .side-menu ul li a, .side-menu ul li form button {
+          text-decoration: none;
+          font-size: 18px;
+          color: #333;
+          font-weight: 500;
+          background: none;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          display: block;
+          transition: color 0.3s ease, transform 0.2s;
+      }
+
+      .side-menu ul li a:hover, .side-menu ul li form button:hover {
+          color: #000;
+          font-weight: 700;
+          transform: scale(1.05);
+      }
+
+      .main-content {
+          flex: 1;
+          padding: 40px;
+      }
+
+      .info-box {
+          margin-bottom: 20px;
+      }
+
+      .info-box h2 {
+          margin-bottom: 25px;
+          color: #333;
+          font-size: 26px;
+          font-weight: bold;
+      }
+
+      .info-box p {
+          margin: 15px 0;
+          font-size: 16px;
+          line-height: 1.6;
+          color: #555;
+      }
+
+      .info-box p strong {
+          display: inline-block;
+          width: 160px;
+          text-align: right;
+          margin-right: 12px;
+          font-weight: bold;
+          color: #555;
+      }
+
+      .info-box p input {
+          border: 1px solid #aaa;
+          border-radius: 5px;
+          padding: 8px;
+          width: 60%;
+          font-size: 14px;
+          color: #555;
+          background: #f8f9fa;
+          pointer-events: none; /* 읽기 전용 */
+      }
+
+      footer {
+          margin-top: 20px;
+          text-align: center;
+          padding: 15px;
+          background: #b3b3b3;
+          color: #333;
+          font-size: 14px;
+          border-top: 3px solid #999;
+      }
+
+      footer a {
+          color: #666;
+          text-decoration: none;
+          font-weight: 600;
+      }
+
+      footer a:hover {
+          text-decoration: underline;
+          color: #333;
+      }
+
+    </style>
+</head>
+<body>
+<header>
+    마이페이지
+</header>
+
+<main>
+    <div class="content-wrapper">
+        <!-- 사이드 메뉴 -->
+        <nav class="side-menu">
+            <ul>
+                <li><a th:href="@{/main}">메인페이지</a></li>
+                <li><a th:href="@{/calendar}">캘린더</a></li>
+                <li>
+                    <form th:action="@{/mypage/edit-info}" method="get">
+                        <button type="submit">회원정보 수정</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/mypage/changepassword}" method="get">
+                        <button type="submit">비밀번호 변경</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/mypage/Inquiry}" method="get">
+                        <button type="submit">1:1 문의</button>
+                    </form>
+                </li>
+                <li>
+                    <form th:action="@{/mypage/delete}" method="post">
+                        <button type="submit">회원탈퇴</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 사용자 정보 -->
+            <section class="info-box">
+                <h2>사용자 정보</h2>
+                <p><strong>아이디:</strong> <input type="text" th:value="${member.memberId}" readonly></p>
+                <p><strong>이름:</strong> <input type="text" th:value="${member.name}" readonly></p>
+                <p><strong>연락처:</strong> <input type="text" th:value="${member.phone}" readonly></p>
+                <p><strong>성별:</strong> <input type="text" th:value="${member.gender == 1 ? '남성' : '여성'}" readonly></p>
+                <p><strong>나이:</strong> <input type="text" th:value="${member.age}" readonly></p>
+                <p><strong>이메일:</strong> <input type="text" th:value="${member.email}" readonly></p>
+                <p><strong>주소:</strong> <input type="text" th:value="${member.address}" readonly></p>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2024 <a href="#">MyWebsite</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ID 찾기 결과</title>
+  <style>
+    /* 전체 배경 및 컨텐츠 스타일 */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #28a745, #1e7d34);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+    }
+
+    .content-wrapper {
+        background: white;
+        color: #333;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 30px 40px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #28a745;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 1em;
+        color: #333;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        text-align: center;
+        color: #555;
+    }
+
+    input[type="text"]:focus {
+        border-color: #28a745;
+        outline: none;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #28a745;
+        color: white;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    input[type="button"]:hover {
+        background-color: #218838;
+    }
+
+    .message {
+        margin-top: 20px;
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    .success {
+        color: #28a745;
+    }
+
+    .error {
+        color: #dc3545;
+    }
+  </style>
+  <script>
+    // 창 닫기 함수
+    function idok() {
+        self.close();
+    }
+  </script>
+</head>
+<body>
+<div class="content-wrapper">
+  <h1>ID 찾기 결과</h1>
+  <form method="post" name="formm" action="id_check_form">
+    <label for="uid">User ID</label>
+    <input type="text" name="uid" id="uid" th:value="${uid}" readonly>
+
+    <div class="message">
+      <th:block th:if="${message == 1}">
+        <p class="success">요청하신 ID는 <span th:text="${uid}"></span>입니다.</p>
+      </th:block>
+      <th:block th:if="${message == -1}">
+        <p class="error">가입하지 않은 ID입니다.</p>
+      </th:block>
+    </div>
+
+    <input type="button" value="확인" onclick="idok()">
+  </form>
+</div>
+</body>
+</html>
