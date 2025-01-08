@@ -23,8 +23,8 @@ public class Product {
     private Double price;
 
     private Integer room;
-
-    private Integer bottom;
+    
+    private Integer roomcount;
 
     @ManyToOne
     @JoinColumn(name = "camping_id")
