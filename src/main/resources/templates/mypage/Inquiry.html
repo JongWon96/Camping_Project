@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1 문의 내역</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* 조금 더 밝은 회색 */
+        }
+
+        header {
+            text-align: center;
+            background-color: #e0e0e0; /* 상단 헤더 회색 */
+            padding: 20px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: #ffffff; /* 본문 흰색 */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .side-menu {
+            background-color: #e6e6e6; /* 좌측 메뉴 밝은 회색 */
+            width: 220px;
+            padding: 25px;
+            border-right: 1px solid #ccc;
+        }
+
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .side-menu ul li {
+            margin: 15px 0;
+        }
+
+        .side-menu ul li a,
+        .side-menu ul li form button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            display: block;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .side-menu ul li a:hover,
+        .side-menu ul li form button:hover {
+            color:  #e0e0e0; /* 새로운 녹색 강조 */
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            color: #333; /* 본문 텍스트 어두운 색 */
+            background-color: #ffffff; /* 본문 흰색 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ffffff; /* 테이블 배경 */
+            color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f8f8f8; /* 테이블 헤더 밝은 회색 */
+            color: #333;
+            font-weight: bold;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9; /* 행 강조 */
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color:  #e0e0e0; /* 새로운 녹색 버튼 */
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color:  #e0e0e0; /* 더 진한 녹색 */
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: #e0e0e0;
+            color: #333;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #009688;
+            color: #fff;
+        }
+
+        .pagination .active {
+            background-color: #009688;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #e0e0e0; /* 푸터 회색 */
+            color: #777;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #009688;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    1:1 문의 내역
+</header>
+
+<main class="content-wrapper">
+    <!-- 사이드 메뉴 -->
+    <nav class="side-menu">
+        <ul>
+            <li><a th:href="@{/main}">메인페이지</a></li>
+            <li>
+                <form th:action="@{/mypage}" method="get">
+                    <button type="submit">마이페이지</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/reservations}" method="get">
+                    <button type="submit">예약내역</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/wishlist}" method="get">
+                    <button type="submit">찜목록</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/edit-info}" method="get">
+                    <button type="submit">회원정보 수정</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/changepassword}" method="get">
+                    <button type="submit">비밀번호 변경</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">로그아웃</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 문의 내역 목록 -->
+            <table>
+                <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>작성일</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="inquiry : ${Inquiry}">
+                    <td>
+                        <a th:href="@{/mypage/inquiry/detail/{id}(id=${inquiry.id})}" th:text="${inquiry.title}"></a>
+                    </td>
+                    <td th:text="${inquiry.content}"></td>
+                    <td>
+                        <span th:if="${inquiry.createddate != null}" th:text="${#temporals.format(inquiry.createddate, 'yyyy-MM-dd HH:mm')}"></span>
+                        <span th:if="${inquiry.createddate == null}">날짜 없음</span>
+                    </td>
+                    <td>
+                        <span th:if="${inquiry.status == 0}">답변 대기중</span>
+                        <span th:if="${inquiry.status == 1}">답변 완료</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- "새 문의하기" 버튼 -->
+            <div class="button-container">
+                <a href="/mypage/inquiry/new">
+                    <button>새 문의하기</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2025 <a href="#">MyWebsite</a>. All Rights Reserved.
+</footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 문의하기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>새 문의하기</h1>
+    <form th:action="@{/mypage/inquiry}" method="post" enctype="multipart/form-data">
+        <label for="title">문의 제목:</label>
+        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+
+        <label for="content">문의 내용:</label>
+        <textarea id="content" name="content" rows="4" placeholder="문의 내용을 입력하세요" required></textarea>
+
+        <label for="img">이미지 첨부:</label>
+        <input type="file" id="img" name="img">
+
+        <button type="submit">문의 등록</button>
+    </form>
+</div>
+</body>
+</html>
