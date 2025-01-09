@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약 페이지</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 라이브러리 포함 -->
 </head>
 <body>
 
@@ -12,12 +13,12 @@
 <form action="/reservation" method="post">
     <input type="hidden" name="campingId" th:value="${camping.id}">
     <input type="hidden" name="room" th:value="${room}">
-    
+
     <p><strong>방 타입:</strong> <span th:text="${room}">방 정보</span>번 방</p>
 
     <!-- 전체 방 개수 및 남은 방 개수 -->
     <p><strong>전체 방 개수:</strong> <span th:text="${maxRoomCount}">방 개수</span>개</p>
-    <p><strong>남은 방 개수:</strong> <span th:text="${remainingRoomCount}">남은 방 개수</span>개</p>
+    <p><strong>남은 방 개수:</strong> <span id="remainingRoomCount" th:text="${remainingRoomCount}">남은 방 개수</span>개</p>
 
     <label for="checkin">체크인 날짜:</label>
     <input type="date" id="checkin" name="checkin" required><br>
@@ -37,6 +38,38 @@
 
     <button type="submit">예약하기</button>
 </form>
+
+<script>
+    // 날짜가 변경되었을 때 남은 방 개수를 업데이트
+    function updateRemainingRooms() {
+        var checkinDate = $('#checkin').val();
+        var checkoutDate = $('#checkout').val();
+
+        if (checkinDate && checkoutDate) {
+            $.ajax({
+                url: '/checkRemainingRooms',  // 남은 방 개수를 계산하는 서버 엔드포인트
+                method: 'GET',
+                data: {
+                    campingId: $('input[name="campingId"]').val(),
+                    room: $('input[name="room"]').val(),
+                    checkin: checkinDate,
+                    checkout: checkoutDate
+                },
+                success: function(response) {
+                    $('#remainingRoomCount').text(response.remainingRooms); // 서버로부터 받은 남은 방 개수 업데이트
+                },
+                error: function() {
+                    alert('남은 방 개수를 가져오는 데 실패했습니다.');
+                }
+            });
+        }
+    }
+
+    // 날짜 선택 시 남은 방 개수 업데이트
+    $('#checkin, #checkout').on('change', function() {
+        updateRemainingRooms();
+    });
+</script>
 
 </body>
 </html>

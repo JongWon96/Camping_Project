@@ -22,7 +22,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id", nullable = false, length = 50)
+    @Column(name = "memberid", nullable = false, length = 50)
     private String memberId;
 
     @Column(name = "password", nullable = false, length = 50)

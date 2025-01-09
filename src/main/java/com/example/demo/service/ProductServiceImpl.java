@@ -6,10 +6,13 @@ import jakarta.annotation.PostConstruct;
 
 import com.example.demo.domain.Camping;
 import com.example.demo.domain.Product;
+import com.example.demo.domain.Reservation;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.CampingRepository;
 import com.example.demo.service.ProductService;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository; // Product 저장용 리포지토리
-
+    @Autowired
+    private ReservationRepository reservationRepository; 
     @Autowired
     private CampingRepository campingRepository; // Camping 조회용 리포지토리
 
@@ -143,5 +147,27 @@ public class ProductServiceImpl implements ProductService {
         // ProductRepository에서 캠핑장 ID와 방 이름(room)으로 찾기
         return productRepository.findByCamping_IdAndRoom(campingId, room);
     }
-    
+    @Override
+    public int getRoomCount(Long campingId, int room) {
+        // 캠핑장 ID와 방 타입에 해당하는 Product를 조회
+        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
+        if (product != null) {
+            return product.getRoomcount();  // 총 방 수를 반환
+        } else {
+            return 0;  // 해당하는 상품이 없으면 0을 반환
+        }
+    }
+
+    @Override
+    public int getReservedRoomCount(Long campingId, int room, String checkin, String checkout) {
+        // 날짜를 Date 타입으로 변환
+        Date checkinDate = Date.valueOf(checkin);
+        Date checkoutDate = Date.valueOf(checkout);
+
+        // 특정 캠핑장과 방 타입에 해당하는 예약 목록 조회
+        List<Reservation> reservations = reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
+
+        // 예약된 방 수를 반환
+        return reservations.size();
+    }
 }
