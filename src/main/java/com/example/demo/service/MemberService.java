@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface MemberService {
 
-    Member updateMemberInfo(String memberId, String phone);
+    Member updateMemberInfo(String memberId, String phone, String address, String email);
 
     void changePassword(String memberId, String currentPassword, String newPassword, String confirmPassword);
 

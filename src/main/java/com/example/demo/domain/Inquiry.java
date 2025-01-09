@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -38,6 +39,7 @@ public class Inquiry {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
 
 
 }

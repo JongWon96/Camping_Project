@@ -29,11 +29,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public Member updateMemberInfo(String memberId, String phone) {
+    public Member updateMemberInfo(String memberId, String phone, String address, String email) {
         Member member = memberRepository.findMemberByMemberId(memberId);
         if (member == null) {
             throw new RuntimeException("수정할 회원을 찾을 수 없습니다.");
         }
+        member.setEmail(email);
+        member.setAddress(address);
         member.setPhone(phone);
         return memberRepository.save(member);
     }

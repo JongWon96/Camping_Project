@@ -57,7 +57,7 @@ public class MyPageController {
             return "redirect:/login";
         }
 
-        model.addAttribute("loginUser", member);
+        model.addAttribute("member", member);
         return "mypage/edit-info";
     }
 
@@ -66,6 +66,9 @@ public class MyPageController {
     public String updateMemberInfo(
             @SessionAttribute("loginUser") Member member,
             @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "email", required = false) String email,
+
 
             RedirectAttributes redirectAttributes,
             HttpSession session
@@ -73,7 +76,9 @@ public class MyPageController {
         try {
             Member updatedMember = memberService.updateMemberInfo(
                     member.getMemberId(),
-                    phone != null ? phone : member.getPhone()
+                    phone != null ? phone : member.getPhone(),
+                    address!= null ? address : member.getAddress(),
+                    email!= null ? email : member.getEmail()
 
             );
             session.setAttribute("loginUser", updatedMember);
@@ -135,7 +140,7 @@ public class MyPageController {
             session.invalidate(); // 세션 무효화 (로그아웃 처리)
 
             redirectAttributes.addFlashAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
-            return "redirect:/main";
+            return "redirect:/login";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
             return "redirect:/mypage";
@@ -204,5 +209,15 @@ public class MyPageController {
 
         return "redirect:/mypage/Inquiry";
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session , RedirectAttributes redirectAttributes) {
+        // 세션 무효화
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
+
+        return "redirect:/login";
+    }
 }
+
 

@@ -149,34 +149,41 @@
 </header>
 
 <main>
-    <div class="content-wrapper">
-        <!-- 사이드 메뉴 -->
-        <nav class="side-menu">
-            <ul>
-                <li><a th:href="@{/main}">메인페이지</a></li>
-                <li><a th:href="@{/calendar}">캘린더</a></li>
-                <li>
-                    <form th:action="@{/mypage/edit-info}" method="get">
-                        <button type="submit">회원정보 수정</button>
-                    </form>
-                </li>
-                <li>
-                    <form th:action="@{/mypage/changepassword}" method="get">
-                        <button type="submit">비밀번호 변경</button>
-                    </form>
-                </li>
-                <li>
-                    <form th:action="@{/mypage/Inquiry}" method="get">
-                        <button type="submit">1:1 문의</button>
-                    </form>
-                </li>
-                <li>
-                    <form th:action="@{/mypage/delete}" method="post">
-                        <button type="submit">회원탈퇴</button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
+    <nav class="side-menu">
+        <ul>
+            <li><a th:href="@{/main}">메인페이지</a></li>
+            <li>
+                <form th:action="@{/mypage/Inquiry}" method="get">
+                    <button type="submit">1:1 문의</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/reservations}" method="get">
+                    <button type="submit">예약내역</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/wishlist}" method="get">
+                    <button type="submit">찜목록</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/edit-info}" method="get">
+                    <button type="submit">회원정보 수정</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/changepassword}" method="get">
+                    <button type="submit">비밀번호 변경</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/delete}" method="post">
+                    <button type="submit">회원탈퇴</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
 
         <!-- 메인 컨텐츠 -->
         <div class="main-content">
