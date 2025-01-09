@@ -21,10 +21,10 @@
     <p><strong>남은 방 개수:</strong> <span id="remainingRoomCount" th:text="${remainingRoomCount}">남은 방 개수</span>개</p>
 
     <label for="checkin">체크인 날짜:</label>
-    <input type="date" id="checkin" name="checkin" required><br>
+    <input type="date" id="checkin" name="checkin" th:value="${checkin}" required><br>
 
     <label for="checkout">체크아웃 날짜:</label>
-    <input type="date" id="checkout" name="checkout" required><br>
+    <input type="date" id="checkout" name="checkout" th:value="${checkout}" required><br>
 
     <label for="person">인원 수:</label>
     <input type="number" id="person" name="person" required><br>
@@ -59,11 +59,16 @@
                     $('#remainingRoomCount').text(response.remainingRooms); // 서버로부터 받은 남은 방 개수 업데이트
                 },
                 error: function() {
-                    alert('남은 방 개수를 가져오는 데 실패했습니다.');
+                    alert('서버와의 연결에 문제가 있습니다. 다시 시도해주세요.');
                 }
             });
         }
     }
+
+    // 페이지 로드 시 남은 방 개수를 업데이트
+    $(document).ready(function() {
+        updateRemainingRooms();
+    });
 
     // 날짜 선택 시 남은 방 개수 업데이트
     $('#checkin, #checkout').on('change', function() {

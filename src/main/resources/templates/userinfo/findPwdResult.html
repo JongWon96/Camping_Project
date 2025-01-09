@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>비밀번호 변경</title>
+  <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+  <style>
+    /* 전체 배경 및 컨텐츠 스타일 */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #28a745, #1e7d34);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+    }
+
+    .content-wrapper {
+        background: white;
+        color: #333;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #28a745;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: left;
+        font-weight: bold;
+        font-size: 1em;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: calc(100% - 160px); /* 라벨을 제외한 공간 채우기 */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #28a745;
+        outline: none;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #28a745;
+        color: white;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    input[type="button"]:hover {
+        background-color: #218838;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+  </style>
+  <script>
+    // 비밀번호 변경 확인 함수
+    function changePassword() {
+        const upw = document.getElementById("upw").value;
+        const pwdCheck = document.getElementById("pwdcheck").value;
+
+        if (upw === "" || pwdCheck === "") {
+            alert("비밀번호를 입력해주세요.");
+            return false;
+        }
+
+        if (upw !== pwdCheck) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+        document.getElementById("pwd_form").submit();
+    }
+  </script>
+</head>
+<body>
+<div class="content-wrapper">
+  <h1>비밀번호 변경</h1>
+  <form method="post" name="form" action="change_pwd" id="pwd_form">
+    <label for="uid">User ID</label>
+    <input type="text" name="uid" id="uid" th:value="${uid}" readonly="readonly">
+
+    <div>
+      <th:block th:if="${message == 1}">
+        <label for="upw">New Password</label>
+        <input type="password" name="upw" id="upw">
+
+        <label for="pwdcheck">Retype Password</label>
+        <input type="password" name="pwdCheck" id="pwdcheck">
+
+        <input type="button" value="확인" onclick="changePassword()">
+      </th:block>
+
+      <th:block th:if="${message == -1}">
+        <p class="error-message">잘못된 사용자 정보입니다.</p>
+        <input type="button" value="확인" onclick="self.close()">
+      </th:block>
+    </div>
+  </form>
+</div>
+</body>
+</html>

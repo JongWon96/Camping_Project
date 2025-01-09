@@ -2,6 +2,9 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -30,8 +33,13 @@ public class Inquiry {
     private String img;
 
     private Integer status;
+    
+    private LocalDateTime createddate;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+
+	
 }

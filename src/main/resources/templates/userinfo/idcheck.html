@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이디 중복 체크</title>
+  <style type="text/css">
+    /* 전체 배경 및 컨텐츠 스타일 */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #28a745, #1e7d34);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    #wrap {
+      background: white;
+      color: #333;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    form input[type="text"]:focus {
+      border-color: #28a745;
+      outline: none;
+      box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    }
+
+    form input[type="submit"], form input[type="button"] {
+      width: 48%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 5px 1%;
+    }
+
+    form input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+    }
+
+    form input[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    form input[type="button"] {
+      background-color: #007bff;
+      color: white;
+    }
+
+    form input[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    .message.success {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .message.error {
+      color: #dc3545;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script type="text/javascript" th:inline="javascript">
+    function idok() {
+      var uid = $("#uid").val();
+      opener.form.uid.value = uid;
+      opener.form.reuid.value = uid;
+      self.close();
+    }
+  </script>
+</head>
+<body>
+<div id="wrap">
+  <h1>ID 중복확인</h1>
+  <form method="get" name="form" id="theform" action="id_check_form">
+    <label for="uid">User ID</label>
+    <input type="text" name="uid" id="uid" th:value="${uid}" placeholder="아이디를 입력하세요">
+    <input type="submit" value="검색" class="submit">
+    <div class="message" style="margin-top: 20px">
+      <th:block th:if="${message == 1}">
+        <script type="text/javascript">
+          opener.document.form.id.value = "";
+        </script>
+        <p class="message error">[[${uid}]]는 이미 사용 중인 아이디입니다.</p>
+      </th:block>
+      <th:block th:if="${message == -1}">
+        <p class="message success">[[${uid}]]는 사용 가능한 ID입니다.</p>
+        <input type="button" value="사용" onclick="idok()">
+      </th:block>
+    </div>
+  </form>
+</div>
+</body>
+</html>

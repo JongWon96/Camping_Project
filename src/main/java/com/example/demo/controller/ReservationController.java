@@ -87,7 +87,7 @@ public class ReservationController {
                           Model model) {
 
         // 로그인된 사용자 확인
-        Member member = (Member) session.getAttribute("member");
+        Member member = (Member) session.getAttribute("loginUser");
         if (member == null) {
             session.invalidate(); // 세션 무효화
             return "redirect:/login";  // 로그인되지 않으면 로그인 페이지로 리다이렉트
@@ -126,9 +126,6 @@ public class ReservationController {
         reservation.setCheckout(checkoutDate);  
         reservation.setPerson(person);  
         reservation.setBottom(bottom); 
-
-        // 방 갯수 차감 (트랜잭션을 고려하여 처리)
-        productService.reduceRoomCount(campingId, room);
 
         // 예약 저장
         reservationService.save(reservation);

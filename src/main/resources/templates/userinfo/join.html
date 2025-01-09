@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 정보</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="js/member.js"></script>
+    <style>
+        /* 전체 배경 및 컨텐츠 스타일 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #28a745, #1e7d34);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .content-wrapper {
+            background: white;
+            color: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #28a745;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            flex: 0 0 30%;
+            text-align: right;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        #buttons input[type="button"],
+        #buttons input[type="reset"] {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        #buttons input[type="button"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #buttons input[type="button"]:hover {
+            background-color: #218838;
+        }
+
+        #buttons input[type="reset"] {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        #buttons input[type="reset"]:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script>
+        // 회원가입 버튼 동작
+        function go_save() {
+            alert("회원가입이 완료되었습니다.");
+            document.getElementById("join").submit();
+        }
+
+        // 취소 버튼 동작
+        document.addEventListener("DOMContentLoaded", () => {
+            const cancelButton = document.querySelector("input[type='reset']");
+            cancelButton.addEventListener("click", () => {
+                const form = document.getElementById("join");
+                form.reset(); // 입력 필드 초기화
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="content-wrapper">
+    <h2>회원가입 정보</h2>
+    <form id="join" action="join" method="post" name="form">
+        <div class="form-group">
+            <label for="uid">아이디</label>
+            <input type="text" name="uid" id="uid" th:value="${uid}">
+        </div>
+        <div class="form-group">
+            <label for="upw">비밀번호</label>
+            <input type="password" name="upw" id="upw">
+        </div>
+        <div class="form-group">
+            <label for="pwdCheck">비밀번호 확인</label>
+            <input type="password" name="pwdCheck" id="pwdCheck">
+        </div>
+        <div class="form-group">
+            <label for="uname">이름</label>
+            <input type="text" name="uname" id="uname">
+        </div>
+        <div class="form-group">
+            <label for="uphone">전화번호</label>
+            <input type="tel" name="uphone" id="uphone" maxlength="13" placeholder="- 없이 숫자만 입력하세요" oninput="autoHyphen(this)">
+        </div>
+        <div class="form-group">
+            <label for="ugender">성별</label>
+            <select name="ugender"  id="ugender" >
+                <option th:value="1" th:text="남성">남성</option>
+                <option th:value="2" th:text="여성">여성</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="uage">나이</label>
+            <input type="number" name="uage" id="uage">
+        </div>
+        <div class="form-group">
+            <label for="uweight">몸무게</label>
+            <input type="number" name="uweight" id="uweight" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="uheight">키</label>
+            <input type="number" name="uheight" id="uheight" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="ugoal">목표체중</label>
+            <input type="number" name="ugoal" id="ugoal">
+        </div>
+        <div class="form-group">
+            <label for="uallergy"> 식단</label>
+
+            <select name="ustyle">
+                <option value="1" th:text="체중감량">체중감량</option>
+                <option value="2" th:text="근육증가">근육증가</option>
+                <option value="3" th:text="건강유지">건강유지</option>
+                <option value="4" th:text="기타">기타</option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="uallergy">알레르기</label>
+            <select name="uallergy" id="uallergy">
+                <option value="0">알레르기 없음</option>
+                <option value="1">알류(계란, 메추리알, 등 가금류에 한함)</option>
+                <option value="2">우유</option>
+                <option value="3">메밀</option>
+                <option value="4">땅콩</option>
+                <option value="5">대두</option>
+                <option value="6">밀(밀가루)</option>
+                <option value="7">잣</option>
+                <option value="8">호두</option>
+                <option value="9">게</option>
+                <option value="10">새우</option>
+                <option value="11">오징어</option>
+                <option value="12">고등어</option>
+                <option value="13">조개류(굴, 전복, 홍합)</option>
+                <option value="14">복숭아</option>
+                <option value="15">토마토</option>
+                <option value="16">닭고기</option>
+                <option value="17">돼지고기</option>
+                <option value="18">쇠고기</option>
+                <option value="19">아황산류(마른새우, 건표고, 조미김 등)</option>
+                <option value="20">기타</option>
+
+            </select>
+        </div>
+        <div id="buttons">
+            <input type="button" value="가입하기" class="submit" onclick="go_save()">
+            <input type="reset" value="취소" class="cancel">
+        </div>
+    </form>
+</div>
+</body>
+</html>

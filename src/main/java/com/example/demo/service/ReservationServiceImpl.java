@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.Reservation;
 import com.example.demo.repository.ReservationRepository;
-import com.example.demo.service.ProductService;
-import com.example.demo.service.ReservationService;
 
 import jakarta.transaction.Transactional;
 
@@ -22,29 +20,30 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ProductService productService;
 
+    // 예약 저장 처리 (방 수량 차감하지 않음)
     @Transactional
+    @Override
     public void save(Reservation reservation) {
-        // 방 수량 차감
-        productService.reduceRoomCount(reservation.getProduct().getCamping().getId(), reservation.getProduct().getRoom());
-        reservationRepository.save(reservation); // 예약 저장
+        reservationRepository.save(reservation); // 예약을 저장한 후, 방 수는 차감되지 않음
     }
 
+    // 예약 ID로 예약 정보 찾기
     @Override
     public Reservation findById(Long id) {
         return reservationRepository.findById(id).orElse(null);
     }
 
+    // 예약 취소 처리 (방 수량 복구는 불필요)
     @Override
     public void cancelReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         if (reservation != null) {
-            // 방 수량 복구
-            productService.restoreRoomCount(reservation.getProduct().getCamping().getId(), reservation.getProduct().getRoom());
             reservationRepository.delete(reservation); // 예약 취소
         }
     }
 
     // 예약 기간이 끝났는지 확인하고 후기 작성이 가능한지 확인
+    @Override
     public boolean isReviewAvailable(Long campingId, Long memberId) {
         Reservation reservation = reservationRepository.findByCamping_IdAndMember_Id(campingId, memberId);
 
@@ -57,16 +56,16 @@ public class ReservationServiceImpl implements ReservationService {
         return reservation.getCheckout().before(currentDate);  // checkout이 현재 날짜 이전이면 true
     }
 
+    // 캠핑장 ID와 회원 ID로 예약 정보 조회
     @Override
     public Reservation getReservationByIds(Long campingId, Long memberId) {
-        // campingId와 memberId로 예약 정보를 조회
         return reservationRepository.findByCamping_IdAndMember_Id(campingId, memberId);
     }
 
-    // 날짜별 예약 가능 방 수 조회
+    // 특정 날짜 범위에 예약된 방 수 조회
     @Override
     public int getRemainingRooms(Long campingId, int room, Date checkinDate, Date checkoutDate) {
-        // 특정 날짜 범위에 예약된 수를 조회
+        // 예약된 방 수를 조회
         List<Reservation> reservations = reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
 
         // 전체 방 수에서 예약된 방 수를 뺀 남은 방 수 계산
@@ -76,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
         return totalRoomCount - reservedRooms; // 남은 방 수
     }
 
-    // 예약된 방 목록을 날짜 범위로 조회
+    // 날짜 범위 내 예약된 방 목록을 조회
     @Override
     public List<Reservation> findReservationsByCampingIdAndRoomAndDateRange(Long campingId, int room, Date checkinDate, Date checkoutDate) {
         return reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);

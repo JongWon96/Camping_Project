@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의 상세내용</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .field p {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>문의 상세내용</h1>
+
+    <div class="field">
+        <label>제목:</label>
+        <p th:text="${inquiry.title}"></p>
+    </div>
+
+    <div class="field">
+        <label>내용:</label>
+        <p th:text="${inquiry.content}"></p>
+    </div>
+
+
+    <div class="field">
+        <label>답변:</label>
+        <p th:if="${inquiry.reply != null}" th:text="${inquiry.reply}"></p>
+        <p th:if="${inquiry.reply == null}">아직 답변이 등록되지 않았습니다.</p>
+    </div>
+
+    <div class="field">
+        <label>이미지:</label>
+        <img th:if="${inquiry.img != null}" th:src="${inquiry.img}" alt="문의 이미지" style="max-width: 100%;">
+        <p th:if="${inquiry.img == null}">이미지가 없습니다.</p>
+    </div>
+
+    <a href="/mypage/Inquiry" class="back-button">목록으로 돌아가기</a>
+</div>
+</body>
+</html>

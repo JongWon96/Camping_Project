@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회원정보 수정</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 헤더 - 초록색 배경 */
+        header {
+            background-color: #28a745; /* 초록색 */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* 컨테이너 스타일 */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #f9f9f9; /* 연한 회색 배경 */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 입력 필드 스타일 */
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            background-color: #28a745; /* 초록색 */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838; /* 진한 초록색 */
+        }
+
+        /* 제목 스타일 */
+        h2 {
+            color: #28a745; /* 초록색 */
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* 취소 버튼 별도 스타일 */
+        .cancel-section button {
+            background-color: #6c757d; /* 회색 */
+        }
+
+        .cancel-section button:hover {
+            background-color: #5a6268;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #e9f5e9; /* 연한 초록색 */
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>회원정보 수정</h1>
+</header>
+
+<main class="container">
+    <!-- 사용자 정보 수정 폼 -->
+    <section class="edit-info-box">
+        <h2>사용자 정보 수정</h2>
+        <form th:action="@{/mypage/update}" method="post">
+            <!-- 아이디 -->
+            <p>
+                <strong>아이디:</strong>
+                <input type="text" th:value="${userInfo.uid}" readonly>
+            </p>
+            <!-- 이름 -->
+            <p>
+                <strong>이름:</strong>
+                <input type="text" th:value="${userInfo.uname}" readonly>
+            </p>
+            <!-- 나이 -->
+            <p>
+                <strong>나이:</strong>
+                <input type="text" th:value="${userInfo.uage}" readonly>
+            </p>
+            <p>
+                <strong>연락처:</strong>
+                <input type="text" th:value="${userInfo.uphone}" id="uphone" name="uphone" >
+            </p>
+            <!-- 체중 -->
+            <p>
+                <strong>체중:</strong>
+                <input type="text" th:value="${userInfo.uweight}"  id= "uweight" name="uweight">
+            </p>
+            <!-- 키 -->
+            <p>
+                <strong>키:</strong>
+                <input type="text" th:value="${userInfo.uheight}" id = "uheight" name="uheight" >
+            </p>
+            <p>
+                <strong>목표 체중:</strong>
+                <input type="text" th:value="${userInfo.ugoal}" id ="ugoal" name="ugoal">
+            </p>
+            <!-- 목표 -->
+            <p>
+                <strong>목표:</strong>
+                <select name="ustyle">
+                    <option value="1" th:selected="${userInfo.ustyle == '체중감량'}">체중감량</option>
+                    <option value="2" th:selected="${userInfo.ustyle == '근육증가'}">근육증가</option>
+                    <option value="3" th:selected="${userInfo.ustyle == '건강유지'}">건강유지</option>
+                    <option value="4" th:selected="${userInfo.ustyle == '기타'}">기타</option>
+                </select>
+            </p>
+            <!-- 알레르기 -->
+            <p>
+                <strong>알레르기:</strong>
+                    <select name="uallergy">
+                        <option value="0" th:selected="${userInfo.uallergy == '없음'}">없음</option>
+                        <option value="1" th:selected="${userInfo.uallergy == '알류(계란, 메추리알, 등 가금류에 한함)'}">알류(계란, 메추리알, 등 가금류에 한함)</option>
+                        <option value="2" th:selected="${userInfo.uallergy == '우유 '}">우유</option>
+                        <option value="3" th:selected="${userInfo.uallergy == '메밀 '}">메밀</option>
+                        <option value="4" th:selected="${userInfo.uallergy == '땅콩 '}">땅콩</option>
+                        <option value="5" th:selected="${userInfo.uallergy == '대두'}">대두</option>
+                        <option value="6" th:selected="${userInfo.uallergy == '밀(밀가루)'}">밀(밀가루)</option>
+                        <option value="7" th:selected="${userInfo.uallergy == '잣'}">잣</option>
+                        <option value="8" th:selected="${userInfo.uallergy == '호두'}">호두</option>
+                        <option value="9" th:selected="${userInfo.uallergy == '게'}">게</option>
+                        <option value="10" th:selected="${userInfo.uallergy == '새우'}">새우</option>
+                        <option value="11" th:selected="${userInfo.uallergy == '오징어'}">오징어</option>
+                        <option value="12" th:selected="${userInfo.uallergy == '고등어'}">고등어</option>
+                        <option value="13" th:selected="${userInfo.uallergy == '조개류(굴, 전복, 홍합)'}">조개류(굴, 전복, 홍합)</option>
+                        <option value="14" th:selected="${userInfo.uallergy == '복숭아'}">복숭아</option>
+                        <option value="15" th:selected="${userInfo.uallergy == '토마토'}">토마토</option>
+                        <option value="16" th:selected="${userInfo.uallergy == '닭고기'}">닭고기</option>
+                        <option value="17" th:selected="${userInfo.uallergy == '돼지고기'}">돼지고기</option>
+                        <option value="18" th:selected="${userInfo.uallergy == '쇠고기'}">쇠고기</option>
+                        <option value="19" th:selected="${userInfo.uallergy == '아황산류(마른새우, 건표고, 조미김, 등)'}">아황산류(마른새우, 건표고, 조미김, 등)</option>
+                        <option value="20" th:selected="${userInfo.uallergy == '기타'}">기타</option>
+                    </select>
+            </p>
+
+            <button type="submit">수정 완료</button>
+        </form>
+    </section>
+
+    <!-- 취소 버튼 -->
+    <section class="cancel-section">
+        <form th:action="@{/mypage}" method="get">
+            <button type="submit">취소</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>© 2024 MyWebsite</p>
+</footer>
+
+</body>
+</html>
