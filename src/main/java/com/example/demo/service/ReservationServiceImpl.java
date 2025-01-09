@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.Member;
 import com.example.demo.domain.Reservation;
 import com.example.demo.repository.ReservationRepository;
 
@@ -80,4 +81,18 @@ public class ReservationServiceImpl implements ReservationService {
     public List<Reservation> findReservationsByCampingIdAndRoomAndDateRange(Long campingId, int room, Date checkinDate, Date checkoutDate) {
         return reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
     }
+    
+    @Override
+    public List<Reservation> findReservationsByMember(Member member) {
+        return List.of();
+    }
+
+    @Override
+    public Reservation getReservationByMemberId(Long memberId) {
+        return reservationRepository.findFirstByMember_Id(memberId)
+                .orElseThrow(() -> new RuntimeException("예약 정보를 찾을 수 없습니다."));
+    }
+    
+
+   
 }

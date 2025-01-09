@@ -68,6 +68,7 @@ public class ReservationController {
         model.addAttribute("camping", camping);
         model.addAttribute("room", room);
         model.addAttribute("maxRoomCount", product.getRoomcount());  // 전체 방 개수
+        
         model.addAttribute("remainingRoomCount", remainingRoomCount);  // 남은 방 개수
         model.addAttribute("checkin", checkinDate.toString());
         model.addAttribute("checkout", checkoutDate.toString());
@@ -75,7 +76,7 @@ public class ReservationController {
         return "/Reservation/reservationPage"; // 예약 페이지
     }
 
-    // 예약 처리
+	// 예약 처리
     @PostMapping("/reservation")
     public String reserve(@RequestParam Long campingId, 
                           @RequestParam int room, 

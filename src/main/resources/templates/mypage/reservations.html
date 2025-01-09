@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 정보</title>
+</head>
+<body>
+<h1>예약 정보</h1>
+
+<!-- 예약 정보 출력 -->
+<p>캠핑장 이름: <span th:text="${reservation.product.camping.facltnm}">캠핑장 이름</span></p>
+<p>캠핑장 주소: <span th:text="${reservation.product.camping.addr1}">캠핑장 주소</span></p>
+<p>예약 날짜: <span th:text="${reservation.checkin}">체크인 날짜</span> ~ <span th:text="${reservation.checkout}">체크아웃 날짜</span></p>
+<p>예약자 이름: <span th:text="${reservation.member.name}">회원 이름</span></p>
+
+
+<!-- 후기 작성 버튼 -->
+<form th:action="@{/reviews/checkReview}" method="get">
+    <input type="hidden" name="campingId" th:value="${reservation.product.camping.id}">
+    <input type="hidden" name="memberId" th:value="${reservation.member.id}">
+    <button type="submit">후기 작성</button>
+</form>
+
+<!-- 후기 작성 불가 안내 -->
+<div th:if="${!canWriteReview}">
+    <p>후기 작성 기간이 아닙니다. 후기 작성은 예약이 종료된 후 가능합니다.</p>
+</div>
+</body>
+</html>

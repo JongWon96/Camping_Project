@@ -1,18 +1,22 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Reservation;
-import java.sql.Date;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.sql.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     // 특정 회원의 예약 내역 조회
     List<Reservation> findByMember_Id(Long memberId);
+
+
 
     // 캠핑장 ID와 회원 ID로 예약 조회
     @Query("SELECT r FROM Reservation r WHERE r.product.camping.id = :campingId AND r.member.id = :memberId")
@@ -27,4 +31,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("room") int room,
             @Param("checkin") Date checkin,
             @Param("checkout") Date checkout);
+
+
+    Optional<Reservation> findFirstByMember_Id(Long memberId);
 }
+

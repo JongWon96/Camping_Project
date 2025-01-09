@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.demo.domain.Member;
 import com.example.demo.domain.Reservation;
 
 public interface ReservationService {
@@ -13,7 +14,7 @@ public interface ReservationService {
     // 예약 ID로 예약 정보 찾기
     Reservation findById(Long id);
 
-    // 예약 취소 처리
+    // 예약 취소 처리	
     void cancelReservation(Long reservationId);
 
     // 예약 기간이 끝났는지 확인하고 후기 작성이 가능한지 확인
@@ -27,4 +28,12 @@ public interface ReservationService {
 
     // 날짜 범위 내 예약된 방 목록을 조회
     List<Reservation> findReservationsByCampingIdAndRoomAndDateRange(Long campingId, int room, Date checkinDate, Date checkoutDate);
+    
+    
+    List<Reservation> findReservationsByMember(Member member);
+
+    Reservation getReservationByMemberId(Long memberId);
+    
+    
+    
 }

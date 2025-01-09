@@ -18,7 +18,7 @@
 
     <!-- 전체 방 개수 및 남은 방 개수 -->
     <p><strong>전체 방 개수:</strong> <span th:text="${maxRoomCount}">방 개수</span>개</p>
-    <p><strong>남은 방 개수:</strong> <span id="remainingRoomCount" th:text="${remainingRoomCount}">남은 방 개수</span>개</p>
+    <p><strong>남은 방 개수:</strong> <span th:text="${remainingRoomCount <= 0 ? '0' : remainingRoomCount}">0</span></span>개</p>
 
     <label for="checkin">체크인 날짜:</label>
     <input type="date" id="checkin" name="checkin" th:value="${checkin}" required><br>
