@@ -23,7 +23,7 @@ public class Product {
 
     private Integer room;
 
-    private Integer bottom;
+    private Integer roomcount;
 
     @ManyToOne
     @JoinColumn(name = "camping_id")
