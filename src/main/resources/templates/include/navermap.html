@@ -17,8 +17,8 @@
 
 	<script>
 	
-		var x = [[${campingPlace.mapX != null ? campingPlace.mapX : 0}]];  //경도
-		var y = [[${campingPlace.mapY != null ? campingPlace.mapY : 0}]];  //위도
+		var x = [[${CampingPlace.mapx != null ? CampingPlace.mapx : 0}]];  //경도
+		var y = [[${CampingPlace.mapy != null ? CampingPlace.mapy : 0}]];  //위도
 
 	
 		var mapOptions = {
@@ -40,34 +40,34 @@
 		        position: camping
 		    });
 	
-		var Name = [[${campingPlace.facltNm != null ? campingPlace.facltNm : ""}]];
+		var Name = [[${CampingPlace.facltnm != null ? CampingPlace.facltnm : ""}]];
 		
-		var addr1 = [[${campingPlace.doNm != null ? campingPlace.doNm : ""}]];
-		var addr2 = [[${campingPlace.sigungoNm != null ? campingPlace.sigungoNm: ""}]];
+		var addr1 = [[${CampingPlace.donm != null ? CampingPlace.donm : ""}]];
+		var addr2 = [[${CampingPlace.sigungunm != null ? CampingPlace.sigungunm: ""}]];
 		
-		var addr3 = [[${campingPlace.addr1 != null ? campingPlace.addr1 : ""}]];
+		var addr3 = [[${CampingPlace.addr1 != null ? CampingPlace.addr1 : ""}]];
 		
-		var tell = [[${campingPlace.tel != null ? campingPlace.tel : ""}]];
+		var tell = [[${CampingPlace.tel != null ? CampingPlace.tel : ""}]];
 		
-		var homepage = [[${campingPlace.homepage != null ? campingPlace.homepage : ""}]];
+		var homepage = [[${CampingPlace.homepage != null ? CampingPlace.homepage : ""}]];
 		
-		var category = [[${campingPlace.category != null ? campingPlace.category : ""}]];
+		var category = [[${CampingPlace.category != null ? CampingPlace.category : ""}]];
 		
-		var campingPlaceName = Name;
-		var campingPlaceAddress = addr1 + " " + addr2;
-		var campingPlaceAddress2 = addr3;
-		var campingPlaceTell = tell;
-		var campingPlaceSite = tell;
-		var campingPlaceTag = category;
+		var CampingPlaceName = Name;
+		var CampingPlaceAddress = addr1 + " " + addr2;
+		var CampingPlaceAddress2 = addr3;
+		var CampingPlaceTell = tell;
+		var CampingPlaceSite = tell;
+		var CampingPlaceTag = category;
 		
 		
 		var contentString = [
 		        '<div class="iw_inner">',
-		        '   <h3>' + campingPlaceName + '</h3>',
-		        '   <p>' + campingPlaceAddress + '|' + campingPlaceAddress2 + '<br />',
-		        '       ' + campingPlaceTell +'<br />',
-		        '       ' + campingPlaceTag +'<br />',
-		        '       <a href="' + campingPlaceSite + '" target="_blank">링크</a>',
+		        '   <h3>' + CampingPlaceName + '</h3>',
+		        '   <p>' + CampingPlaceAddress + '|' + CampingPlaceAddress2 + '<br />',
+		        '       ' + CampingPlaceTell +'<br />',
+		        '       ' + CampingPlaceTag +'<br />',
+		        '       <a href="' + CampingPlaceSite + '" target="_blank">링크</a>',
 		        '   </p>',
 		        '</div>'
 		    ].join('');

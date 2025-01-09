@@ -24,11 +24,21 @@ public class CampingController {
 	private ProductService productService;
 
 	@GetMapping("/campinglist")
-	private String campingList(@RequestParam(value = "page", defaultValue = "1") int page,
-								@RequestParam(value = "size", defaultValue = "10") int size, 
+	private String campingList(
+			@RequestParam(value = "searchWord", required=false) String searchWord,
+			@RequestParam(value = "searchDo", required=false) String doNm,
+			@RequestParam(value = "searchCl", required=false) String Cl,
+			@RequestParam(value = "searchLctCl", required=false) String LctCl,
+			@RequestParam(value = "searchInduty", required=false) String category,
+			@RequestParam(value = "searchSbrsClCode", required=false) String clCode,
+			@RequestParam(value = "searchTrlerAcmpnyAt", required=false) String trler,
+			@RequestParam(value = "searchCaravAcmpnyAt", required=false) String carav,
+			@RequestParam(value = "searchAnimalCmgCl", required=false) String animal,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size, 
 								Model model) {
 		
-		Page<Camping> campingPlaces = campingService.getAllCamping(null, 0, 0);
+		Page<Camping> campingPlaces = campingService.getAllCamping(null, page, size);
 		
 		model.addAttribute("campingPlaces", campingPlaces);
 
@@ -60,12 +70,13 @@ public class CampingController {
 			trlerResult = "불가능";
 		}
 		
-		model.addAttribute("campingPlace", campingPlace);
+		model.addAttribute("CampingPlace", campingPlace);
 		model.addAttribute("caravResult", caravResult);
 		model.addAttribute("trlerResult", trlerResult);
 		
+		productService
 		
-		Page<Review> reviews = reviewService.getReview(campingId, 0, 0);
+		Page<Review> reviews = reviewService.getReview(campingId, page, size);
 
 		model.addAttribute("reviews", reviews);
 

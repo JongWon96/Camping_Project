@@ -22,6 +22,8 @@ public class ReservationContoller {
 	@GetMapping("/reservation")
 	private String reservationPage() {
 		
+		
+		
 		return "tmp/ReservationPage";
 	}
 	
