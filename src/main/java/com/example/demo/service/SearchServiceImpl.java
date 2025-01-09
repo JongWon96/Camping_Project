@@ -24,7 +24,7 @@ public class SearchServiceImpl implements SearchService {
         String donm,
         String sigungunm,
         String category,
-        String campingName, // 캠핑장 이름 추가
+        String campingName,
         String flooring,
         LocalDate startDate,
         LocalDate endDate,
@@ -37,7 +37,7 @@ public class SearchServiceImpl implements SearchService {
             donm,
             sigungunm,
             category,
-            campingName, // 캠핑장 이름 전달
+            campingName,
             flooring,
             startDate,
             endDate,
