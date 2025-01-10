@@ -68,15 +68,32 @@ public class ReservationController {
         model.addAttribute("camping", camping);
         model.addAttribute("room", room);
         model.addAttribute("maxRoomCount", product.getRoomcount());  // 전체 방 개수
-        
         model.addAttribute("remainingRoomCount", remainingRoomCount);  // 남은 방 개수
         model.addAttribute("checkin", checkinDate.toString());
         model.addAttribute("checkout", checkoutDate.toString());
 
         return "/Reservation/reservationPage"; // 예약 페이지
     }
+ // 남은 방 개수를 계산하는 엔드포인트 추가
+    @GetMapping("/checkRemainingRooms")
+    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
+                                                                   @RequestParam int room, 
+                                                                   @RequestParam String checkin, 
+                                                                   @RequestParam String checkout) {
+        Date checkinDate = Date.valueOf(checkin);
+        Date checkoutDate = Date.valueOf(checkout);
 
-	// 예약 처리
+        // 남은 방 개수 계산
+        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+
+        // 결과를 Map에 담아 반환
+        Map<String, Integer> response = new HashMap<>();
+        response.put("remainingRooms", remainingRoomCount);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // 예약 처리
     @PostMapping("/reservation")
     public String reserve(@RequestParam Long campingId, 
                           @RequestParam int room, 
@@ -112,7 +129,7 @@ public class ReservationController {
         }
 
         // 방 갯수 확인 (날짜별로 남은 방 수 계산)
-        int remainingRoomCount = getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
 
         if (remainingRoomCount <= 0) {
             model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
@@ -133,37 +150,5 @@ public class ReservationController {
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
         return "redirect:/Reservation/reservation_details";
-    }
-
-    // 특정 날짜에 남은 방 개수 계산
-    public int getRemainingRooms(Long campingId, int room, Date checkinDate, Date checkoutDate) {
-        // 해당 캠핑장, 방 타입, 날짜 범위에 대한 예약 목록을 조회
-        List<Reservation> reservations = reservationService.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
-        
-        // 예약된 방 수
-        int reservedRooms = reservations.size();
-        
-        // 해당 방의 총 방 개수에서 예약된 방을 차감
-        Product product = productService.findByCamping_IdAndRoom(campingId, room);
-        int remainingRooms = product.getRoomcount() - reservedRooms;
-
-        return remainingRooms;
-    }
-
-    // 남은 방 개수를 계산하는 엔드포인트 추가
-    @GetMapping("/checkRemainingRooms")
-    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
-                                                                   @RequestParam int room, 
-                                                                   @RequestParam String checkin, 
-                                                                   @RequestParam String checkout) {
-        Date checkinDate = Date.valueOf(checkin);
-        Date checkoutDate = Date.valueOf(checkout);
-
-        int remainingRoomCount = getRemainingRooms(campingId, room, checkinDate, checkoutDate);
-
-        Map<String, Integer> response = new HashMap<>();
-        response.put("remainingRooms", remainingRoomCount);
-
-        return ResponseEntity.ok(response);
     }
 }

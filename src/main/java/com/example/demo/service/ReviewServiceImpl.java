@@ -25,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     // 후기 저장
     @Override
-    public Review saveReview(Long memberId, Long campingId, String content, Integer rate, String img, Integer danger) {
+    public Review saveReview(Long memberId, Long campingId, String content, Integer rate, String img) {
         // 회원과 캠핑장 정보 조회
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
         Camping camping = campingRepository.findById(campingId).orElseThrow(() -> new RuntimeException("Camping not found"));
@@ -36,18 +36,17 @@ public class ReviewServiceImpl implements ReviewService {
                 .camping(camping)
                 .content(content)
                 .rate(rate)
-                .img(img)
-                .danger(danger)  // 부적절한 내용 여부 (danger)
+                .img(img)            
                 .reviewdate(new Date())  // 현재 날짜로 설정
                 .build();
 
         // 후기 저장
         Review savedReview = reviewRepository.save(review);
 
-        // danger 값이 1이라면, 부적절한 후기 신고 처리를 추가
-        if (danger != null && danger > 0) {
-            alertAdminOfInappropriateReview(savedReview);  // 부적절한 후기 관리자에게 알림
-        }
+//        // danger 값이 1이라면, 부적절한 후기 신고 처리를 추가
+//        if (danger != null && danger > 0) {
+//            alertAdminOfInappropriateReview(savedReview);  // 부적절한 후기 관리자에게 알림
+//        }
 
         return savedReview;
     }
