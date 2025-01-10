@@ -1,26 +1,28 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Camping;
-import com.example.demo.domain.Member;
-import com.example.demo.domain.Product;
-import com.example.demo.domain.Reservation;
-import com.example.demo.service.CampingService;
-import com.example.demo.service.ProductService;
-import com.example.demo.service.ReservationService;
-import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
 
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.example.demo.domain.Camping;
+import com.example.demo.domain.Member;
+import com.example.demo.domain.Reservation;
+import com.example.demo.domain.Product;
+import com.example.demo.service.CampingService;
+import com.example.demo.service.ReservationService;
+import com.example.demo.service.ProductService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ReservationController {
@@ -72,6 +74,24 @@ public class ReservationController {
 
         return "/Reservation/reservationPage"; // 예약 페이지
     }
+ // 남은 방 개수를 계산하는 엔드포인트 추가
+    @GetMapping("/checkRemainingRooms")
+    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
+                                                                   @RequestParam int room, 
+                                                                   @RequestParam String checkin, 
+                                                                   @RequestParam String checkout) {
+        Date checkinDate = Date.valueOf(checkin);
+        Date checkoutDate = Date.valueOf(checkout);
+
+        // 남은 방 개수 계산
+        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+
+        // 결과를 Map에 담아 반환
+        Map<String, Integer> response = new HashMap<>();
+        response.put("remainingRooms", remainingRoomCount);
+
+        return ResponseEntity.ok(response);
+    }
 
     // 예약 처리
     @PostMapping("/reservation")
@@ -109,7 +129,7 @@ public class ReservationController {
         }
 
         // 방 갯수 확인 (날짜별로 남은 방 수 계산)
-        int remainingRoomCount = getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
 
         if (remainingRoomCount <= 0) {
             model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
@@ -130,37 +150,5 @@ public class ReservationController {
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
         return "redirect:/Reservation/reservation_details";
-    }
-
-    // 특정 날짜에 남은 방 개수 계산
-    public int getRemainingRooms(Long campingId, int room, Date checkinDate, Date checkoutDate) {
-        // 해당 캠핑장, 방 타입, 날짜 범위에 대한 예약 목록을 조회
-        List<Reservation> reservations = reservationService.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
-        
-        // 예약된 방 수
-        int reservedRooms = reservations.size();
-        
-        // 해당 방의 총 방 개수에서 예약된 방을 차감
-        Product product = productService.findByCamping_IdAndRoom(campingId, room);
-        int remainingRooms = product.getRoomcount() - reservedRooms;
-
-        return remainingRooms;
-    }
-
-    // 남은 방 개수를 계산하는 엔드포인트 추가
-    @GetMapping("/checkRemainingRooms")
-    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
-                                                                   @RequestParam int room, 
-                                                                   @RequestParam String checkin, 
-                                                                   @RequestParam String checkout) {
-        Date checkinDate = Date.valueOf(checkin);
-        Date checkoutDate = Date.valueOf(checkout);
-
-        int remainingRoomCount = getRemainingRooms(campingId, room, checkinDate, checkoutDate);
-
-        Map<String, Integer> response = new HashMap<>();
-        response.put("remainingRooms", remainingRoomCount);
-
-        return ResponseEntity.ok(response);
     }
 }

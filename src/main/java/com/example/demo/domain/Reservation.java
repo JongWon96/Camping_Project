@@ -24,11 +24,13 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int person;
+    private int person;  //인원수
 
-    private Date checkin;
-    private Date checkout;
+    private Date checkin;	//체크인
+    
+    private Date checkout;	//체크아웃
 
+    private String bottom;
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

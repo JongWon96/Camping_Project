@@ -5,6 +5,9 @@ import com.example.demo.domain.Member;
 import com.example.demo.service.ReservationService;
 import com.example.demo.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,12 +36,15 @@ public class ReviewController {
         // 로그인된 사용자의 ID
         Long memberId = loginUser.getId();
 
-        // Reservation 가져오기
-        Reservation reservation = reservationService.getReservationByMemberId(memberId);
-        if (reservation == null) {
+        // Reservation 가져오기 (여러 개의 예약을 조회)
+        List<Reservation> reservations = reservationService.findReservationsByMember(loginUser);
+        if (reservations.isEmpty()) {
             model.addAttribute("errorMessage", "예약 정보를 찾을 수 없습니다.");
             return "errorPage";
         }
+
+        // 예약이 존재한다면, 첫 번째 예약을 사용하거나 다른 방식으로 처리할 수 있습니다.
+        Reservation reservation = reservations.get(0); // 예시로 첫 번째 예약을 가져옴
 
         // Camping ID 가져오기
         Long campingId = reservation.getProduct().getCamping().getId();
@@ -76,7 +82,7 @@ public class ReviewController {
         boolean canWriteReview = reservationService.isReviewAvailable(campingId, memberId);
 
         if (canWriteReview) {
-            model.addAttribute("productId", campingId);
+            model.addAttribute("campingId", campingId);
             model.addAttribute("memberId", memberId);
             return "Review/write_review";
         } else {
@@ -113,7 +119,6 @@ public class ReviewController {
             @RequestParam String content,
             @RequestParam Integer rate,
             @RequestParam(required = false) String img,
-            @RequestParam Integer danger,
             HttpSession session
     ) {
         Member loginUser = (Member) session.getAttribute("loginUser");
@@ -122,7 +127,14 @@ public class ReviewController {
         }
 
         Long memberId = loginUser.getId();
-        reviewService.saveReview(memberId, campingId, content, rate, img, danger);
+
+        // 이미지가 없는 경우 처리
+        if (img == null || img.isEmpty()) {
+            img = ""; // 기본 이미지로 설정 가능
+        }
+
+        // 리뷰 저장
+        reviewService.saveReview(memberId, campingId, content, rate, img);
         return "redirect:/reviews/success";
     }
 
