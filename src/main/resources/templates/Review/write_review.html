@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>후기 작성</title>
+    <style>
+        .star-rating {
+            display: flex;
+            direction: row;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.checked {
+            color: #f39c12; /* 별점에 체크된 별의 색 */
+        }
+
+        .star:hover,
+        .star:hover ~ .star {
+            color: #f39c12; /* 마우스를 올리면 별이 변경되는 색 */
+        }
+    </style>
+</head>
+<body>
+    <h1>후기 작성</h1>
+
+    <!-- 폼 액션을 /submit으로 수정 -->
+    <form action="/submit" method="POST">
+        <input type="hidden" name="campingId" th:value="${campingId}">
+        <input type="hidden" name="memberId" th:value="${memberId}">
+
+        <label for="content">후기 내용:</label>
+        <textarea name="content" id="content" rows="5" cols="40" required></textarea><br>
+
+        <label for="rate">별점:</label>
+        <div class="star-rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div><br>
+
+        <input type="hidden" name="rate" id="rate" required>
+
+        <label for="img">이미지 (선택):</label>
+        <input type="text" name="img" id="img"><br>
+
+     
+        <input type="checkbox" name="danger" value="1"><br>
+
+        <button type="submit">후기 제출</button>
+    </form>
+
+    <script>
+        // 별 클릭 시 동작
+        const stars = document.querySelectorAll('.star');
+        const rateInput = document.getElementById('rate');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                rateInput.value = value; // rate 값을 폼에 설정
+                updateStars(value); // 별 업데이트
+            });
+        });
+
+        // 별의 체크 상태 업데이트
+        function updateStars(value) {
+            stars.forEach(star => {
+                if (star.getAttribute('data-value') <= value) {
+                    star.classList.add('checked');
+                } else {
+                    star.classList.remove('checked');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

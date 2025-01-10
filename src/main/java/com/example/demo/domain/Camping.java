@@ -27,7 +27,6 @@ public class Camping {
     @Id
     private Long id;
 
-
     @Column(name = "category")
     private String category;
 
@@ -275,5 +274,4 @@ public class Camping {
     @LastModifiedDate
     @Column(name = "modifiedtime")
     private LocalDateTime modifiedtime;
-
 }

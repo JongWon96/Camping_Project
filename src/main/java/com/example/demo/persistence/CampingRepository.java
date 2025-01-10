@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.example.demo.persistence;
 
 import com.example.demo.domain.Camping;
 import org.springframework.data.jpa.repository.JpaRepository;

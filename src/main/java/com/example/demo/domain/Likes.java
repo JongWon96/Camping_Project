@@ -22,9 +22,11 @@ public class Likes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-    @Column(name = "camping_id", nullable = false)
-    private Long campingId;
+    @ManyToOne
+    @JoinColumn(name = "camping_id", nullable = false)
+    private Camping camping;
 }

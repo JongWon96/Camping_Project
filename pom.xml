@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
+		<version>3.4.1</version>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
@@ -11,6 +12,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>Camping_Project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>Camping_Project</artifactId>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

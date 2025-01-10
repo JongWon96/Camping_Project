@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 상세</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- 필요에 따라 CSS 파일 추가 -->
+</head>
+<body>
+    <div class="container">
+        <h1>예약 상세 정보</h1>
+
+        <!-- 예약 정보 출력 -->
+        <div>
+            <p><strong>캠핑장 이름:</strong> <span th:text="${campingName}">캠핑장 이름</span></p>
+            <p><strong>예약자 이름:</strong> <span th:text="${memberName}">예약자 이름</span></p>
+            <p><strong>체크인 날짜:</strong> <span th:text="${checkIn}">체크인 날짜</span></p>
+            <p><strong>체크아웃 날짜:</strong> <span th:text="${checkOut}">체크아웃 날짜</span></p>
+        </div>
+
+        <!-- 후기 작성 가능 여부 -->
+        <div th:if="${canWriteReview}">
+            <p>후기를 작성할 수 있습니다.</p>
+      <a th:href="@{/write?campingId={campingId}&memberId={memberId}(campingId=${campingId}, memberId=${memberId})}">후기 작성하기</a>
+
+        </div>
+        <div th:if="${!canWriteReview}">
+            <p>후기를 작성할 수 없는 상태입니다.</p>
+        </div>
+
+        <!-- 예약 내역이 없다면 에러 메시지 -->
+        <div th:if="${errorMessage}">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+</body>
+</html>

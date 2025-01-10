@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
+
 import com.example.demo.domain.Inquiry;
-import dto.InquiryVo;
 import com.example.demo.domain.Member;
 import com.example.demo.persistence.InquiryRepository;
 import com.example.demo.persistence.MemberRepository;
@@ -17,27 +17,41 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+
 
     @Autowired
     private InquiryRepository inquiryRepository;
+    
+    @Autowired
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
+    public Optional<Member> findByUsername(String memberId) {
+        return memberRepository.findByMemberId(memberId);
+    }
+    
+    
     @Transactional
     @Override
-    public Member updateMemberInfo(String memberId, String phone, String address, String email) {
+    public Member updateMemberInfo(String memberId, String phone) {
         Member member = memberRepository.findMemberByMemberId(memberId);
         if (member == null) {
             throw new RuntimeException("수정할 회원을 찾을 수 없습니다.");
         }
-        member.setEmail(email);
-        member.setAddress(address);
         member.setPhone(phone);
         return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateMemberInfo(String memberId, String phone, String address, String email) {
+        return null;
     }
 
     @Transactional
@@ -162,4 +176,6 @@ public class MemberServiceImpl implements MemberService {
 
         return "/uploads/" + fileName; // 저장된 파일 경로 반환
     }
-}
+    }
+
+

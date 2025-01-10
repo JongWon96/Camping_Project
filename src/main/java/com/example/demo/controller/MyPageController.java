@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Inquiry;
+import com.example.demo.domain.Likes;
 import com.example.demo.domain.Member;
+import com.example.demo.domain.Reservation;
 import com.example.demo.persistence.InquiryRepository;
+import com.example.demo.service.LikesService;
 import com.example.demo.service.MemberService;
+import com.example.demo.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -28,6 +27,12 @@ public class MyPageController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private LikesService likesService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     // 공통된 사용자 세션 체크 메소드
     private Member getMemberFromSession(HttpSession session, RedirectAttributes redirectAttributes) {
@@ -46,9 +51,10 @@ public class MyPageController {
             return "redirect:/login";
         }
 
-        model.addAttribute("member", member); // 변수명을 "member"로 전달
+        model.addAttribute("member", member);
         return "mypage"; // mypage.html
     }
+
     // 사용자 정보 수정 페이지
     @GetMapping("/edit-info")
     public String editInfoPage(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -68,8 +74,6 @@ public class MyPageController {
             @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "address", required = false) String address,
             @RequestParam(value = "email", required = false) String email,
-
-
             RedirectAttributes redirectAttributes,
             HttpSession session
     ) {
@@ -77,9 +81,8 @@ public class MyPageController {
             Member updatedMember = memberService.updateMemberInfo(
                     member.getMemberId(),
                     phone != null ? phone : member.getPhone(),
-                    address!= null ? address : member.getAddress(),
-                    email!= null ? email : member.getEmail()
-
+                    address != null ? address : member.getAddress(),
+                    email != null ? email : member.getEmail()
             );
             session.setAttribute("loginUser", updatedMember);
 
@@ -210,12 +213,74 @@ public class MyPageController {
         return "redirect:/mypage/Inquiry";
     }
 
+    // 예약 내역 조회
+    @GetMapping("/reservations")
+    public String showReservations(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Member member = getMemberFromSession(session, redirectAttributes);
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        List<Reservation> reservations = reservationService.findReservationsByMember(member);
+        model.addAttribute("reservations", reservations);
+
+        return "mypage/reservations";
+    }
+
+    // 예약 취소 처리
+    @PostMapping("/reservation/cancel")
+    public String cancelReservation(
+            @RequestParam Long reservationId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Member member = getMemberFromSession(session, redirectAttributes);
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            reservationService.cancelReservation(reservationId, member);
+            redirectAttributes.addFlashAttribute("successMessage", "예약이 성공적으로 취소되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "예약 취소 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/mypage/reservations";
+    }
+
+    // 찜 목록 페이지
+    @GetMapping("/likes")
+    public String showLikesPage(HttpSession session, Model model) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login"; // 로그인 페이지로 리다이렉트
+        }
+
+        List<Likes> likes = likesService.getLikesByMember(loginUser.getMemberId());
+        model.addAttribute("member", loginUser);
+        model.addAttribute("likes", likes);
+
+        return "mypage/likes"; // 찜 목록 페이지
+    }
+
+    // 찜 삭제 처리
+    @PostMapping("/remove")
+    public String removeLike(@RequestParam Long campingId, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
+
+        likesService.removeLike(loginUser.getMemberId(), campingId);
+        return "redirect:/mypage/likes";
+    }
+
+    // 로그아웃
     @PostMapping("/logout")
-    public String logout(HttpSession session , RedirectAttributes redirectAttributes) {
-        // 세션 무효화
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
         redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
-
         return "redirect:/login";
     }
 }
