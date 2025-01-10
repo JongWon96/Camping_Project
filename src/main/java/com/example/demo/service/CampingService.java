@@ -8,6 +8,6 @@ public interface CampingService {
 
 	public Camping getCampingDetail(Long campingId);
 
-	public Page<Camping> getAllCamping(Long campingId, int page, int size);
+	public Page<Camping> getAllCamping(int page, int size);
 	
 }

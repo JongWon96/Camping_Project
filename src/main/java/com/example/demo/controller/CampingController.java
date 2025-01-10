@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Camping;
+import com.example.demo.domain.Product;
 import com.example.demo.domain.Review;
 import com.example.demo.service.CampingService;
 import com.example.demo.service.ProductService;
@@ -22,25 +25,24 @@ public class CampingController {
 	private ReviewService reviewService;
 	@Autowired
 	private ProductService productService;
-
+	
 	@GetMapping("/campinglist")
 	private String campingList(
-			@RequestParam(value = "searchWord", required=false) String searchWord,
+			@RequestParam(value = "campingName", required=false) String campingName,
 			@RequestParam(value = "searchDo", required=false) String doNm,
-			@RequestParam(value = "searchCl", required=false) String Cl,
-			@RequestParam(value = "searchLctCl", required=false) String LctCl,
-			@RequestParam(value = "searchInduty", required=false) String category,
-			@RequestParam(value = "searchSbrsClCode", required=false) String clCode,
-			@RequestParam(value = "searchTrlerAcmpnyAt", required=false) String trler,
-			@RequestParam(value = "searchCaravAcmpnyAt", required=false) String carav,
-			@RequestParam(value = "searchAnimalCmgCl", required=false) String animal,
+
+			@RequestParam(value = "category", required=false) String category,
+			@RequestParam(value = "bonfire", required=false) String bonfire,
+			@RequestParam(value = "trailerAllowed", required=false) String trailerAllowed,
+			@RequestParam(value = "caravanAllowed", required=false) String caravanAllowed,
+			@RequestParam(value = "petAllowed", required=false) String petAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, 
+			@RequestParam(value = "size", defaultValue = "9") int size, 
 								Model model) {
 		
-		Page<Camping> campingPlaces = campingService.getAllCamping(null, page, size);
+		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
 		
-		model.addAttribute("campingPlaces", campingPlaces);
+		model.addAttribute("CampingPlaces", CampingPlaces);
 
 		return "tmp/ListPage";
 	}
@@ -52,6 +54,19 @@ public class CampingController {
 									Model model) {
 
 		Camping campingPlace = campingService.getCampingDetail(campingId);
+		List<Product> products = productService.getProducts(campingId);
+		List<Review> tmpReviews = reviewService.getRate(campingId);
+		
+		Integer result = 0;
+		
+		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
+//		for(Review review : tmpReviews) {
+//			result += review.getRate();
+//		}
+//		result = result/(Integer)tmpReviews.size();
+//		
+//		model.addAttribute("rate", result);
+		model.addAttribute("products", products);
 		
 		String carav = campingPlace.getCaravacmpnyat();
 		String trler = campingPlace.getTrleracmpnyat();
@@ -73,8 +88,6 @@ public class CampingController {
 		model.addAttribute("CampingPlace", campingPlace);
 		model.addAttribute("caravResult", caravResult);
 		model.addAttribute("trlerResult", trlerResult);
-		
-		productService
 		
 		Page<Review> reviews = reviewService.getReview(campingId, page, size);
 

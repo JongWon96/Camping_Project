@@ -8,7 +8,7 @@ import com.example.demo.domain.Camping;
 
 public interface CampingRepository extends JpaRepository<Camping, Long> {
 
-	Page<Camping> findAllById(Long campingId, Pageable Pageable);
+	Page<Camping> findAll(Pageable Pageable);
 
 	
 }

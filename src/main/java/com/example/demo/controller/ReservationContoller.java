@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.Reservation;
+import com.example.demo.service.ProductService;
 import com.example.demo.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,13 +20,18 @@ public class ReservationContoller {
 	
 	@Autowired 
 	private ReservationService reservationService;
+	@Autowired 
+	private ProductService productService;
 
-	@GetMapping("/reservation")
-	private String reservationPage() {
+	@GetMapping("/reservationpage")
+	private String reservationPage(@RequestParam("productid") Long productId, 
+									@RequestParam("room") Integer roomNum, Model model) {
 		
+		Product product = productService.getProductByRoom(productId, roomNum);
 		
+		model.addAttribute("product", product);
 		
-		return "tmp/ReservationPage";
+		return "tmp/reservationPage";
 	}
 	
 	@PostMapping("/reservation_success")
