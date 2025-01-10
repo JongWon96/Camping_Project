@@ -12,7 +12,7 @@ import com.example.demo.domain.Camping;
 public interface SearchRepository extends JpaRepository<Camping, Long> {
 
 	@Query(value = """
-		    SELECT c.* 
+		    SELECT DISTINCT c.*  -- DISTINCT 추가
 		    FROM Camping c
 		    LEFT JOIN Product p ON c.id = p.camping_id
 		    LEFT JOIN Reservation r ON r.product_id = p.id
@@ -28,7 +28,7 @@ public interface SearchRepository extends JpaRepository<Camping, Long> {
 		                WHEN '자갈' THEN c.sitebottomcl4
 		                WHEN '맨흙' THEN c.sitebottomcl5
 		                ELSE NULL END) <> '0')
-		      AND (:bonfire IS NULL OR c.eqpmnlendcl LIKE %:bonfire%)
+		      AND (:bonfire IS NULL OR (:bonfire = 'Y' AND c.eqpmnlendcl LIKE '%화로대%'))
 		      AND (:petAllowed IS NULL OR c.animalcmgcl = :petAllowed)
 		      AND (:trailerAllowed IS NULL OR c.trleracmpnyat = :trailerAllowed)
 		      AND (:caravanAllowed IS NULL OR c.caravacmpnyat = :caravanAllowed)
@@ -59,4 +59,6 @@ public interface SearchRepository extends JpaRepository<Camping, Long> {
 		    @Param("trailerAllowed") String trailerAllowed,
 		    @Param("caravanAllowed") String caravanAllowed
 		);
+
+
 }

@@ -23,44 +23,44 @@ class SearchServiceTest {
         // 테스트 데이터 입력
         String donm = "충청남도";
         String sigungunm = "태안군";
-        //String category = "일반 캠핑";
-        //String campingName = "우니메이카 태안점";
-        //String flooring = "데크";
-        //LocalDate startDate = LocalDate.of(2025, 1, 10); // 예약 시작 날짜
-        //LocalDate endDate = LocalDate.of(2025, 1, 20);   // 예약 종료 날짜
-        //String bonfire = "Y";
-        //String petAllowed = "가능";
-        //String trailerAllowed = "N";
-        //String caravanAllowed = "N";
+        String category = "일반 캠핑";
+        String campingName = "우니메이카";
+        String flooring = "데크";
+        LocalDate startDate = LocalDate.of(2025, 1, 10); // 예약 시작 날짜
+        LocalDate endDate = LocalDate.of(2025, 1, 20);   // 예약 종료 날짜
+        String bonfire = "Y"; // 불멍 여부
+        String petAllowed = "가능";
+        String trailerAllowed = "N";
+        String caravanAllowed = "N";
 
         // 실제 서비스 호출
         List<Camping> results = searchService.searchCampings(
             donm,
             sigungunm,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            category,
+            campingName,
+            flooring,
+            startDate,
+            endDate,
+            bonfire,
+            petAllowed,
+            trailerAllowed,
+            caravanAllowed
         );
 
         // 결과 출력
         System.out.println("=== 검색 조건 ===");
         System.out.println("도: " + donm);
         System.out.println("시군구: " + sigungunm);
-        //System.out.println("카테고리: " + category);
-        //System.out.println("캠핑장 이름: " + campingName);
-        //System.out.println("바닥재: " + flooring);
-        //System.out.println("시작 날짜: " + startDate);
-        //System.out.println("종료 날짜: " + endDate);
-        //System.out.println("불멍 여부: " + bonfire);
-        //System.out.println("반려동물 가능 여부: " + petAllowed);
-        //System.out.println("트레일러 가능 여부: " + trailerAllowed);
-        //System.out.println("카라반 가능 여부: " + caravanAllowed);
+        System.out.println("카테고리: " + category);
+        System.out.println("캠핑장 이름: " + campingName);
+        System.out.println("바닥재: " + flooring);
+        System.out.println("시작 날짜: " + startDate);
+        System.out.println("종료 날짜: " + endDate);
+        System.out.println("불멍 여부: " + bonfire);
+        System.out.println("반려동물 가능 여부: " + petAllowed);
+        System.out.println("트레일러 가능 여부: " + trailerAllowed);
+        System.out.println("카라반 가능 여부: " + caravanAllowed);
         System.out.println();
 
         System.out.println("=== 검색 결과 ===");
@@ -86,4 +86,5 @@ class SearchServiceTest {
             .anyMatch(camping -> camping.getFacltnm().contains(campingName));
         assertTrue(containsCampingName, "검색 결과에 캠핑장이 포함되어야 합니다.");
     }
+
 }
