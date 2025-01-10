@@ -3,12 +3,12 @@ package com.example.demo.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.demo.persistence.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Reservation;
-import com.example.demo.repository.ReservationRepository;
 
 import jakarta.transaction.Transactional;
 @Service
@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     // 예약 취소 처리 (방 수량 복구는 불필요)
     @Override
-    public void cancelReservation(Long reservationId) {
+    public void cancelReservation(Long reservationId, Member member) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         if (reservation != null) {
             reservationRepository.delete(reservation); // 예약 취소

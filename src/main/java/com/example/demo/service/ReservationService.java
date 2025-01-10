@@ -15,7 +15,7 @@ public interface ReservationService {
     Reservation findById(Long id);
 
     // 예약 취소 처리
-    void cancelReservation(Long reservationId);
+    void cancelReservation(Long reservationId, Member member);
 
     // 예약 기간이 끝났는지 확인하고 후기 작성이 가능한지 확인
     boolean isReviewAvailable(Long campingId, Long memberId);

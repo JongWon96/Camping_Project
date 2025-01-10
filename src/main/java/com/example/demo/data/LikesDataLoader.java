@@ -55,3 +55,4 @@ public class LikesDataLoader implements CommandLineRunner {
         System.out.println("모든 멤버에게 랜덤 찜 데이터 생성 완료!");
     }
 }
+*/

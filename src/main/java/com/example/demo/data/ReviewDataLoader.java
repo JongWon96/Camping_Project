@@ -1,4 +1,4 @@
-package com.example.demo.data;/*package com.example.demo.persistence;
+/*package com.example.demo.data;/*package com.example.demo.persistence;
 
 import com.example.demo.domain.Camping;
 import com.example.demo.domain.Member;
@@ -54,3 +54,5 @@ public class ReviewDataLoader implements CommandLineRunner {
         System.out.println("모든 캠핑장에 리뷰 데이터 생성 완료!");
     }
 }
+
+ */

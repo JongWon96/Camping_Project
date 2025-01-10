@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.domain.Inquiry;
 import com.example.demo.domain.Member;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -10,6 +11,9 @@ import java.util.List;
 
 @Service
 public interface MemberService {
+
+    @Transactional
+    Member updateMemberInfo(String memberId, String phone);
 
     Member updateMemberInfo(String memberId, String phone, String address, String email);
 

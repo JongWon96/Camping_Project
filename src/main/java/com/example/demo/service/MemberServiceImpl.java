@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 
 import com.example.demo.domain.Inquiry;
-import dto.InquiryVo;
 import com.example.demo.domain.Member;
 import com.example.demo.persistence.InquiryRepository;
 import com.example.demo.persistence.MemberRepository;
@@ -18,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -33,8 +33,7 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
-    @Override
-    public Member findByUsername(String memberId) {
+    public Optional<Member> findByUsername(String memberId) {
         return memberRepository.findByMemberId(memberId);
     }
     
