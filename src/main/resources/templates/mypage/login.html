@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이페이지</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* 전체 레이아웃 설정 */
+        .content-wrapper {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        /* 헤더 스타일 (초록색 배경) */
+        header {
+            background-color: #28a745; /* 초록색 배경 */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* 사이드 메뉴 스타일 */
+        .side-menu {
+            width: 200px;
+            background-color: #e9f5e9; /* 연한 초록색 배경 */
+            padding: 15px;
+            border-right: 1px solid #ccc;
+            height: 100%; /* 페이지 높이에 맞추기 */
+        }
+
+        .side-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .side-menu ul li {
+            margin-bottom: 15px;
+        }
+
+        .side-menu ul li a {
+            text-decoration: none;
+            color: #28a745; /* 초록색 링크 */
+            font-size: 16px;
+        }
+
+        .side-menu ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* 메인 컨텐츠 스타일 */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            background-color: #28a745; /* 초록색 버튼 */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #218838; /* 진한 초록색 */
+        }
+
+        /* 팝업 스타일 */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup-content button {
+            margin-top: 10px;
+            background-color: #28a745; /* 초록색 버튼 */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 8px 15px;
+        }
+
+        .popup-content button:hover {
+            background-color: #218838;
+        }
+
+        /* 에러 메시지 스타일 */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* 푸터 스타일 */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #e9f5e9; /* 연한 초록색 */
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>마이페이지</h1>
+</header>
+
+<main class="container">
+    <div class="content-wrapper">
+        <!-- 성공 팝업 메시지 -->
+        <div id="successPopup" class="popup" th:if="${successMessage}">
+            <div class="popup-content">
+                <p th:text="${successMessage}"></p>
+                <button onclick="closePopup()">확인</button>
+            </div>
+        </div>
+
+        <!-- 에러 메시지 -->
+        <div th:if="${errorMessage}" class="alert error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <!-- 왼쪽 메뉴 -->
+        <nav class="side-menu">
+            <ul>
+                <li><a th:href="@{/main}">메인페이지 이동</a></li>
+                <li><a th:href="@{/diary}">다이어리 이동</a></li>
+                <li>
+                    <form th:action="@{/mypage/delete}" method="post" style="display: inline;">
+                        <button type="submit" style="all: unset; color: #28a745; cursor: pointer;">회원탈퇴</button>
+                    </form>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 사용자 정보 표시 -->
+            <section class="info-box">
+                <h2>사용자 정보</h2>
+                <p>
+                    <strong>아이디:</strong>
+                    <input type="text" th:value="${userInfo.uid}" readonly>
+                </p>
+                <p>
+                    <strong>이름:</strong>
+                    <input type="text" th:value="${userInfo.uname}" readonly>
+                </p>
+                <p>
+                    <strong>연락처:</strong>
+                    <input type="text" th:value="${userInfo.uphone}" id="uphone" name="uphone"  readonly >
+                </p>
+
+
+                <p>
+                    <strong>나이:</strong>
+                    <input type="text" th:value="${userInfo.uage}" readonly>
+                </p>
+                <p>
+                    <strong>체중:</strong>
+                    <input type="text" th:value="${userInfo.uweight}" id="uweight" name="uweight" readonly>
+                </p>
+                <p>
+                    <strong>키:</strong>
+                    <input type="text" th:value="${userInfo.uheight}" id="uheight" name="uheight" readonly>
+                </p>
+
+                <p>
+                    <strong>목표 체중:</strong>
+                    <input type="text" th:value="${userInfo.ugoal}" id="ugoal" name="ugoal" readonly>
+                </p>
+                <p>
+                    <strong>목표:</strong>
+                    <input type="text" id="ustyle" readonly
+                           th:value="${userInfo.ustyle == 1 ? '체중감량'
+                   : (userInfo.ustyle == 2 ? '근육증가'
+                   : (userInfo.ustyle == 3 ? '건강유지'
+                   : (userInfo.ustyle == 4 ? '기타' : '알 수 없음')))}" />
+                </p>
+
+                <p>
+                    <strong>알러지:</strong>
+                    <input type="text" th:value="${userInfo.uallergy}" id="uallergy" name="uallergy" readonly>
+                </p>
+            </section>
+
+            <!-- 회원정보 수정 버튼 -->
+            <section class="info-edit-section">
+                <form th:action="@{/mypage/edit-info}" method="get">
+                    <button type="submit">회원정보 수정</button>
+                </form>
+            </section>
+
+            <!-- 비밀번호 변경 버튼 -->
+            <section class="password-change-section">
+                <form th:action="@{/mypage/changepassword}" method="get">
+                    <button type="submit">비밀번호 변경</button>
+                </form>
+            </section>
+
+            <!-- 로그아웃 버튼 -->
+            <section class="logout-section">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">로그아웃</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>© 2024 MyWebsite</p>
+</footer>
+
+<script>
+    // 팝업 닫기 함수
+    function closePopup() {
+        document.getElementById("successPopup").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
