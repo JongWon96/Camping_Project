@@ -1,8 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Camping;
-import com.example.demo.repository.CampingRepository;
-import com.example.demo.service.CampingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

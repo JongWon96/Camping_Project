@@ -1,15 +1,15 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import jakarta.annotation.PostConstruct;
-
 import com.example.demo.domain.Camping;
 import com.example.demo.domain.Product;
-import com.example.demo.repository.ProductRepository;
-import com.example.demo.repository.CampingRepository;
-import com.example.demo.service.ProductService;
+import com.example.demo.domain.Reservation;
+import com.example.demo.persistence.CampingRepository;
+import com.example.demo.persistence.ProductRepository;
+import com.example.demo.persistence.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,16 +18,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository; // Product 저장용 리포지토리
-
+    @Autowired
+    private ReservationRepository reservationRepository; 
     @Autowired
     private CampingRepository campingRepository; // Camping 조회용 리포지토리
 
-//    // 애플리케이션 시작 시 상품 생성
-//    @PostConstruct
-//    public void generateProductsForExistingCampingsAtStartup() {
-//        generateProductsForExistingCampings(); 
-//    }
-
+    // 애플리케이션 시작 시 상품 생성
     @Override
     public void generateProductsForExistingCampings() {
         // DB에서 모든 캠핑장 정보 조회
@@ -115,33 +111,33 @@ public class ProductServiceImpl implements ProductService {
         return (price / 1000) * 1000.0; // 1000으로 나누고 다시 곱해서 만원 단위로
     }
 
-    // 예약이 성공하면 방 갯수 차감
-    public void reduceRoomCount(Long campingId, int room) {
-        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
-        if (product != null) {
-            if (product.getRoomcount() > 0) {
-                product.setRoomcount(product.getRoomcount() - 1);
-                productRepository.save(product);
-            } else {
-                // 방이 더 이상 없으면 에러 처리나 로그 출력
-                System.out.println("No rooms available for the given product.");
-            }
-        }
-    }
-
-
-    // 예약 취소 시 방 갯수 복구
-    public void restoreRoomCount(Long campingId, int room) {
-        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
-        if (product != null) {
-            product.setRoomcount(product.getRoomcount() + 1);
-            productRepository.save(product); // 방 수량 복구 후 저장
-        }
-    }
     // 캠핑장 ID와 방 이름(room)으로 Product 찾기
     public Product findByCamping_IdAndRoom(Long campingId, int room) {
         // ProductRepository에서 캠핑장 ID와 방 이름(room)으로 찾기
         return productRepository.findByCamping_IdAndRoom(campingId, room);
     }
-    
+
+    @Override
+    public int getRoomCount(Long campingId, int room) {
+        // 캠핑장 ID와 방 타입에 해당하는 Product를 조회
+        Product product = productRepository.findByCamping_IdAndRoom(campingId, room);
+        if (product != null) {
+            return product.getRoomcount();  // 총 방 수를 반환
+        } else {
+            return 0;  // 해당하는 상품이 없으면 0을 반환
+        }
+    }
+
+    @Override
+    public int getReservedRoomCount(Long campingId, int room, String checkin, String checkout) {
+        // 날짜를 Date 타입으로 변환
+        Date checkinDate = Date.valueOf(checkin);
+        Date checkoutDate = Date.valueOf(checkout);
+
+        // 특정 캠핑장과 방 타입에 해당하는 예약 목록 조회
+        List<Reservation> reservations = reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
+
+        // 예약된 방 수를 반환
+        return reservations.size();
+    }
 }

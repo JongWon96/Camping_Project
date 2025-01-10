@@ -6,9 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    // MemberRepository
+    Optional<Member> findByMemberId(String memberId);
+
+    // CampingRepository
+    Optional<Member> findById(Long id);
 
     // Member ID로 회원 검색
     Member findMemberByMemberId(String memberId);
