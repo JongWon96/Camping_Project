@@ -23,6 +23,8 @@ public interface MemberService {
 
     void saveMember(Member member);
 
+
+
     Member findMemberByNameAndPhone(String name, String phone);
 
     Member findMemberByIdNameAndPhone(String memberId, String name, String phone);

@@ -58,5 +58,11 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recommendation> recommendations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude // 순환 참조 방지
+    private List<Likes> likes = new ArrayList<>();
+
+
 }
 
