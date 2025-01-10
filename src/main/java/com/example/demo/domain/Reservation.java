@@ -38,5 +38,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public void setBottom(String bottom) {
+    }
 }
 

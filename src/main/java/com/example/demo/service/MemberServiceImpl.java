@@ -4,8 +4,8 @@ package com.example.demo.service;
 import com.example.demo.domain.Inquiry;
 import dto.InquiryVo;
 import com.example.demo.domain.Member;
-import com.example.demo.repository.InquiryRepository;
-import com.example.demo.repository.MemberRepository;
+import com.example.demo.persistence.InquiryRepository;
+import com.example.demo.persistence.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,6 +48,11 @@ public class MemberServiceImpl implements MemberService {
         }
         member.setPhone(phone);
         return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateMemberInfo(String memberId, String phone, String address, String email) {
+        return null;
     }
 
     @Transactional
