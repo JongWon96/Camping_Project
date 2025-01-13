@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-
 <script type="text/javascript"
 	src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ejrkepww5a"></script>
 
@@ -15,76 +14,60 @@
 
 
 
-	<script>
-	
-		var x = [[${CampingPlace.mapx != null ? CampingPlace.mapx : 0}]];  //경도
-		var y = [[${CampingPlace.mapy != null ? CampingPlace.mapy : 0}]];  //위도
-
-	
-		var mapOptions = {
-		    center: new naver.maps.LatLng(37.7278127, 127.5112565),  //경도, 위도
-		    zoom: 15
-		};		
-	
-		var map = new naver.maps.Map('map', mapOptions);
+	<script th:inline="javascript">
+		var CampingObject = [[${CampingPlace}]];
+		/*
+		var x = [[${CampingPlace.mapx != null ? CampingPlace.mapx : 127.105399}]]; // 경도
+		var y = [[${CampingPlace.mapy != null ? CampingPlace.mapy : 37.3595704}]]; // 위도
+		*/
+		var x = CampingObject.mapx;
+		var y = CampingObject.mapy;
 		
 		var HOME_PATH = window.HOME_PATH || '.';
 
-		var camping = new naver.maps.LatLng(37.7278127, 127.5112565),
-		    map = new naver.maps.Map('map', {
-		        center: camping.destinationPoint(0, 500),
-		        zoom: 15
-		    }),
-		    marker = new naver.maps.Marker({
-		        map: map,
-		        position: camping
-		    });
-	
-		var Name = [[${CampingPlace.facltnm != null ? CampingPlace.facltnm : ""}]];
+		var camping = new naver.maps.LatLng(y, x), 
+			map = new naver.maps.Map(
+				'map', {
+					center : camping.destinationPoint(0, 250),
+					scaleControl: false,
+				    logoControl: false,
+				    mapDataControl: false,
+				    zoomControl: true,
+					zoom : 15
+				}), marker = new naver.maps.Marker({
+			map : map,
+			position : camping
+		});
 		
-		var addr1 = [[${CampingPlace.donm != null ? CampingPlace.donm : ""}]];
-		var addr2 = [[${CampingPlace.sigungunm != null ? CampingPlace.sigungunm: ""}]];
+		var Name = CampingObject.facltnm;
 		
-		var addr3 = [[${CampingPlace.addr1 != null ? CampingPlace.addr1 : ""}]];
-		
-		var tell = [[${CampingPlace.tel != null ? CampingPlace.tel : ""}]];
-		
-		var homepage = [[${CampingPlace.homepage != null ? CampingPlace.homepage : ""}]];
-		
-		var category = [[${CampingPlace.category != null ? CampingPlace.category : ""}]];
-		
-		var CampingPlaceName = Name;
-		var CampingPlaceAddress = addr1 + " " + addr2;
-		var CampingPlaceAddress2 = addr3;
-		var CampingPlaceTell = tell;
-		var CampingPlaceSite = tell;
-		var CampingPlaceTag = category;
-		
-		
-		var contentString = [
-		        '<div class="iw_inner">',
-		        '   <h3>' + CampingPlaceName + '</h3>',
-		        '   <p>' + CampingPlaceAddress + '|' + CampingPlaceAddress2 + '<br />',
-		        '       ' + CampingPlaceTell +'<br />',
-		        '       ' + CampingPlaceTag +'<br />',
-		        '       <a href="' + CampingPlaceSite + '" target="_blank">링크</a>',
-		        '   </p>',
-		        '</div>'
-		    ].join('');
+		var addr1 = /*[[${CampingPlace.donm != null ? CampingPlace.donm : ''}]]*/"";
+		var addr2 = /*[[${CampingPlace.sigungunm != null ? CampingPlace.sigungunm : '""'}]]*/"";
+		var addr3 = /*[[${CampingPlace.addr1 != null ? CampingPlace.addr1 : ''}]]*/"";
 
+		var tell = /*[[${CampingPlace.tel != null ? CampingPlace.tel : ''}]]*/"";
+		var homepage = /*[[${CampingPlace.homepage != null ? CampingPlace.homepage : ''}]]*/"";
+		var category = /*[[${CampingPlace.category != null ? CampingPlace.category : ''}]]*/"";
+
+		var contentString = [ '<div class="iw_inner">',
+				'   <h3>' + Name + '</h3>',
+				'   <p>' + addr1 + " " + addr2 + ' | ' + addr3 + '<br />',
+				'       카테고리: ' + category + '<br />'].join('');;
+		
 		var infowindow = new naver.maps.InfoWindow({
-		    content: contentString
+			content : contentString
 		});
 
 		naver.maps.Event.addListener(marker, "click", function(e) {
-		    if (infowindow.getMap()) {
-		        infowindow.close();
-		    } else {
-		        infowindow.open(map, marker);
-		    }
+			if (infowindow.getMap()) {
+				infowindow.close();
+			} else {
+				infowindow.open(map, marker);
+			}
 		});
 
-		infowindow.open(map, marker);
+		infowindow.open(map, marker); 
+		
 	</script>
 </body>
 </html>

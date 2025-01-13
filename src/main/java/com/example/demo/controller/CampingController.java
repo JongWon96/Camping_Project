@@ -55,17 +55,19 @@ public class CampingController {
 
 		Camping campingPlace = campingService.getCampingDetail(campingId);
 		List<Product> products = productService.getProducts(campingId);
-		List<Review> tmpReviews = reviewService.getRate(campingId);
-		
-		Integer result = 0;
 		
 		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
+//		List<Review> tmpReviews = reviewService.getRate(campingId);
+//		
+//		Integer result = 0;
+//		
 //		for(Review review : tmpReviews) {
 //			result += review.getRate();
 //		}
 //		result = result/(Integer)tmpReviews.size();
 //		
 //		model.addAttribute("rate", result);
+		
 		model.addAttribute("products", products);
 		
 		String carav = campingPlace.getCaravacmpnyat();

@@ -20,7 +20,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public Page<Review> getReview(Long campingId, int page, int size) {
-		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "reviewdate");
+		Pageable paging = PageRequest.of(page - 1, size, Direction.DESC, "reviewdate");
 
 		return reviewRepo.findReviewByCampingId(campingId, paging);
 	}

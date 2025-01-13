@@ -31,6 +31,9 @@ public class Reservation {
     private Date checkout;
     
     private String bottom;
+    
+    @Column(name = "hasreview")
+    private Boolean hasreview;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
