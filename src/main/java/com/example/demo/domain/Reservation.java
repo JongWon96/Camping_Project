@@ -39,7 +39,13 @@ public class Reservation {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public void setBottom(String bottom) {
-    }
-}
+    @Column(name = "hasreview")
+    private Boolean hasreview;
+
+		
+	}
+
+    
+    
+
 

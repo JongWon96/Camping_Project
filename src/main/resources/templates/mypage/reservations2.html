@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 상세 정보</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .reservation-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .reservation-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .reservation-details {
+            margin-bottom: 15px;
+        }
+        .reservation-footer {
+            margin-top: 20px;
+        }
+        .price {
+            color: #ff5722;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+        .reservation-image img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>예약 정보</h1>
+    <div class="reservation-list">
+        <!-- 여러 예약 정보를 반복하여 표시 -->
+        <div th:each="reservation : ${reservations}" class="reservation-card" 
+             th:data-checkin-date="${reservation.checkin}">
+            <div class="reservation-header">
+                <div>
+                    <p><strong>캠핑장 이름:</strong> <span th:text="${reservation.product.camping.facltnm}">캠핑장 이름</span></p>
+                    <p><strong>예약자 이름:</strong> <span th:text="${reservation.member.name}">예약자 이름</span></p>
+                </div>
+                <div class="reservation-image">
+                    <img th:src="${reservation.product.camping.firstimageurl}" alt="상품 이미지">
+                </div>
+            </div>
+            <div class="reservation-details">
+                <p><strong>체크인 날짜:</strong> <span th:text="${reservation.checkin}">체크인 날짜</span></p>
+                <p><strong>체크아웃 날짜:</strong> <span th:text="${reservation.checkout}">체크아웃 날짜</span></p>
+                <p><strong>가격:</strong> <span class="price" th:text="${reservation.product.price}">100,000원</span></p>
+            </div>
+            <div class="reservation-footer">
+                <!-- 예약 취소 버튼 -->
+            <form th:action="@{/cancelReservation}" method="post">
+                <input type="hidden" th:name="reservationId" th:value="${reservation.id}" />
+                <button type="submit" class="button cancel-button">예약 취소</button>
+            </form>
+            </br>
+                <!-- 후기 작성 가능 여부 버튼 활성화/비활성화 -->
+                <span th:if="${!reservation.hasreview}">
+                    <a th:href="@{/write?campingId={campingId}&memberId={memberId}(campingId=${reservation.product.camping.id}, memberId=${reservation.member.id})}"
+                     class="button review-button">후기 작성하기</a>
+                </span>
+                <span th:if="${reservation.hasreview}">
+                    <button class="button review-disabled-button" disabled>후기 작성 불가</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+   <script>
+   document.addEventListener("DOMContentLoaded", function() {
+	    const reviewButtons = document.querySelectorAll(".review-button");
+	    const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
+	    const cancelButtons = document.querySelectorAll(".cancel-button");
+	    const today = new Date();
+	    const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
+
+	    console.log("오늘 날짜:", todayString); // 오늘 날짜 로그 확인
+
+	    reviewButtons.forEach(function(button, index) {
+	        const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");  // 예약의 체크아웃 날짜
+	        const disabledButton = reviewDisabledButtons[index];  // 후기 작성 불가 버튼
+
+	        if (checkoutDateString) {
+	            const checkoutDate = new Date(checkoutDateString);
+	            if (isNaN(checkoutDate)) {
+	                console.error("잘못된 체크아웃 날짜:", checkoutDateString);
+	                return;  // 잘못된 날짜 처리
+	            }
+
+	            const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0];  // 'YYYY-MM-DD' 형식으로 변환
+
+	            console.log("체크아웃 날짜:", checkoutDateStringFormatted); // 체크아웃 날짜 로그 확인
+
+	            // 날짜 비교를 'YYYY-MM-DD' 형식으로만 비교
+	            if (checkoutDateStringFormatted < todayString) {
+	                button.style.display = 'inline-block';  // 후기 작성 버튼을 보이게
+	                disabledButton.style.display = 'none';  // 후기 작성 불가 버튼 숨기기
+	            } else {
+	                button.style.display = 'none';  // 후기 작성 버튼을 숨기기
+	                disabledButton.style.display = 'inline-block';  // 후기 작성 불가 버튼 보이게
+	            }
+	        }
+	    });
+	    
+	    cancelButtons.forEach(function(button, index) {
+	        const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");  // 예약의 체크인 날짜
+	        const checkinDate = new Date(checkinDateString);
+	        
+	        if (isNaN(checkinDate)) {
+	            console.error("잘못된 체크인 날짜:", checkinDateString);
+	            return;  // 잘못된 날짜 처리
+	        }
+
+	        const diffInTime = checkinDate - today;  // 체크인 날짜와 오늘 날짜의 차이를 밀리초로 계산
+	        const diffInDays = diffInTime / (1000 * 3600 * 24);  // 밀리초를 일(day) 단위로 변환
+
+	        console.log("체크인 날짜:", checkinDateString, "오늘과의 차이(일):", diffInDays);  // 날짜 차이 로그 확인
+
+	        // 10일 이상 차이가 나면 예약 취소 버튼을 활성화
+	        if (diffInDays >= 10) {
+	            button.disabled = false;  // 예약 취소 버튼 활성화
+	        } else {
+	            button.disabled = true;  // 예약 취소 버튼 비활성화
+	        }
+	    });
+	});
+
+   </script>
+
+</body>
+</html>

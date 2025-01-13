@@ -1,13 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>후기 작성</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* 컨테이너 스타일: 전체 가로 크기 줄이기 */
+        .container {
+            width: 50%; /* 가로 크기를 50%로 좁힘 */
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px; /* 패딩을 조금 더 추가 */
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px; /* 패딩을 늘려서 입력 박스를 더 크게 */
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 200px; /* 텍스트영역 세로 길이를 늘림 */
+        }
+
         .star-rating {
             display: flex;
             direction: row;
+            margin-bottom: 20px;
         }
 
         .star {
@@ -25,13 +70,48 @@
         .star:hover ~ .star {
             color: #f39c12; /* 마우스를 올리면 별이 변경되는 색 */
         }
+
+        input[type="file"] {
+            padding: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            margin-top: 10px;
+            width: auto;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
-<body>
-    <h1>후기 작성</h1>
 
-    <!-- 폼 액션을 /submit으로 수정 -->
-    <form action="/submit" method="POST">
+<body>
+<div class="container">
+    <h1>후기 작성</h1>
+    <form action="/submit" method="POST" id="reviewForm" enctype="multipart/form-data">
         <input type="hidden" name="campingId" th:value="${campingId}">
         <input type="hidden" name="memberId" th:value="${memberId}">
 
@@ -49,39 +129,49 @@
 
         <input type="hidden" name="rate" id="rate" required>
 
-        <label for="img">이미지 (선택):</label>
-        <input type="text" name="img" id="img"><br>
-
-     
-        <input type="checkbox" name="danger" value="1"><br>
+        <label for="img">이미지:</label>
+        <input type="file" name="imgFile" id="imgFile"><br>
 
         <button type="submit">후기 제출</button>
     </form>
 
-    <script>
-        // 별 클릭 시 동작
-        const stars = document.querySelectorAll('.star');
-        const rateInput = document.getElementById('rate');
+    <!-- 이전 페이지로 돌아가기 버튼 -->
+    <button type="button" class="back-button" onclick="window.history.back();">이전 페이지로 돌아가기</button>
+</div>
 
-        stars.forEach(star => {
-            star.addEventListener('click', function() {
-                const value = this.getAttribute('data-value');
-                rateInput.value = value; // rate 값을 폼에 설정
-                updateStars(value); // 별 업데이트
-            });
+<script>
+    // 별 클릭 시 동작
+    const stars = document.querySelectorAll('.star');
+    const rateInput = document.getElementById('rate');
+    const reviewForm = document.getElementById('reviewForm');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            rateInput.value = value; // rate 값을 폼에 설정
+            updateStars(value); // 별 업데이트
         });
+    });
 
-        // 별의 체크 상태 업데이트
-        function updateStars(value) {
-            stars.forEach(star => {
-                if (star.getAttribute('data-value') <= value) {
-                    star.classList.add('checked');
-                } else {
-                    star.classList.remove('checked');
-                }
-            });
+    // 별의 체크 상태 업데이트
+    function updateStars(value) {
+        stars.forEach(star => {
+            if (star.getAttribute('data-value') <= value) {
+                star.classList.add('checked');
+            } else {
+                star.classList.remove('checked');
+            }
+        });
+    }
+
+    // 폼 제출 전에 별점이 선택되었는지 확인
+    reviewForm.addEventListener('submit', function(event) {
+        if (!rateInput.value) { // 별점이 선택되지 않은 경우
+            alert('별점을 선택해 주세요!');
+            event.preventDefault(); // 폼 제출 막기
         }
-    </script>
+    });
+</script>
 
 </body>
 </html>

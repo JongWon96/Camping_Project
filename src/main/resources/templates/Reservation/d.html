@@ -1,0 +1,93 @@
+<!-- reservations.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 상세 정보</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .reservation-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .reservation-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .reservation-details {
+            margin-bottom: 15px;
+        }
+        .reservation-footer {
+            margin-top: 20px;
+        }
+        .price {
+            color: #ff5722;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+        .reservation-image img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>예약 정보</h1>
+    <div class="reservation-list">
+        <div th:each="reservation : ${reservations}" class="reservation-card">
+            <div class="reservation-header">
+                <div>
+                    <h2 th:text="${reservation.product.camping.facltnm}">캠핑장 이름</h2>
+                    <p th:text="'예약자: ' + ${reservation.member.name}">예약자 이름</p>
+                </div>
+                <div class="reservation-image">
+                    <img th:src="${reservation.product.camping.firstimageurl}" alt="상품 이미지">
+                </div>
+            </div>
+            <div class="reservation-details">
+                <p><strong>체크인:</strong> <span th:text="${reservation.checkin}">2025-01-01</span></p>
+                <p><strong>체크아웃:</strong> <span th:text="${reservation.checkout}">2025-01-05</span></p>
+                <p><strong>가격:</strong> <span class="price" th:text="${reservation.product.price}">100,000원</span></p>
+            </div>
+            <div class="reservation-footer">
+                <!-- 후기 작성 가능 여부 -->
+                <span th:if="${reservation.canWriteReview}">
+                    <a th:href="@{/write(campingId=${reservation.campingId}, memberId=${reservation.memberId})}" class="button">후기 작성하기</a>
+                </span>
+                <span th:if="${!reservation.canWriteReview}">
+                    <button class="button" disabled>후기 작성 불가</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

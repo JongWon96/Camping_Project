@@ -2,7 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Review;
 
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public interface ReviewService {
 
-    Review saveReview(Long memberId, Long campingId, String content, Integer rate, String img);
+    // 후기 저장 메소드 (이미지 파일을 받기 위한 MultipartFile 추가)
+    public Review saveReview(Long memberId, Long campingId, String content, Integer rate, MultipartFile imgFile) throws IOException;
+    
+    // 후기가 작성되었는지 확인하는 메소드 추가
+    boolean hasReview(Long memberId, Long campingId);
 }
