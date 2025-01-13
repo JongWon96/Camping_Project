@@ -1,37 +1,326 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예약 상세</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- 필요에 따라 CSS 파일 추가 -->
+    <title>예약 상세 정보</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            text-align: center;
+            background-color: #e0e0e0;
+            padding: 20px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .side-menu {
+            background-color: #e6e6e6;
+            width: 220px;
+            padding: 25px;
+            border-right: 1px solid #ccc;
+        }
+
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .side-menu ul li {
+            margin: 15px 0;
+        }
+
+        .side-menu ul li a,
+        .side-menu ul li form button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            display: block;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .side-menu ul li a:hover,
+        .side-menu ul li form button:hover {
+            color: #009688;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .reservation-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reservation-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .reservation-details {
+            margin-bottom: 15px;
+        }
+
+        .reservation-footer {
+            margin-top: 20px;
+        }
+
+        .price {
+            color: #ff5722;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .reservation-image img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: #e0e0e0;
+            color: #333;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #009688;
+            color: #fff;
+        }
+
+        .pagination .active {
+            background-color: #009688;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #e0e0e0;
+            color: #777;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #009688;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>예약 상세 정보</h1>
 
-        <!-- 예약 정보 출력 -->
-        <div>
-            <p><strong>캠핑장 이름:</strong> <span th:text="${campingName}">캠핑장 이름</span></p>
-            <p><strong>예약자 이름:</strong> <span th:text="${memberName}">예약자 이름</span></p>
-            <p><strong>체크인 날짜:</strong> <span th:text="${checkIn}">체크인 날짜</span></p>
-            <p><strong>체크아웃 날짜:</strong> <span th:text="${checkOut}">체크아웃 날짜</span></p>
-        </div>
+<header>
+  예약 확인 페이지
+</header>
 
-        <!-- 후기 작성 가능 여부 -->
-        <div th:if="${canWriteReview}">
-            <p>후기를 작성할 수 있습니다.</p>
-      <a th:href="@{/write?campingId={campingId}&memberId={memberId}(campingId=${campingId}, memberId=${memberId})}">후기 작성하기</a>
+<main class="content-wrapper">
+    <nav class="side-menu">
+        <ul>
+            <li><a th:href="@{/main}">메인페이지</a></li>
+            <li>
+                <form th:action="@{/mypage}" method="get">
+                    <button type="submit">마이페이지</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/reservations}" method="get">
+                    <button type="submit">예약내역</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/likes}" method="get">
+                    <button type="submit">찜목록</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/edit-info}" method="get">
+                    <button type="submit">회원정보 수정</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/changepassword}" method="get">
+                    <button type="submit">비밀번호 변경</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/logout}" method="post">
+                    <button type="submit">로그아웃</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
 
-        </div>
-        <div th:if="${!canWriteReview}">
-            <p>후기를 작성할 수 없는 상태입니다.</p>
-        </div>
+    <div class="main-content">
+        <div class="container">
+            <div class="reservation-list">
+                <div th:each="reservation : ${reservations}" class="reservation-card" 
+                     th:data-checkin-date="${reservation.checkin}" 
+                     th:data-checkout-date="${reservation.checkout}">
+                    <div class="reservation-header">
+                        <div>
+                            <p><strong>캠핑장 이름:</strong> <span th:text="${reservation.product.camping.facltnm}">캠핑장 이름</span></p>
+                            <p><strong>예약자 이름:</strong> <span th:text="${reservation.member.name}">예약자 이름</span></p>
+                        </div>
+                        <div class="reservation-image">
+                            <img th:src="${reservation.product.camping.firstimageurl}" alt="상품 이미지">
+                        </div>
+                    </div>
+                    <div class="reservation-details">
+                        <p><strong>체크인 날짜:</strong> <span th:text="${reservation.checkin}">체크인 날짜</span></p>
+                        <p><strong>체크아웃 날짜:</strong> <span th:text="${reservation.checkout}">체크아웃 날짜</span></p>
+                        <p><strong>가격:</strong> <span class="price" th:text="${reservation.product.price}">100,000원</span></p>
+                    </div>
+                    <div class="reservation-footer">
+                        <form th:action="@{/cancelReservation}" method="post">
+                            <input type="hidden" th:name="reservationId" th:value="${reservation.id}" />
+                            <button type="submit" class="button cancel-button">예약 취소</button>
+                        </form>
+                        <br>
+                        <span th:if="${!reservation.hasreview}">
+                            <a th:href="@{/write?campingId={campingId}&memberId={memberId}(campingId=${reservation.product.camping.id}, memberId=${reservation.member.id})}"
+                               class="button review-button">후기 작성하기</a>
+                        </span>
+                        <span th:if="${reservation.hasreview}">
+                            <button class="button review-disabled-button" disabled>후기 작성 불가</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-        <!-- 예약 내역이 없다면 에러 메시지 -->
-        <div th:if="${errorMessage}">
-            <p th:text="${errorMessage}"></p>
         </div>
     </div>
+</main>
+
+<footer>
+    © 2025 <a href="#">MyWebsite</a>. All Rights Reserved.
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const reviewButtons = document.querySelectorAll(".review-button");
+    const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
+    const cancelButtons = document.querySelectorAll(".cancel-button");
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
+
+    reviewButtons.forEach(function(button, index) {
+        const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
+        const disabledButton = reviewDisabledButtons[index];
+
+        if (checkoutDateString) {
+            const checkoutDate = new Date(checkoutDateString);
+            const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0]; 
+
+            if (checkoutDateStringFormatted < todayString) {
+                button.style.display = 'inline-block'; 
+                disabledButton.style.display = 'none'; 
+            } else {
+                button.style.display = 'none';
+                disabledButton.style.display = 'inline-block';
+            }
+        }
+    });
+
+    cancelButtons.forEach(function(button, index) {
+        const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
+        const checkinDate = new Date(checkinDateString);
+        
+        if (isNaN(checkinDate)) {
+            console.error("잘못된 체크인 날짜:", checkinDateString);
+            return;  
+        }
+
+        const diffInTime = checkinDate - today;
+        const diffInDays = diffInTime / (1000 * 3600 * 24); 
+        
+        if (diffInDays >= 10) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    });
+});
+</script>
+
 </body>
 </html>
