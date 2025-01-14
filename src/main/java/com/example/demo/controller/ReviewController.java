@@ -123,7 +123,7 @@ public class ReviewController {
         // 리뷰 저장 (이미지 파일을 전달)
         reviewService.saveReview(memberId, campingId, content, rate, imgFile);
 
-        return "redirect:/reviews/success"; // 리뷰 작성 후 성공 페이지로 이동
+        return "redirect:/success"; // 리뷰 작성 후 성공 페이지로 이동
     }
 
     // 후기 작성 성공 페이지
@@ -131,4 +131,8 @@ public class ReviewController {
     public String reviewSuccess() {
         return "review/review_success"; // 후기 작성 성공 페이지
     }
+
+//	@GetMapping("/rewiews")
+//	public String rewiewList(@RequestParam,){getReviewsByCampingId
 }
+
