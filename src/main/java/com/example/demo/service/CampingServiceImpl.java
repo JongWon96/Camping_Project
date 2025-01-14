@@ -38,4 +38,10 @@ public class CampingServiceImpl implements CampingService{
 		return campRepo.findAll();
 	}
 
+	@Override
+	public Camping getCampingByProductId(Long productId) {
+	
+		return campRepo.findCampingByProductid(productId);
+	}
+
 }

@@ -14,4 +14,6 @@ public interface CampingService {
 	
 	public List<Camping> getTmpCamping();
 	
+	public Camping getCampingByProductId(Long productId);
+	
 }

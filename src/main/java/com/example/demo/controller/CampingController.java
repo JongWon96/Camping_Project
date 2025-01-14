@@ -68,6 +68,23 @@ public class CampingController {
 		model.addAttribute("secondPlace", secondPlace);
 		model.addAttribute("thirdPlace", thirdPlace);
 		
+		
+		
+		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
+		
+		Integer result = 0;
+		
+		for (Camping place : CampingPlaces) {
+			Long campingId = place.getId();
+			List<Review> tmpReviews = reviewService.getRate(campingId);
+			
+			for(Review review : tmpReviews) {
+				result += review.getRate();
+			}
+			result = Math.round(result/(Integer)tmpReviews.size());	
+			
+		}
+		model.addAttribute("rate", result);
 
 		return "tmp/ListPage";
 	}

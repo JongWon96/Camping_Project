@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.Camping;
 import com.example.demo.domain.Product;
 import com.example.demo.persistance.ProductRepository;
 
@@ -31,5 +32,6 @@ public class ProductServiceImpl implements ProductService{
 		
 		return productRepo.findByRoom(productId, roomNum);
 	}
+
 	
 }
