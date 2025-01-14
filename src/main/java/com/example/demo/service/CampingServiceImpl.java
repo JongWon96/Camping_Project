@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,12 @@ public class CampingServiceImpl implements CampingService{
 		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
 		
 		return campRepo.findAll(paging);
+	}
+
+	@Override
+	public List<Camping> getTmpCamping() {
+		
+		return campRepo.findAll();
 	}
 
 }
