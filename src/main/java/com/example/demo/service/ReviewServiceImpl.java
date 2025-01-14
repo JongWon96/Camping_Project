@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -85,4 +86,9 @@ public class ReviewServiceImpl implements ReviewService {
         // 해당 캠핑장에 대해 해당 유저가 후기를 작성했는지 체크
         return reviewRepository.existsByMemberIdAndCampingId(memberId, campingId);
     }
+    //리뷰 보기
+    public List<Review> getReviewsByCampingId(Long campingId) {
+        // 특정 캠핑장에 대한 후기를 불러오는 로직
+        return reviewRepository.findByCamping_Id(campingId);
+}
 }
