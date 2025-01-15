@@ -1,0 +1,64 @@
+<div id="page_area">
+	<ul class="pagination"
+		th:with="start=${T(java.lang.Math).floor(pageInfo.number/10)*10 + 1},
+                last=(${start + 9 < pageInfo.totalPages ? start+9 : pageInfo.totalPages})">
+		<th:block
+			th:with="
+            firstPage=@{/campinglist(type=${category}, location=${searchword}, page=1)},
+            previous=@{/campinglist(type=${category}, location=${searchword}, page=${pageInfo.number})},
+            next=@{/campinglist(type=${category}, location=${searchword}, page=${pageInfo.number + 2})},
+            lastPage=@{/campinglist(type=${category}, location=${searchword}, page=${pageInfo.totalPages})}">
+
+			<!-- 첫 페이지로 이동 -->
+			<li th:class="paging"><a th:href="${firstPage}"
+				aria-label="First"> <span aria-hidden="true">처음으로</span>
+			</a></li>
+
+			<!-- 이전 페이지로 이동 -->
+			<li th:class="${pageInfo.first} ? 'disabled'" class="paging"><a
+				th:href="${pageInfo.first} ? '#' : ${previous}"
+				aria-label="Previous"> <span aria-hidden="true">&lt;</span>
+			</a></li>
+
+			<!-- 페이지 번호들 -->
+			<li th:each="page : ${#numbers.sequence(start, last)}"
+				th:class="${page == pageInfo.number + 1} ? 'active'" class="paging">
+				<a th:text="${page}"
+				th:href="@{/foodproject/foodlist(category=${category}, searchword=${searchword}, page=${page})}"></a>
+			</li>
+
+			<!-- 다음 페이지로 이동 -->
+			<li th:class="${pageInfo.last} ? 'disabled'" class="paging"><a
+				th:href="${pageInfo.last} ? '#' : ${next}" aria-label="Next"> <span
+					aria-hidden="true">&gt;</span>
+			</a></li>
+
+			<!-- 마지막 페이지로 이동 -->
+			<li><a th:href="${lastPage}" aria-label="Last"> <span
+					aria-hidden="true">마지막으로</span>
+			</a></li>
+		</th:block>
+
+		<!-- 부트스트랩 css 참고용 -->
+		<div class="bd-example-snippet bd-code-snippet">
+			<div class="bd-example m-0 border-0">
+
+				<nav aria-label="Standard pagination example">
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+						</a></li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+
+	</ul>
+</div>

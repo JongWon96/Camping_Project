@@ -9,8 +9,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -28,7 +26,6 @@ public class Camping {
 
     @Id
     private Long id;
-
 
     @Column(name = "category")
     private String category;
@@ -277,9 +274,4 @@ public class Camping {
     @LastModifiedDate
     @Column(name = "modifiedtime")
     private LocalDateTime modifiedtime;
-
-    @OneToMany(mappedBy = "camping", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Likes> likes = new ArrayList<>();
 }
-

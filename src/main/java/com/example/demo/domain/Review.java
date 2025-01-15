@@ -23,6 +23,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length=2000)
     private String content;
 
     private Date reviewdate;
@@ -34,10 +35,12 @@ public class Review {
     private Integer rate;
 
     @ManyToOne
+    @JoinColumn(name = "camping_id")
+    private Camping camping;
+    
+
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "camping_id")
-    private Camping camping;
 }
