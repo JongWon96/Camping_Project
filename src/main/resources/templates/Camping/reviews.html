@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캠핑장 리뷰</title>
+    <style>
+        /* 기본적인 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 캠핑장 제목 스타일 */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* 리뷰 목록 스타일 */
+        .review {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review p {
+            margin: 5px 0;
+        }
+
+        /* 별점 스타일 */
+        .star-rating {
+            display: flex;
+            direction: row;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 20px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.checked {
+            color: #f39c12; /* 별점이 채워진 경우, 황금색으로 표시 */
+        }
+
+        /* 리뷰 이미지 스타일 */
+        .review img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        /* 신고 버튼 스타일 */
+        .report-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .report-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .reported {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* 리뷰 수정 및 삭제 버튼 스타일 */
+        .review a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .review a:hover {
+            text-decoration: underline;
+        }
+
+        form button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        form button:hover {
+            background-color: #c0392b;
+        }
+
+        /* 로그인 사용자와 작성자가 일치하는 경우에만 보여지는 영역 */
+        .review .edit-delete {
+            margin-top: 15px;
+        }
+
+        /* 구분선 스타일 */
+        hr {
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+            margin: 20px 0;
+        }
+
+        /* 각 리뷰 항목 구분을 위한 스타일 */
+        .review p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 기타 추가적인 스타일 */
+        .review .reviewer-info {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- 캠핑장 이름 표시 -->
+    <h1 th:text="${camping.facltnm} + ' 캠핑장 리뷰'"></h1>
+
+    <!-- 리뷰 목록 -->
+    <h2>리뷰 목록</h2>
+    <div>
+        <!-- Thymeleaf의 th:each를 사용하여 리뷰 목록 반복 -->
+        <div th:each="review : ${reviews}">
+            <div class="review">
+                <!-- 리뷰 작성자의 이름 -->
+                작성자 : <p th:text="${review.member != null ? review.member.name : '이름 없음'}"></p>
+
+                <!-- 별점 표시 -->
+                <p>별점:</p>
+                <div class="star-rating">
+                    <span class="star" data-value="1" th:classappend="${review.rate >= 1 ? ' checked' : ''}">&#9733;</span>
+                    <span class="star" data-value="2" th:classappend="${review.rate >= 2 ? ' checked' : ''}">&#9733;</span>
+                    <span class="star" data-value="3" th:classappend="${review.rate >= 3 ? ' checked' : ''}">&#9733;</span>
+                    <span class="star" data-value="4" th:classappend="${review.rate >= 4 ? ' checked' : ''}">&#9733;</span>
+                    <span class="star" data-value="5" th:classappend="${review.rate >= 5 ? ' checked' : ''}">&#9733;</span>
+                </div>
+
+                <!-- 리뷰 내용 표시 -->
+                <p th:text="${review.content != null ? review.content : '내용 없음'}"></p>
+
+                <!-- 리뷰 이미지가 있을 경우 이미지 표시 -->
+                <div th:if="${review.img != null}">
+                    <img th:src="@{${review.img}}" alt="리뷰 이미지" class="img-thumbnail" width="200"/>
+                </div>
+
+                <!-- 신고 상태 표시 -->
+                <div>
+                    <!-- 신고된 리뷰인 경우 "신고됨" 표시, 그렇지 않으면 신고 버튼 -->
+                    <form th:action="@{/camping/{campingId}/reviews/{reviewId}/report(campingId=${camping.id}, reviewId=${review.id})}" method="post">
+                        <button type="submit" class="report-button">신고하기</button>
+                    </form>
+                </div>
+
+                <!-- 리뷰 수정 및 삭제 버튼, 로그인 사용자와 작성자가 일치하는 경우에만 표시 -->
+                <div th:if="${loginUser != null and review.member != null and review.member.id == loginUser.id}">
+                    <div class="edit-delete">
+                        <!-- 리뷰 수정 링크 -->
+                        <a th:href="@{/camping/{campingId}/reviews/{reviewId}/edit(campingId=${camping.id}, reviewId=${review.id})}">수정</a>
+
+                        <!-- 리뷰 삭제 폼 -->
+                        <form th:action="@{/camping/{campingId}/reviews/{reviewId}/delete(campingId=${camping.id}, reviewId=${review.id})}" method="post" style="display:inline;">
+                            <input type="hidden" name="_method" value="DELETE"> <!-- _method를 DELETE로 설정 -->
+                            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</body>
+</html>

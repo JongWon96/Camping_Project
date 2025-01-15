@@ -29,8 +29,9 @@ public class Review {
     private Date reviewdate;
 
     private String img;
-
-    private Integer danger;
+    
+    @Column(name = "danger" ,nullable = false)
+    private Integer danger = 0;
 
     private Integer rate;
 

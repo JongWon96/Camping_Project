@@ -10,5 +10,7 @@ public interface CampingRepository extends JpaRepository<Camping, Long> {
 
 	Page<Camping> findAllById(Long campingId, Pageable Pageable);
 
+	//Camping findCampingByProductid(Long productId);
+
 	
 }

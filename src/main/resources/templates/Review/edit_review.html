@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>후기 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 200px;
+        }
+
+        .star-rating {
+            display: flex;
+            direction: row;
+            margin-bottom: 20px;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.checked {
+            color: #f39c12;
+        }
+
+        .star:hover {
+            color: #f39c12;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            margin-top: 10px;
+            width: auto;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>후기 수정</h1>
+    <form th:action="@{/camping/{campingId}/reviews/{reviewId}(campingId=${campingId}, reviewId=${review.id})}" method="POST" id="reviewForm" enctype="multipart/form-data">
+    <input type="hidden" name="campingId" th:value="${campingId}">
+    <input type="hidden" name="reviewId" th:value="${review.id}">
+
+    <label for="content">후기 내용:</label>
+    <textarea name="content" id="content" rows="5" required th:value="${review.content}"></textarea><br>
+
+    <label for="rate">별점:</label>
+    <div class="star-rating">
+        <span class="star" data-value="1" th:classappend="${review.rate >= 1 ? ' checked' : ''}">&#9733;</span>
+        <span class="star" data-value="2" th:classappend="${review.rate >= 2 ? ' checked' : ''}">&#9733;</span>
+        <span class="star" data-value="3" th:classappend="${review.rate >= 3 ? ' checked' : ''}">&#9733;</span>
+        <span class="star" data-value="4" th:classappend="${review.rate >= 4 ? ' checked' : ''}">&#9733;</span>
+        <span class="star" data-value="5" th:classappend="${review.rate >= 5 ? ' checked' : ''}">&#9733;</span>
+    </div><br>
+
+    <input type="hidden" name="rate" id="rate" required th:value="${review.rate}">
+
+    <label for="img">이미지:</label>
+    <!-- 기존 이미지가 있을 경우, 이를 표시하고 삭제할 수 있는 체크박스 추가 -->
+    <div>
+        <p>기존 이미지:</p>
+        <img src="th:src='@{${review.imgPath}}'" alt="Existing Image" width="150" height="150"><br>
+       <senter><label for="deleteImage">기존 이미지 삭제:</label></senter>
+    <input type="checkbox" name="deleteImage" value="true"> <br>
+    </div>
+    
+    <input type="file" name="imgFile" id="imgFile"><br>
+
+    <button type="submit">후기 수정</button>
+</form>
+
+
+    <!-- 이전 페이지로 돌아가기 버튼 -->
+    <button type="button" class="back-button" onclick="window.history.back();">이전 페이지로 돌아가기</button>
+</div>
+
+<script>
+    const stars = document.querySelectorAll('.star');
+    const rateInput = document.getElementById('rate');
+    const reviewForm = document.getElementById('reviewForm');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            rateInput.value = value;
+            updateStars(value);
+        });
+    });
+
+    function updateStars(value) {
+        stars.forEach(star => {
+            if (star.getAttribute('data-value') <= value) {
+                star.classList.add('checked');
+            } else {
+                star.classList.remove('checked');
+            }
+        });
+    }
+
+    reviewForm.addEventListener('submit', function(event) {
+        if (!rateInput.value) {
+            alert('별점을 선택해 주세요!');
+            event.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,8 +35,9 @@ public class ReviewServiceImpl implements ReviewService {
     private String uploadDir; // 파일 저장 경로
 
     // 후기 저장
+ // 후기 저장
     @Override
-    public Review saveReview(Long memberId, Long campingId, String content, Integer rate, MultipartFile imgFile) throws IOException {
+    public Review saveReview(Long memberId, Long campingId, String content, Integer rate, MultipartFile imgFile, Integer danger) throws IOException {
         // 회원과 캠핑장 정보 조회
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
         Camping camping = campingRepository.findById(campingId).orElseThrow(() -> new RuntimeException("Camping not found"));
@@ -46,6 +48,11 @@ public class ReviewServiceImpl implements ReviewService {
             imgPath = saveImage(imgFile);  // 이미지를 서버에 저장하고 경로 반환
         }
 
+        // danger 값이 null이면 0으로 설정 (기본값)
+        if (danger == null) {
+            danger = 0;  // 기본값 0으로 설정
+        }
+
         // Review 객체 생성
         Review review = Review.builder()
                 .member(member)
@@ -54,11 +61,13 @@ public class ReviewServiceImpl implements ReviewService {
                 .rate(rate)
                 .img(imgPath)  // 이미지 경로 설정
                 .reviewdate(new Date())  // 현재 날짜로 설정
+                .danger(danger)  // danger 값 설정
                 .build();
 
         // 후기 저장
         return reviewRepository.save(review);
     }
+
 
     // 이미지를 서버에 저장하고 경로를 반환하는 메서드
     private String saveImage(MultipartFile imgFile) throws IOException {
@@ -91,4 +100,79 @@ public class ReviewServiceImpl implements ReviewService {
         // 특정 캠핑장에 대한 후기를 불러오는 로직
         return reviewRepository.findByCamping_Id(campingId);
 }
+
+    // 기존 이미지 삭제 메소드
+    public void deleteReviewImage(Review review) {
+        if (review.getImg() != null && !review.getImg().isEmpty()) {
+            File imageFile = new File(review.getImg());
+            if (imageFile.exists()) {
+                imageFile.delete();  // 이미지 파일 삭제
+            }
+        }
+    }
+
+    
+	@Override
+	public void updateReview(Long reviewId, String content, Integer rate, MultipartFile imgFile ,Integer danger) throws IOException {
+	    // 리뷰 조회
+	    Review review = reviewRepository.findById(reviewId)
+	            .orElseThrow(() -> new IllegalArgumentException("해당아이디를 찾을 수 없습니다"));
+
+	    // 수정된 내용 반영
+	    review.setContent(content);
+	    review.setRate(rate);
+	    review.setDanger(danger); // danger 값 설정
+	    
+	    
+	    // 새 이미지 파일이 있을 경우 처리
+	    if (imgFile != null && !imgFile.isEmpty()) {
+	        // 기존 이미지 삭제 (옵션: 기존 이미지도 삭제하려면 아래 메서드를 호출)
+	        if (review.getImg() != null && !review.getImg().isEmpty()) {
+	            deleteImageFile(review.getImg()); // 기존 이미지 삭제 메서드 (필요시 구현)
+	        }
+
+	        // 새 이미지 파일 저장
+	        String imgPath = saveImage(imgFile); // 새 이미지를 저장하고 경로 반환
+	        review.setImg(imgPath); // 이미지 경로를 리뷰에 설정
+	    }
+
+	    // 수정된 리뷰 저장
+	    reviewRepository.save(review);
+	}
+
+	
+	
+	private void deleteImageFile(String imgPath) throws IOException {
+	    // 기존 이미지 파일을 삭제하는 로직 (파일 시스템에서)
+	    Path path = Paths.get(uploadDir, imgPath); // 경로를 기반으로 파일을 찾음
+	    Files.deleteIfExists(path); // 파일이 존재하면 삭제
+	}
+
+
+	@Override
+	public void deleteReview(Long reviewId) throws IOException {
+	    // 리뷰 조회
+	    Review review = reviewRepository.findById(reviewId)
+	            .orElseThrow(() -> new IllegalArgumentException("해당 리뷰 ID를 찾을 수 없습니다"));
+	    
+	    // 이미지 파일이 존재하면 삭제
+	    if (review.getImg() != null && !review.getImg().isEmpty()) {
+	        deleteImageFile(review.getImg()); // 이미지 삭제 메서드 호출
+	    }
+	    
+	    // 리뷰 삭제
+	    reviewRepository.delete(review);
+	}
+
+	@Override
+	public Review getReviewById(Long reviewId) {
+		
+		  return reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));	}
+
+	@Override
+	public void dangerReview(Review review) {
+		  reviewRepository.save(review);
+		
+	}
+
 }
