@@ -157,7 +157,15 @@
 						<div class="carousel-caption bgbbox" align="center">
 							<h1 th:text="${CampingPlace.facltnm}">캠핑장 이름</h1>
 							<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
-							<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
+							<p class="opacity-75">평점: </p>
+									<div class="rating-container" th:if="${rate} != '아직 리뷰가 등록되지 않음'">
+									    <span th:each="i : ${#numbers.sequence(1, 5)}">
+									        <span th:if="${i <= T(java.lang.Math).floor(rate)}" class="filled-star">★</span>
+									        <span th:if="${i == T(java.lang.Math).ceil(rate) and T(java.lang.Double).parseDouble(rate) - T(java.lang.Math).floor(rate) >= 0.5}" class="half-star">★</span>
+									        <span th:if="${i > T(java.lang.Double).parseDouble(rate)}" class="empty-star">★</span>
+									    </span>
+									</div>
+								<p th:text="${rate}"></p>
 							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> <a
 								class="btn btn-lg btn-primary" onClick="AddLike" id="AddLike"
 								data-id="${CampingPlace.id}">찜에 추가</a>
@@ -366,9 +374,11 @@
 				<th:block th:insert="~{/include/review}"></th:block>
 			</div>
 			 -->
+			
 			<div id="review">
 				<th:block th:insert="~{/include/reviewExample}"></th:block>
 			</div>
+			
 			<hr class="featurette-divider">
 
 		</div>

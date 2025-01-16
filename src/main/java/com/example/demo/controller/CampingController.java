@@ -41,7 +41,8 @@ public class CampingController {
 			@RequestParam(value = "size", defaultValue = "9") int size, Model model) {
 
 		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
-
+		
+		model.addAttribute("pageInfo", CampingPlaces);
 		model.addAttribute("CampingPlaces", CampingPlaces);
 
 		/*
@@ -116,7 +117,7 @@ public class CampingController {
 		if ("0".equals(rate)) {
 			rate = "아직 리뷰가 등록되지 않음";
 		} 
-		
+
 		model.addAttribute("rate", rate);
 
 		String carav = campingPlace.getCaravacmpnyat();
@@ -172,6 +173,8 @@ public class CampingController {
 		int price3 = (int)Room3.getPrice().doubleValue();		
 		String formattedPrice3 = numberFormat.format(price3);
 		model.addAttribute("price3", formattedPrice3);
+		
+		model.addAttribute("math", Math.class);
 		
 		return "Camping/DetailPage";
 	}

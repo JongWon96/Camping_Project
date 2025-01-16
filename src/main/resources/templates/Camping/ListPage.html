@@ -275,6 +275,8 @@
 
 					<hr style="margin-top: 50px; margin-bottom: 50px">
 
+					</div>
+					
 					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 						<block th:each="CampingPlace : ${CampingPlaces}">
 						<div class="col">
@@ -304,18 +306,18 @@
 										
 									</div>
 								</div>						
-							
-							
-							
-							
 							</div>
 						</div>
 						</block>
 					</div>
+					
 				</div>
+				
+				<th:block th:insert="~{/include/page_area}"></th:block>
+				
 			</div>
 
-			<block>
+
 	</main>
 
 	<!-- 아래내용 -->
