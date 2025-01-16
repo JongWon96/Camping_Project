@@ -12,9 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
     // 특정 회원의 예약 내역 조회
-    List<Reservation> findByMember_Id(Long memberId);
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memberId ORDER BY r.id DESC")
+    List<Reservation> findByMember_Id(@Param("memberId") Long memberId);
+    ;
 
     // 캠핑장 ID와 회원 ID로 예약 조회 (여러 개의 예약을 반환)
     @Query("SELECT r FROM Reservation r WHERE r.product.camping.id = :campingId AND r.member.id = :memberId")
