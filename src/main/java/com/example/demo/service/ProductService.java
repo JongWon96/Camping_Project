@@ -11,6 +11,7 @@ public interface ProductService {
 	
 	public Product getProduct(Long productId);
 	
-	public Product getProductByRoom(Long productId, Integer roomNum);
+	public Product getProductByRoom(Long campingId, Integer roomNum);
+
 }
  

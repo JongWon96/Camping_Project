@@ -1,0 +1,389 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<title>캠핑장 상세 페이지</title>
+<meta name="generator" content="Hugo 0.122.0">
+
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<!-- 네이버 지도 api 인증키 -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<script type="text/javascript"
+	th:src="@{http://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ejrkepww5a}"></script>
+
+<link rel="canonical"
+	th:href="@{http://getbootstrap.com/docs/5.3/examples/carousel/}">
+
+<link rel="stylesheet"
+	th:href="@{http://cdn.jsdelivr.net/npm/@docsearch/css@3}">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.b-example-divider {
+	width: 100%;
+	height: 3rem;
+	background-color: rgba(0, 0, 0, .1);
+	border: solid rgba(0, 0, 0, .15);
+	border-width: 1px 0;
+	box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
+		rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+	flex-shrink: 0;
+	width: 1.5rem;
+	height: 100vh;
+}
+
+.bi {
+	vertical-align: -.125em;
+	fill: currentColor;
+}
+
+.nav-scroller {
+	position: relative;
+	z-index: 2;
+	height: 2.75rem;
+	overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+	display: flex;
+	flex-wrap: nowrap;
+	padding-bottom: 1rem;
+	margin-top: -1px;
+	overflow-x: auto;
+	text-align: center;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+}
+
+.btn-bd-primary {
+	--bd-violet-bg: #712cf9;
+	--bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+	--bs-btn-font-weight: 600;
+	--bs-btn-color: var(--bs-white);
+	--bs-btn-bg: var(--bd-violet-bg);
+	--bs-btn-border-color: var(--bd-violet-bg);
+	--bs-btn-hover-color: var(--bs-white);
+	--bs-btn-hover-bg: #6528e0;
+	--bs-btn-hover-border-color: #6528e0;
+	--bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+	--bs-btn-active-color: var(--bs-btn-hover-color);
+	--bs-btn-active-bg: #5a23c8;
+	--bs-btn-active-border-color: #5a23c8;
+}
+
+.bd-mode-toggle {
+	z-index: 1500;
+}
+
+.bd-mode-toggle .dropdown-menu .active .bi {
+	display: block !important;
+}
+
+.index {
+	width: 650px;
+}
+
+.bgbbox {
+	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검은색 */
+	padding: 20px; /* 내부 여백 */
+	border-radius: 8px; /* 모서리 둥글게 */
+	color: white; /* 텍스트 색상 */
+}
+
+.tmp {
+	display: flex; /* Flexbox 활성화 */
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+	position: relative; /* 위치 설정 */
+}
+</style>
+
+<link th:href="@{/css/Camping/carousel.css}" rel="stylesheet">
+<link th:href="@{css/Camping/bootstrap_tmp.min.css}" rel="stylesheet">
+<script src="/js/reservationScript.js"></script>
+</head>
+<body>
+
+	<header data-bs-theme="dark">
+		<nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
+			<th:block th:insert="~{/include/navigater}"></th:block>
+		</nav>
+	</header>
+	<main>
+
+		<div id="myCarousel" class="carousel slide mb-6"
+			data-bs-ride="carousel">
+
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+
+					<svg class="bd-placeholder-img" width="100%" height="100%"
+						xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+						preserveAspectRatio="xMidYMid slice" focusable="false">
+						
+						<image x="0" y="0" width="100%" height="100%"
+							th:attr="href=${CampingPlace.firstimageurl}" />
+							
+					</svg>
+
+					<div class="container tmp">
+						<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+							
+							<rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.8)" />
+							</svg>
+						<div class="carousel-caption bgbbox" align="center">
+							<h1 th:text="${CampingPlace.facltnm}">캠핑장 이름</h1>
+							<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
+							<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
+							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> <a
+								class="btn btn-lg btn-primary" onClick="AddLike" id="AddLike"
+								data-id="${CampingPlace.id}">찜에 추가</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container marketing">
+			<!--  -->
+			<nav>
+				<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+					<button class="nav-link active" id="nav-home-tab"
+						data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+						role="tab" aria-controls="nav-home" aria-selected="true">소개글</button>
+					<!-- 
+					<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+						data-bs-target="#nav-profile" type="button" role="tab"
+						aria-controls="nav-profile" aria-selected="false">임시2</button>
+					<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+						data-bs-target="#nav-contact" type="button" role="tab"
+						aria-controls="nav-contact" aria-selected="false">임시3</button>
+						 -->
+				</div>
+			</nav>
+			<!-- 
+			<div class="tab-content" id="nav-tabContent">
+				<div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+					aria-labelledby="nav-home-tab">
+					<p>임시 내용1</p>
+				</div>
+				<div class="tab-pane fade" id="nav-profile" role="tabpanel"
+					aria-labelledby="nav-profile-tab">
+					<p>임시 내용2</p>
+				</div>
+				<div class="tab-pane fade" id="nav-contact" role="tabpanel"
+					aria-labelledby="nav-contact-tab">
+					<p>임시 내용3</p>
+				</div>
+			</div> -->
+
+			<div class="row">
+				<div>
+					<th:block
+						th:if="${CampingPlace != null and CampingPlace.intro != null}">
+						<p th:text="${CampingPlace.intro}">임시 텍스트</p>
+					</th:block>
+				</div>
+			</div>
+
+			<hr class="featurette-divider">
+
+			<div class="bd-example m-0 border-0">
+
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col"></th>
+							<th scope="col" class="index">항목</th>
+							<th scope="col">내용</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${CampingPlace.tel != null}">
+							<th scope="row"></th>
+							<td class="index">전화번호</td>
+							<td th:text="${CampingPlace.tel}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.category != null}">
+							<th scope="row"></th>
+							<td class="index">카테고리</td>
+							<td th:text="${CampingPlace.category}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.homepage != null}">
+							<th scope="row"></th>
+							<td class="index">홈페이지</td>
+							<td><a th:href="${CampingPlace.homepage}"
+								th:text="${CampingPlace.homepage}"></a></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.operpdcl != null}">
+							<th scope="row"></th>
+							<td class="index">운영 기간</td>
+							<td th:text="${CampingPlace.operpdcl}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.operdecl != null}">
+							<th scope="row"></th>
+							<td class="index">운영 요일</td>
+							<td th:text="${CampingPlace.operdecl}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.animalcmgcl != null}">
+							<th scope="row"></th>
+							<td class="index">반려동물 동반 여부</td>
+							<td th:text="${CampingPlace.animalcmgcl}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.caravacmpnyat != null}">
+							<th scope="row"></th>
+							<td class="index">개인 카라반 동반 여부</td>
+							<td th:text="${caravResult}"></td>
+						</tr>
+
+						<tr th:if="${CampingPlace.trleracmpnyat != null}">
+							<th scope="row"></th>
+							<td class="index">개인 트레일러 동반 여부</td>
+							<td th:text="${trlerResult}"></td>
+						</tr>
+
+					</tbody>
+				</table>
+
+			</div>
+
+			<hr class="featurette-divider">
+
+			<div class="row featurette">
+				<div class="col-md-7">
+					<h2 class="featurette-heading fw-normal lh-1">상세주소</h2>
+					<p class="lead"
+						th:text="${CampingPlace.donm} + ${CampingPlace.sigungunm} + ${CampingPlace.addr1}"></p>
+				</div>
+
+				<div class="col-md-5">
+					<!-- 네이버 지도 출력 -->
+
+					<th:block th:insert="~{/include/navermap}"></th:block>
+				</div>
+
+			</div>
+
+			<hr class="featurette-divider">
+
+			<div class="row featurette">
+				<div class="order-md-2">
+					<h2 class="featurette-heading fw-normal lh-1">캠핑장 시설 정보(부대시설)</h2>
+					<div th:each="feature : ${Sbrscl}"
+						style="display: inline-block; text-align: center; margin: 10px; padding-right: 40px">
+						<p class="lead" th:text="${feature}"></p>
+						<img th:src="@{'/images/icon/' + ${feature} + '.png'}" alt="icon"
+							width=80px height=80px>
+					</div>
+				</div>
+			</div>
+
+			<hr class="featurette-divider">
+
+			<div class="row" id="reservation">
+				<div class="col-lg-4">
+					<svg class="bd-placeholder-img rounded-circle" width="140"
+						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
+						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
+						focusable="false">
+						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
+					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room1.room} + '번'"></h2>
+					<p th:text="'가격: ' + ${price1} + '원'"></p>
+					<p>
+						<a class="btn btn-secondary"
+							th:href="@{/reservationpage(campingid=${CampingPlace.id}, room=${Room1.room})}">
+							예약하기 &raquo;</a>
+					</p>
+				</div>
+
+				<div class="col-lg-4">
+					<svg class="bd-placeholder-img rounded-circle" width="140"
+						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
+						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
+						focusable="false">
+						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
+					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room2.room} + '번'"></h2>
+					<p th:text="'가격: ' + ${price2} + '원'"></p>
+					<p>
+						<a class="btn btn-secondary"
+							th:href="@{/reservationpage(campingid=${CampingPlace.id}, room=${Room2.room})}">
+							예약하기 &raquo;</a>
+					</p>
+				</div>
+				
+				<div class="col-lg-4">
+					<svg class="bd-placeholder-img rounded-circle" width="140"
+						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
+						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
+						focusable="false">
+						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
+					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room3.room} + '번'"></h2>
+					<p th:text="'가격: ' + ${price3} + '원'"></p>
+					<p>
+						<a class="btn btn-secondary"
+							th:href="@{/reservationpage(campingid=${CampingPlace.id}, room=${Room3.room})}">
+							예약하기 &raquo;</a>
+					</p>
+				</div>
+			</div>
+			<!-- /.row -->
+
+			<hr class="featurette-divider">
+
+			<!-- 리뷰 넣을 공간 -->
+			<!-- 
+			<div id="review">
+				<th:block th:insert="~{/include/review}"></th:block>
+			</div>
+			 -->
+			<div id="review">
+				<th:block th:insert="~{/include/reviewExample}"></th:block>
+			</div>
+			<hr class="featurette-divider">
+
+		</div>
+		<!-- /.container -->
+
+
+		<!-- FOOTER -->
+		<footer class="container">
+			<p class="float-end">
+				<a href="#myCarousel">Back to top</a>
+			</p>
+			<p>&copy; Camping Product 2025</p>
+		</footer>
+	</main>
+	<!-- <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script> -->
+
+</body>
+</html>

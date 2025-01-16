@@ -28,9 +28,9 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Product getProductByRoom(Long productId, Integer roomNum) {
+	public Product getProductByRoom(Long campingId, Integer roomNum) {
 		
-		return productRepo.findByRoom(productId, roomNum);
+		return productRepo.findByCamping_idAndRoom(campingId, roomNum);
 	}
 
 	

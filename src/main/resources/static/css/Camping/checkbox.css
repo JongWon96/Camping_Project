@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+/* 공통 스타일 */
+
+/* 섹션 스타일 */
+.detail_search_w ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    padding: 15px 0;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+form {
+    max-width: 1000px;
+    margin: 20px auto;
+}
+
+/* 드롭다운 및 타이틀 스타일 */
+.tm_ver {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tm_ver button {
+    display: block;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tm_ver button:hover {
+    background-color: #357abd;
+}
+
+.tm_ver strong {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px;
+    text-align: center;
+}
+
+/* 체크박스 그룹 스타일 */
+.folder_w {
+    margin-top: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+.check_w ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.check_w li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.check_w input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* 가격대 및 버튼 스타일 */
+.price-container {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    gap: 10px;
+}
+
+.price-container input {
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button[type="submit"],
+button[type="reset"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button[type="submit"] {
+    background-color: #4a90e2;
+}
+
+button[type="submit"]:hover {
+    background-color: #357abd;
+}
+
+button[type="reset"] {
+    background-color: #e94e4e;
+}
+
+button[type="reset"]:hover {
+    background-color: #d03b3b;
+}
+

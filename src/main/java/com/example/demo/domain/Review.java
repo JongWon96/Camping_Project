@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -29,6 +31,7 @@ public class Review {
 
     private String img;
 
+    @ColumnDefault("0")
     private Integer danger;
 
     private Integer rate;
