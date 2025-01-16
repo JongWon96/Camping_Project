@@ -6,42 +6,62 @@
     <title>1:1 문의 내역</title>
     <style>
         body {
-            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f5f5f5; /* 조금 더 밝은 회색 */
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
             text-align: center;
-            background-color: #e0e0e0; /* 상단 헤더 회색 */
-            padding: 20px;
-            color: #333;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+       main {
+    display: flex;
+    flex: 1;
+    margin: 100px auto; /* 가운데 정렬 */
+    box-sizing: border-box;
+    width: 100%; /* 전체 화면의 80%를 사용 */
+    max-width: 1500px; /* 최대 폭 제한 */
+    min-width: 1400px; /* 최소 폭 설정 */
+    padding: 30px;
+    background: #ffffff; /* 박스 배경 */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
 
         .content-wrapper {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-start;
             width: 100%;
-            max-width: 1200px;
-            margin: 30px auto;
-            background-color: #ffffff; /* 본문 흰색 */
-            border-radius: 10px;
-            overflow: hidden;
+            max-width: 1200px; /* 최대 너비 설정 */
+            background: #fff;
+            border-radius: 8px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 0 auto; /* 중앙 정렬 */
         }
 
         .side-menu {
-            background-color: #e6e6e6; /* 좌측 메뉴 밝은 회색 */
+            background-color: #555;
             width: 220px;
-            padding: 25px;
-            border-right: 1px solid #ccc;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: fit-content;
+            align-self: flex-start;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
+
 
         .side-menu ul {
             list-style: none;
@@ -50,128 +70,100 @@
         }
 
         .side-menu ul li {
-            margin: 15px 0;
+            margin-bottom: 20px;
         }
 
-        .side-menu ul li a,
-        .side-menu ul li form button {
+        .side-menu ul li a, .side-menu ul li form button {
             text-decoration: none;
             font-size: 18px;
-            color: #333;
-            font-weight: 500;
+            color: #fff;
+            font-weight: 600;
             background: none;
             border: none;
             cursor: pointer;
             text-align: left;
             display: block;
-            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .side-menu ul li a:hover,
-        .side-menu ul li form button:hover {
-            color:  #e0e0e0; /* 새로운 녹색 강조 */
-            transform: translateX(5px);
+        .side-menu ul li a:hover, .side-menu ul li form button:hover {
+            background: #666;
+            color: #f0f0f0;
         }
 
         .main-content {
             flex: 1;
-            padding: 30px;
-            color: #333; /* 본문 텍스트 어두운 색 */
-            background-color: #ffffff; /* 본문 흰색 */
+            padding: 30px 40px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px; /* 컨텐츠 최대 너비 */
+            margin: 0 auto; /* 컨텐츠를 중앙으로 정렬 */
         }
 
         table {
-            width: 100%;
+            width: 100%; /* 테이블이 전체 폭을 차지 */
             border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #ffffff; /* 테이블 배경 */
-            color: #333;
-            border-radius: 8px;
-            overflow: hidden;
+            margin-bottom: 30px;
         }
 
-        table th,
-        table td {
-            padding: 12px;
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
 
         table th {
-            background-color: #f8f8f8; /* 테이블 헤더 밝은 회색 */
-            color: #333;
-            font-weight: bold;
+            background-color: #333;
+            color: #fff;
         }
 
-        table tr:hover {
-            background-color: #f9f9f9; /* 행 강조 */
+        table td {
+            background-color: #f9f9f9;
         }
 
         .button-container {
             text-align: center;
-            margin-top: 20px;
         }
 
-        button {
-            background-color:  #e0e0e0; /* 새로운 녹색 버튼 */
-            color: #333;
-            border: none;
+        .button-container a button {
             padding: 10px 20px;
-            border-radius: 25px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s ease;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        button:hover {
-            background-color:  #e0e0e0; /* 더 진한 녹색 */
+        .button-container a button:hover {
+            background-color: #4682b4;
             transform: scale(1.05);
         }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+      footer {
+    text-align: center;
+    padding: 25px 15px; /* 기존 15px에서 25px로 위아래 패딩을 늘림 */
+    background: #333;
+    color: #fff;
+    font-size: 14px;
+    border-top: 1px solid #444;
+    margin-top: auto;
+}
 
-        .pagination a {
-            text-decoration: none;
-            margin: 0 5px;
-            padding: 8px 12px;
-            background-color: #e0e0e0;
-            color: #333;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            transition: background-color 0.3s, color 0.3s;
-        }
+footer a {
+    color: #ddd;
+    text-decoration: none;
+}
 
-        .pagination a:hover {
-            background-color: #009688;
-            color: #fff;
-        }
-
-        .pagination .active {
-            background-color: #009688;
-            color: #fff;
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #e0e0e0; /* 푸터 회색 */
-            color: #777;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-
-        footer a {
-            color: #009688;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
+footer a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
     </style>
 </head>
 <body>

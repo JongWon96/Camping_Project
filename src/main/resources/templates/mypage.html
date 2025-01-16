@@ -6,140 +6,162 @@
     <style>
         /* 전체 레이아웃 */
       body {
-          margin: 0;
-          font-family: 'Roboto', Arial, sans-serif;
-          background: #ffffff;
-          color: #333;
-      }
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-      header {
-          background: #b3b3b3;
-          color: #333;
-          padding: 25px 0;
-          text-align: center;
-          font-size: 32px; /* 제목 글자 크기 추가로 키움 */
-          font-weight: 700;
-          letter-spacing: 1px;
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-      main {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          align-items: flex-start;
-          padding: 50px;
-      }
+    main {
+    display: flex;
+    flex: 1;
+    margin: 0px auto; /* 가운데 정렬 */
+    box-sizing: border-box;
+    width: 100%; /* 전체 화면의 80%를 사용 */
+    max-width: 1500px; /* 최대 폭 제한 */
+    min-width: 1400px; /* 최소 폭 설정 */
+    padding: 30px;
+    padding-top: px; /*
+    background: #ffffff; /* 박스 배경 */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
 
-      .content-wrapper {
-          display: flex;
-          width: 100%;
-          max-width: 1200px;
-          background: #ffffff;
-          border-radius: 10px;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-          overflow: hidden;
-      }
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
 
-      .side-menu {
-          background-color: #d9d9d9;
-          width: 220px;
-          padding: 30px;
-          border-right: 3px solid #b3b3b3;
-      }
+        .side-menu {
+            background-color: #555;
+            width: 220px;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: fit-content;
+            align-self: flex-start;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
 
-      .side-menu ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-      }
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-      .side-menu ul li {
-          margin: 25px 0; /* 사이드 메뉴 항목 간격을 늘림 */
-      }
+        .side-menu ul li {
+            margin: 20px 0;
+        }
 
-      .side-menu ul li a, .side-menu ul li form button {
-          text-decoration: none;
-          font-size: 22px; /* 사이드 메뉴 글자 크기 키움 */
-          color: #333;
-          font-weight: 600;
-          background: none;
-          border: none;
-          cursor: pointer;
-          text-align: left;
-          display: block;
-          transition: color 0.3s ease, transform 0.2s;
-      }
+        .side-menu ul li a, .side-menu ul li form button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.3s ease, color 0.3s ease;
+              height: fit-content;
+        }
 
-      .side-menu ul li a:hover, .side-menu ul li form button:hover {
-          color: #000;
-          font-weight: 700;
-          transform: scale(1.05);
-      }
+        .side-menu ul li a:hover, .side-menu ul li form button:hover {
+            background: #666;
+            color: #f0f0f0;
+        }
 
-      .main-content {
-          flex: 1;
-          padding: 50px;
-      }
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 260px;
+        }
 
-      .info-box {
-          margin-bottom: 40px; /* 각 항목 간격을 더 넓힘 */
-      }
+       .info-box {
+           margin-bottom: 20px;
+           background: #fafafa;
+           padding: 20px;
+           border-radius: 8px;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       }
 
-      .info-box h2 {
-          margin-bottom: 35px;
-          color: #333;
-          font-size: 36px; /* 제목 글자 크기 키움 */
-          font-weight: bold;
-      }
+       .info-box h2 {
+           margin-bottom: 20px;
+           color: #333;
+           font-size: 24px;
+           font-weight: bold;
+           border-bottom: 2px solid #ddd;
+           padding-bottom: 10px;
+       }
 
-      .info-box p {
-          margin: 30px 0; /* 항목 간격을 더 넓힘 */
-          font-size: 22px; /* 본문 글자 크기 키움 */
-          line-height: 2; /* 줄 간격을 넓힘 */
-          color: #555;
-      }
+       .info-box p {
+           margin: 30px 0;
+           font-size: 16px;
+           line-height: 1.6;
+           color: #555;
+       }
 
-      .info-box p strong {
-          display: inline-block;
-          width: 220px; /* 레이블의 너비 더 넓힘 */
-          text-align: right;
-          margin-right: 25px; /* 레이블과 입력란 간격 넓힘 */
-          font-weight: bold;
-          color: #555;
-      }
+       .info-box p strong {
+           display: inline-block;
+           width: 70px;
+           text-align: right;
+           margin-right: 15px;
+           font-weight: bold;
+           color: #444;
+       }
 
-      .info-box p input {
-          border: 1px solid #aaa;
-          border-radius: 8px; /* 둥근 모서리 더 크게 */
-          padding: 15px; /* 입력 박스 크기 더 키움 */
-          width: 75%; /* 입력 박스 너비 더 넓힘 */
-          font-size: 18px; /* 입력 필드 글자 크기 키움 */
-          color: #555;
-          background: #f8f9fa;
-          pointer-events: none; /* 읽기 전용 */
-      }
+       .info-box p input {
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           padding: 10px;
+           width: 60%;
+           font-size: 14px;
+           color: #555;
+           background: #f9f9f9;
+           pointer-events: none;
+       }
 
       footer {
-          margin-top: 40px;
-          text-align: center;
-          padding: 25px;
-          background: #b3b3b3;
-          color: #333;
-          font-size: 16px; /* 푸터 글자 크기 키움 */
-          border-top: 3px solid #999;
-      }
+    text-align: center;
+    padding: 15px;
+    background: #333;
+    color: #fff;
+    font-size: 14px;
+    border-top: 1px solid #444;
+    margin-top: auto; /* 푸터를 페이지 하단에 고정 */
+}
 
-      footer a {
-          color: #666;
-          text-decoration: none;
-          font-weight: 600;
-      }
+       footer a {
+           color: #ddd;
+           text-decoration: none;
+       }
 
-      footer a:hover {
-          text-decoration: underline;
-          color: #333;
-      }
+       footer a:hover {
+           text-decoration: underline;
+           color: #fff;
+       }
 
     </style>
 </head>
@@ -185,28 +207,25 @@
         </ul>
     </nav>
 
-        <!-- 메인 컨텐츠 -->
-        <div class="main-content">
-            <!-- 사용자 정보 -->
-            <section class="info-box">
-                <h2>사용자 정보</h2>
-                <p><strong>아이디:</strong> <input type="text" th:value="${member.memberId}" readonly></p>
-                <p><strong>이름:</strong> <input type="text" th:value="${member.name}" readonly></p>
-                <p><strong>연락처:</strong> <input type="text" th:value="${member.phone}" readonly></p>
-                <p><strong>성별:</strong> <input type="text" th:value="${member.gender == 1 ? '남성' : '여성'}" readonly></p>
-                <p><strong>나이:</strong> <input type="text" th:value="${member.age}" readonly></p>
-                <p><strong>이메일:</strong> <input type="text" th:value="${member.email}" readonly></p>
-                <p><strong>주소:</strong> <input type="text" th:value="${member.address}" readonly></p>
-      
-
-                
-            </section>
-        </div>
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <!-- 사용자 정보 -->
+        <section class="info-box">
+            <h2>사용자 정보</h2>
+            <p><strong>아이디:</strong> <input type="text" th:value="${member.memberId}" readonly></p>
+            <p><strong>이름:</strong> <input type="text" th:value="${member.name}" readonly></p>
+            <p><strong>연락처:</strong> <input type="text" th:value="${member.phone}" readonly></p>
+            <p><strong>성별:</strong> <input type="text" th:value="${member.gender == 1 ? '남성' : '여성'}" readonly></p>
+            <p><strong>나이:</strong> <input type="text" th:value="${member.age}" readonly></p>
+            <p><strong>이메일:</strong> <input type="text" th:value="${member.email}" readonly></p>
+            <p><strong>주소:</strong> <input type="text" th:value="${member.address}" readonly></p>
+        </section>
     </div>
 </main>
 
 <footer>
-    © 2024 <a href="#">MyWebsite</a>
+    © 2025 <a href="#">MyWebsite</a>. All Rights Reserved.
 </footer>
+
 </body>
 </html>

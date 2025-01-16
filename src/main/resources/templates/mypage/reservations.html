@@ -6,191 +6,199 @@
     <title>예약 상세 정보</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
+        :root {
+        --primary-color: #1e90ff; /* 주요 색상 */
+        --primary-hover: #4682b4; /* 주요 색상 hover */
+        --secondary-color: #333; /* 텍스트 및 배경 색상 */
+        --secondary-light: #555; /* 사이드 메뉴 배경 */
+        --secondary-hover: #666; /* 사이드 메뉴 hover */
+        --background-color: #f4f4f4; /* 전체 배경 색상 */
+        --card-background: #fff; /* 카드 배경 */
+        --border-color: #ddd; /* 테두리 색상 */
+        --text-light: #666; /* 밝은 텍스트 */
+        --footer-color: #444; /* 푸터 테두리 색상 */
+    }
 
-        header {
-            text-align: center;
-            background-color: #e0e0e0;
-            padding: 20px;
-            color: #333;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    body {
+        margin: 0;
+        font-family: 'Roboto', Arial, sans-serif;
+        background: var(--background-color);
+        color: var(--secondary-color);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    header {
+        background: var(--secondary-color);
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+     main {
+    display: flex;
+    flex: 1;
+    margin: 100px auto; /* 가운데 정렬 */
+    box-sizing: border-box;
+    width: 100%; /* 전체 화면의 80%를 사용 */
+    max-width: 1500px; /* 최대 폭 제한 */
+    min-width: 1400px; /* 최소 폭 설정 */
+    padding: 30px;
+    background: #ffffff; /* 박스 배경 */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
 
         .content-wrapper {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-start;
             width: 100%;
             max-width: 1200px;
-            margin: 30px auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            overflow: hidden;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
-        .side-menu {
-            background-color: #e6e6e6;
+   .side-menu {
+            background-color: #555;
             width: 220px;
-            padding: 25px;
-            border-right: 1px solid #ccc;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: fit-content;
+            align-self: flex-start;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
-        .side-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    .side-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-        .side-menu ul li {
-            margin: 15px 0;
-        }
+    .side-menu ul li {
+        margin: 20px 0;
+    }
 
-        .side-menu ul li a,
-        .side-menu ul li form button {
-            text-decoration: none;
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            display: block;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
+    .side-menu ul li a,
+    .side-menu ul li form button {
+        text-decoration: none;
+        font-size: 18px;
+        color: #fff;
+        font-weight: 600;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        display: block;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
 
-        .side-menu ul li a:hover,
-        .side-menu ul li form button:hover {
-            color: #009688;
-            transform: translateX(5px);
-        }
+    .side-menu ul li a:hover,
+    .side-menu ul li form button:hover {
+        background: var(--secondary-hover);
+        color: #f0f0f0;
+    }
 
-        .main-content {
+    .main-content {
             flex: 1;
             padding: 30px;
-            color: #333;
-            background-color: #ffffff;
+            margin-left: 260px;
         }
+    .reservation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* 카드 간격 */
+    }
 
-        .reservation-card {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-        }
+    .reservation-card {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--card-background);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .reservation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    .reservation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .reservation-header h2 {
-            font-size: 24px;
-            font-weight: bold;
-        }
+    .reservation-header img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .reservation-details {
-            margin-bottom: 15px;
-        }
+    .reservation-details {
+        font-size: 16px;
+        color: var(--secondary-color);
+    }
 
-        .reservation-footer {
-            margin-top: 20px;
-        }
+    .reservation-footer {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px; /* 버튼 간격 */
+    }
 
-        .price {
-            color: #ff5722;
-            font-size: 20px;
-            font-weight: bold;
-        }
+    .button {
+        padding: 10px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
 
-        .button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    .button:hover {
+        background-color: var(--primary-hover);
+        transform: scale(1.05);
+    }
 
-        .button:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
-        }
+    footer {
+        text-align: center;
+        padding: 15px;
+        background: var(--secondary-color);
+        color: #fff;
+        font-size: 14px;
+        border-top: 1px solid var(--footer-color);
+        margin-top: auto;
+    }
 
-        .reservation-image img {
-            width: 100%;
-            max-width: 250px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
+    footer a {
+        color: #ddd;
+        text-decoration: none;
+    }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    footer a:hover {
+        text-decoration: underline;
+        color: #fff;
+    }
 
-        .pagination a {
-            text-decoration: none;
-            margin: 0 5px;
-            padding: 8px 12px;
-            background-color: #e0e0e0;
-            color: #333;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .pagination a:hover {
-            background-color: #009688;
-            color: #fff;
-        }
-
-        .pagination .active {
-            background-color: #009688;
-            color: #fff;
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #e0e0e0;
-            color: #777;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-
-        footer a {
-            color: #009688;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
 
     </style>
 </head>
 <body>
 
 <header>
-  예약 확인 페이지
+    예약 확인 페이지
 </header>
 
 <main class="content-wrapper">
@@ -203,7 +211,7 @@
                 </form>
             </li>
             <li>
-                <form th:action="@{/mypage/reservations}" method="get">
+                <form th:action="@{/reservationDetails}" method="get">
                     <button type="submit">예약내역</button>
                 </form>
             </li>
@@ -233,8 +241,8 @@
     <div class="main-content">
         <div class="container">
             <div class="reservation-list">
-                <div th:each="reservation : ${reservations}" class="reservation-card" 
-                     th:data-checkin-date="${reservation.checkin}" 
+                <div th:each="reservation : ${reservations}" class="reservation-card"
+                     th:data-checkin-date="${reservation.checkin}"
                      th:data-checkout-date="${reservation.checkout}">
                     <div class="reservation-header">
                         <div>
@@ -276,50 +284,50 @@
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const reviewButtons = document.querySelectorAll(".review-button");
-    const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
-    const cancelButtons = document.querySelectorAll(".cancel-button");
-    const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewButtons = document.querySelectorAll(".review-button");
+        const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
+        const cancelButtons = document.querySelectorAll(".cancel-button");
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
 
-    reviewButtons.forEach(function(button, index) {
-        const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
-        const disabledButton = reviewDisabledButtons[index];
+        reviewButtons.forEach(function(button, index) {
+            const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
+            const disabledButton = reviewDisabledButtons[index];
 
-        if (checkoutDateString) {
-            const checkoutDate = new Date(checkoutDateString);
-            const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0]; 
+            if (checkoutDateString) {
+                const checkoutDate = new Date(checkoutDateString);
+                const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0];
 
-            if (checkoutDateStringFormatted < todayString) {
-                button.style.display = 'inline-block'; 
-                disabledButton.style.display = 'none'; 
-            } else {
-                button.style.display = 'none';
-                disabledButton.style.display = 'inline-block';
+                if (checkoutDateStringFormatted < todayString) {
+                    button.style.display = 'inline-block';
+                    disabledButton.style.display = 'none';
+                } else {
+                    button.style.display = 'none';
+                    disabledButton.style.display = 'inline-block';
+                }
             }
-        }
-    });
+        });
 
-    cancelButtons.forEach(function(button, index) {
-        const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
-        const checkinDate = new Date(checkinDateString);
-        
-        if (isNaN(checkinDate)) {
-            console.error("잘못된 체크인 날짜:", checkinDateString);
-            return;  
-        }
+        cancelButtons.forEach(function(button, index) {
+            const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
+            const checkinDate = new Date(checkinDateString);
 
-        const diffInTime = checkinDate - today;
-        const diffInDays = diffInTime / (1000 * 3600 * 24); 
-        
-        if (diffInDays >= 10) {
-            button.disabled = false;
-        } else {
-            button.disabled = true;
-        }
+            if (isNaN(checkinDate)) {
+                console.error("잘못된 체크인 날짜:", checkinDateString);
+                return;
+            }
+
+            const diffInTime = checkinDate - today;
+            const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+            if (diffInDays >= 10) {
+                button.disabled = false;
+            } else {
+                button.disabled = true;
+            }
+        });
     });
-});
 </script>
 
 </body>
