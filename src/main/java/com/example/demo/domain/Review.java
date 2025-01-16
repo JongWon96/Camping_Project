@@ -30,6 +30,7 @@ public class Review {
 
     private String img;
 
+    @Column(name = "danger" ,nullable = false)
     private Integer danger;
 
     private Integer rate;

@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findByCamping_Id(Long campingId); 
-    
-    List<Review> findByMember_Id(Long memberId); 
-    
-	boolean existsByMemberIdAndCampingId(Long memberId, Long campingId);
-    
+    List<Review> findByCamping_Id(Long campingId);
+
+    List<Review> findByMember_Id(Long memberId);
+
+    boolean existsByMemberIdAndCampingId(Long memberId, Long campingId);
+
 }
