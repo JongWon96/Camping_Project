@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캠핑장 추천</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .recommendation-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .camping-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .camping-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .camping-card h3 {
+            margin: 10px 0;
+        }
+        .camping-card p {
+            font-size: 14px;
+            color: #555;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>추천 캠핑장</h1>
+
+<!-- 캠핑장 추천 결과 출력 영역 -->
+<div id="recommendations" class="recommendation-container">
+    <!-- 여기에 캠핑장 추천 목록이 동적으로 표시됩니다 -->
+</div>
+
+<div id="errorMessage" class="error-message" style="display: none;"></div>
+
+<script>
+    // 로그인한 사용자 정보를 세션에서 받아오는 API 호출
+    const userId = /* 여기에 로그인한 사용자 ID를 넣으세요. 예: 12345 */;
+
+    // 캠핑장 추천 API 호출
+    fetch(`/campings?userId=${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('추천 데이터를 불러오는 데 실패했습니다.');
+            }
+            return response.text();  // 문자열로 응답을 받아옴
+        })
+        .then(data => {
+            const recommendationsContainer = document.getElementById("recommendations");
+
+            // 추천 결과가 없을 경우
+            if (data === "추천 캠핑장이 없습니다.") {
+                document.getElementById("errorMessage").innerText = data;
+                document.getElementById("errorMessage").style.display = "block";
+                return;
+            }
+
+            // 문자열을 원하는 형태로 파싱해서 사용해야 할 경우
+            const recommendations = data.split(",");  // 추천된 캠핑장 ID 목록 예시로, 실제 응답 형식에 맞게 처리
+
+            // 추천 캠핑장을 카드 형태로 출력
+            recommendations.forEach(camping => {
+                const campingCard = document.createElement("div");
+                campingCard.className = "camping-card";
+
+                // 캠핑장 이름, 설명, 이미지 URL 등
+                campingCard.innerHTML = `
+                    <img src="/path/to/${camping}.jpg" alt="${camping}">
+                    <h3>${camping}</h3>
+                    <p>설명</p>
+                    <p>평점: 4.5점</p>  <!-- 실제 평점 데이터로 대체 -->
+                `;
+
+                recommendationsContainer.appendChild(campingCard);
+            });
+        })
+        .catch(error => {
+            document.getElementById("errorMessage").innerText = error.message;
+            document.getElementById("errorMessage").style.display = "block";
+        });
+</script>
+</body>
+</html>
