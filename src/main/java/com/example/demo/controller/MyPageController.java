@@ -283,4 +283,11 @@ public class MyPageController {
         redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
         return "redirect:/login";
     }
+
+    @GetMapping("/logout")
+    public String logout1(HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
+        return "redirect:/login";
+    }
 }

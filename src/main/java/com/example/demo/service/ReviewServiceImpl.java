@@ -1,7 +1,17 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.Camping;
+import com.example.demo.domain.Member;
+import com.example.demo.domain.Review;
+import com.example.demo.persistence.CampingRepository;
+import com.example.demo.persistence.MemberRepository;
+import com.example.demo.persistence.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,6 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 해당 캠핑장에 대해 해당 유저가 후기를 작성했는지 체크
         return reviewRepository.existsByMemberIdAndCampingId(memberId, campingId);
     }
+
     //리뷰 보기
     public List<Review> getReviewsByCampingId(Long campingId) {
         // 특정 캠핑장에 대한 후기를 불러오는 로직
@@ -107,7 +118,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public void updateReview(Long reviewId, String content, Integer rate, MultipartFile imgFile ,Integer danger) throws IOException {
+    public void updateReview(Long reviewId, String content, Integer rate, MultipartFile imgFile, Integer danger) throws IOException {
         // 리뷰 조회
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("해당아이디를 찾을 수 없습니다"));
@@ -135,7 +146,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
-
     private void deleteImageFile(String imgPath) throws IOException {
         // 기존 이미지 파일을 삭제하는 로직 (파일 시스템에서)
         Path path = Paths.get(uploadDir, imgPath); // 경로를 기반으로 파일을 찾음
@@ -161,7 +171,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review getReviewById(Long reviewId) {
 
-        return reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));	}
+        return reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
+    }
 
     @Override
     public void dangerReview(Review review) {
@@ -169,4 +180,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
+    @Override
+    public Page<Review> getReview(Long campingId, int page, int size) {
+        Pageable paging = PageRequest.of(page - 1, size, Sort.Direction.DESC, "reviewdate");
+
+        return reviewRepository.findReviewByCampingId(campingId, paging);
+    }
+
+    @Override
+    public List<Review> getRate(Long campingId) {
+
+        return reviewRepository.findAllReviewByCampingId(campingId);
+
+    }
 }

@@ -30,7 +30,12 @@ public class UserInfoController {
 		if (loginResult == 1) {
 			Member loginUser = memberService.getMemberId(member.getMemberId());
 			model.addAttribute("loginUser", loginUser);
-			return "redirect:/mypage";
+
+
+			Long memberId = loginUser.getId();
+
+
+			return "redirect:/landingpage";
 		} else {
 			return "userinfo/login_fail";
 		}

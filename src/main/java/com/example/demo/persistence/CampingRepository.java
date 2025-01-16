@@ -15,4 +15,6 @@ public interface CampingRepository extends JpaRepository<Camping, Long> {
 			+ " INNER JOIN Product p ON p.camping.id=c.id"
 			+ " WHERE p.id = %?1%")
 	Camping findCampingByProductid(Long productId);
+
+	Page<Camping> findAllById(Long campingId, Pageable Pageable);
 }

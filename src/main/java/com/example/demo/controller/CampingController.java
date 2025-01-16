@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.example.demo.domain.Member;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,10 @@ public class CampingController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private RecommendationController recommendationController;
+
+
 	@GetMapping("/campinglist")
 	private String campingList(@RequestParam(value = "campingName", required = false) String campingName,
 			@RequestParam(value = "searchDo", required = false) String doNm,
@@ -38,41 +44,46 @@ public class CampingController {
 			@RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
 			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "9") int size, Model model) {
+			@RequestParam(value = "size", defaultValue = "9") int size, Model model,
+							   HttpSession session) {
+
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
+
 
 		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
-
 		model.addAttribute("CampingPlaces", CampingPlaces);
+
 
 		/*
 		 * / 추천 목록에 띄울 임시 캠핑장 리스트
 		 */
-		List<Camping> tmpPlaces = campingService.getTmpCamping();
-
-		List<Camping> firstPlace = new ArrayList<>();
-		List<Camping> secondPlace = new ArrayList<>();
-		List<Camping> thirdPlace = new ArrayList<>();
-
-		for (int a = 0; a < 9; a++) {
-			if (a < 3) {
-				firstPlace.add(tmpPlaces.get(a));
-			} else if (a < 6) {
-				secondPlace.add(tmpPlaces.get(a));
-			} else {
-				thirdPlace.add(tmpPlaces.get(a));
-			}
-		}
-
-		model.addAttribute("firstPlace", firstPlace);
-		model.addAttribute("secondPlace", secondPlace);
-		model.addAttribute("thirdPlace", thirdPlace);
+//		List<Camping> tmpPlaces = campingService.getTmpCamping();
+//
+//		List<Camping> firstPlace = new ArrayList<>();
+//		List<Camping> secondPlace = new ArrayList<>();
+//		List<Camping> thirdPlace = new ArrayList<>();
+//
+//		for (int a = 0; a < 9; a++) {
+//			if (a < 3) {
+//				firstPlace.add(tmpPlaces.get(a));
+//			} else if (a < 6) {
+//				secondPlace.add(tmpPlaces.get(a));
+//			} else {
+//				thirdPlace.add(tmpPlaces.get(a));
+//			}
+//		}
+//
+//		model.addAttribute("firstPlace", firstPlace);
+//		model.addAttribute("secondPlace", secondPlace);
+//		model.addAttribute("thirdPlace", thirdPlace);
 
 		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
 		Integer result = 0;
 		for (Camping place : CampingPlaces) {
 			Long campingId = place.getId();
 			List<Review> tmpReviews = reviewService.getRate(campingId);
-			
+
 			if (tmpReviews.size() != 0) {
 				for (Review review : tmpReviews) {
 					result += review.getRate();
@@ -85,14 +96,27 @@ public class CampingController {
 		String rate = result.toString();
 		model.addAttribute("rate", rate);
 
+		String campingPage = recommendationController.getCampingRecommendations(
+				session,
+				9, // 기본 추천 개수
+				0.5, // 리뷰 가중치
+				0.3, // 예약 가중치
+				0.2, // 위시리스트 가중치
+				model
+		);
+
+
 		return "Camping/ListPage";
 	}
 
 	@GetMapping("/detailpage")
 	private String campingDetail(@RequestParam("campingid") Long campingId,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
+			@RequestParam(value = "size", defaultValue = "10") int size, Model model,
+		HttpSession session) {
 
+			Member loginUser = (Member) session.getAttribute("loginUser");
+			model.addAttribute("loginUser", loginUser);
 		Camping campingPlace = campingService.getCampingDetail(campingId);
 		List<Product> products = productService.getProducts(campingId);
 
@@ -185,15 +209,17 @@ public class CampingController {
 
 	//임시 확인용
 	@GetMapping("/landingpage")
-	private String landingPage() {
-
+	private String landingPage(HttpSession session , Model model) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
 		return "Camping/landingPage";
 	}
 
 	//임시 확인용
 	@GetMapping("/reviewpage")
-	private String reviewPage() {
-
+	private String reviewPage(HttpSession session , Model model) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
 		return "include/reviewExample";
 	}
 }
