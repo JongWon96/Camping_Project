@@ -2,17 +2,18 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Camping;
 import com.example.demo.persistence.CampingRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
-public class CampingServiceImpl implements CampingService {
+public class CampingServiceImpl implements CampingService{
 
 
 
@@ -31,23 +32,24 @@ public class CampingServiceImpl implements CampingService {
         return campRepo.findById(campingId).get();
     }
 
-    @Override
-    public Page<Camping> getAllCamping(int page, int size) {
+	@Override
+	public Page<Camping> getAllCamping(int page, int size) {
 
-        Pageable paging = PageRequest.of(page - 1, size, Sort.Direction.ASC, "facltnm");
+		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
 
-        return campRepo.findAll(paging);
-    }
+		return campRepo.findAll(paging);
+	}
 
-    @Override
-    public List<Camping> getTmpCamping() {
+	@Override
+	public List<Camping> getTmpCamping() {
 
-        return campRepo.findAll();
-    }
+		return campRepo.findAll();
+	}
 
-//	@Override
-//	public Camping getCampingByProductId(Long productId) {
-//
-//		return campRepo.findCampingByProductid(productId);
-//	}
+	@Override
+	public Camping getCampingByProductId(Long productId) {
+
+		return campRepo.findCampingByProductid(productId);
+	}
+
 }

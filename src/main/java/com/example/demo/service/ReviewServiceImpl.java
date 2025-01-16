@@ -1,11 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Review;
-import com.example.demo.domain.Member;
-import com.example.demo.domain.Camping;
-import com.example.demo.persistence.CampingRepository;
-import com.example.demo.persistence.MemberRepository;
-import com.example.demo.persistence.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

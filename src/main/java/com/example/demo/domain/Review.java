@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -30,18 +32,16 @@ public class Review {
 
     private String img;
 
-    @Column(name = "danger" ,nullable = false)
+    @ColumnDefault("0")
     private Integer danger;
 
     private Integer rate;
 
     @ManyToOne
-    @JoinColumn(name = "camping_id")
-    private Camping camping;
-    
-
-    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name = "camping_id")
+    private Camping camping;
 }

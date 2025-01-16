@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<!-- Bootstrap icons-->
+<link
+	th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css}"
+	rel="stylesheet" type="text/css" />
+<!-- Google fonts-->
+<link
+	th:href="@{https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic}"
+	rel="stylesheet" type="text/css" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link th:href="@{css/tmp/styles.css}" rel="stylesheet" />
+<link th:href="@{css/tmp/checkbox.css}" rel="stylesheet" />
+
+<body>
+
+	<form id="campSearchForm3" action="/campinglist" method="get">
+		<div class="row">
+			<div class="col">
+				<input class="form-control form-control-lg" id="emailAddress"
+					type="text" placeholder="이름으로 검색" name="campingName" />
+			</div>
+			<div class="col-auto"></div>
+		</div>
+
+		<div class="detail_search_w">
+			<input type="hidden" name="listTy" value="LIST" /> <input
+				id="listOrdrTrget2" name="listOrdrTrget" type="hidden"
+				value="c_rdcnt" />
+			<ul>
+				<li>
+					<div class="tm_ver f_open">
+
+						<div class="folder_w">
+							<strong>지역별</strong>
+							<div class="check_w">
+								<ul>
+									<li><input type="checkbox" name="searchDo" id="c_do01"
+										class="check01" value="서울특별시" title="1" /><label for="c_do01">서울특별시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do02"
+										class="check01" value="부산시" title="2" /><label for="c_do02">부산광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do03"
+										class="check01" value="대구광역시" title="3" /><label for="c_do03">대구광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do04"
+										class="check01" value="인천광역시" title="4" /><label for="c_do04">인천광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do05"
+										class="check01" value="인천시" title="5" /><label for="c_do05">광주광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do06"
+										class="check01" value="광주시" title="6" /><label for="c_do06">대전광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do07"
+										class="check01" value="울산시" title="7" /><label for="c_do07">울산광역시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do08"
+										class="check01" value="세종특별자치시" title="8" /><label
+										for="c_do08">세종특별자치시</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do09"
+										class="check01" value="경기도" title="9" /><label for="c_do09">경기도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do010"
+										class="check01" value="강원도" title="10" /><label for="c_do010">강원도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do011"
+										class="check01" value="충청북도" title="11" /><label
+										for="c_do011">충청북도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do012"
+										class="check01" value="충청남도" title="12" /><label
+										for="c_do012">충청남도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do013"
+										class="check01" value="전라북도" title="13" /><label
+										for="c_do013">전라북도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do014"
+										class="check01" value="전라남도" title="14" /><label
+										for="c_do014">전라남도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do015"
+										class="check01" value="경상북도" title="15" /><label
+										for="c_do015">경상북도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do016"
+										class="check01" value="경상남도" title="16" /><label
+										for="c_do016">경상남도</label></li>
+									<li><input type="checkbox" name="searchDo" id="c_do017"
+										class="check01" value="제주특별자치도" title="17" /><label
+										for="c_do017">제주특별자치도</label></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!-- 
+							<li>
+								<div class="tm_ver f_open">
+								
+									<div class="folder_w">
+										<strong>운영형태</strong>
+										<div class="check_w">
+											<ul>
+												<li><input type="checkbox" name="searchCl" id="c_cl01" class="check01" value="지자체" title="29"
+														 /><label for="c_cl01">지자체</label></li>
+												<li><input type="checkbox" name="searchCl" id="c_cl02" class="check01" value="국립공원" title="30"
+														 /><label for="c_cl02">국립공원</label></li>
+												<li><input type="checkbox" name="searchCl" id="c_cl03" class="check01" value="자연휴양림" title="31"
+														 /><label for="c_cl03">자연휴양림</label></li>
+												<li><input type="checkbox" name="searchCl" id="c_cl04" class="check01" value="국민여가" title="32"
+														 /><label for="c_cl04">국민여가</label></li>
+												<li><input type="checkbox" name="searchCl" id="c_cl05" class="check01" value="민간" title="33"
+														 /><label for="c_cl05">민간</label></li>
+												</ul>
+										</div>
+									</div>
+								</div> 
+							</li>
+							 -->
+				<!--
+							<li>
+								<div class="tm_ver f_open">
+									
+									<div class="folder_w">
+										<strong>입지구분</strong>
+										<div class="check_w">
+											<ul>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl01" class="check01" value="해변" title="47"
+														 /><label for="c_lct_cl01">해변</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl02" class="check01" value="섬" title="48"
+														 /><label for="c_lct_cl02">섬</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl03" class="check01" value="산" title="49"
+														 /><label for="c_lct_cl03">산</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl04" class="check01" value="숲" title="50"
+														 /><label for="c_lct_cl04">숲</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl05" class="check01" value="계곡" title="51"
+														 /><label for="c_lct_cl05">계곡</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl06" class="check01" value="강" title="52"
+														 /><label for="c_lct_cl06">강</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl07" class="check01" value="호수" title="53"
+														 /><label for="c_lct_cl07">호수</label></li>
+												<li><input type="checkbox" name="searchLctCl" id="c_lct_cl08" class="check01" value="도심" title="54"
+														 /><label for="c_lct_cl08">도심</label></li>
+												</ul>
+										</div>
+									</div>
+								</div> 
+							</li>
+							  -->
+				<li>
+					<div class="tm_ver f_open">
+						<div class="folder_w">
+							<strong>주요시설</strong>
+							<div class="check_w">
+								<ul>
+									<li><input type="checkbox" name="category" id="c_induty01"
+										value="일반 캠핑" title="42" class="check01" /><label
+										for="c_induty01">일반야영장</label></li>
+									<li><input type="checkbox" name="category" id="c_induty02"
+										value="오토캠핑" title="43" class="check01" /><label
+										for="c_induty02">자동차야영장</label></li>
+									<li><input type="checkbox" name="category" id="c_induty03"
+										value="카라반" title="44" class="check01" /><label
+										for="c_induty03">카라반</label></li>
+									<li><input type="checkbox" name="category" id="c_induty04"
+										value="글랭핑" title="45" class="check01" /><label
+										for="c_induty04">글램핑</label></li>
+								</ul>
+							</div>
+						</div>
+						<!--//folder_w-->
+					</div> <!--//tm_ver-->
+				</li>
+
+				<li>
+					<div class="tm_ver f_open">
+
+						<div class="folder_w">
+							<strong>바닥재</strong>
+							<div class="check_w">
+								<ul>
+									<li><input type="checkbox" name="flooring "
+										id="c_lct_cl01" class="check01" value="잔디" title="47" /><label
+										for="c_lct_cl01">잔디</label></li>
+									<li><input type="checkbox" name="flooring "
+										id="c_lct_cl02" class="check01" value="파쇄석" title="48" /><label
+										for="c_lct_cl02">파쇄석</label></li>
+									<li><input type="checkbox" name="flooring "
+										id="c_lct_cl03" class="check01" value="데크" title="49" /><label
+										for="c_lct_cl03">데크</label></li>
+									<li><input type="checkbox" name="flooring "
+										id="c_lct_cl04" class="check01" value="자갈" title="50" /><label
+										for="c_lct_cl04">자갈</label></li>
+									<li><input type="checkbox" name="flooring "
+										id="c_lct_cl05" class="check01" value="맨흙" title="51" /><label
+										for="c_lct_cl05">맨흙</label></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!-- 
+							<li>
+								<div class="tm_ver f_open">
+								
+									<div class="folder_w">
+										<strong>부대시설</strong>
+										<div class="check_w">
+											<ul>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode01" value="전기" title="56" class="check01"
+														 /><label for="searchSbrsClCode01">전기</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode02" value="무선인터넷" title="57" class="check01"
+														 /><label for="searchSbrsClCode02">무선인터넷</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode03" value="장작판매" title="58" class="check01"
+														 /><label for="searchSbrsClCode03">장작판매</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode04" value="온수" title="59" class="check01"
+														 /><label for="searchSbrsClCode04">온수</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode05" value="트렘폴린" title="60" class="check01"
+														 /><label for="searchSbrsClCode05">트렘폴린</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode06" value="물놀이장" title="61" class="check01"
+														 /><label for="searchSbrsClCode06">물놀이장</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode07" value="놀이터" title="62" class="check01"
+														 /><label for="searchSbrsClCode07">놀이터</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode08" value="산책로" title="63" class="check01"
+														 /><label for="searchSbrsClCode08">산책로</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode09" value="운동장" title="64" class="check01"
+														 /><label for="searchSbrsClCode09">운동장</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode010" value="운동시설" title="65" class="check01"
+														 /><label for="searchSbrsClCode010">운동시설</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode011" value="마트.편의점" title="66" class="check01"
+														 /><label for="searchSbrsClCode011">마트.편의점</label></li>
+												<li><input type="checkbox" name="searchSbrsClCode" id="searchSbrsClCode012" value="덤프스테이션" title="165" class="check01"
+														 /><label for="searchSbrsClCode012">덤프스테이션</label></li>
+												</ul>
+										</div>
+									</div>
+									
+								</div> 
+							</li>
+							 -->
+				<li>
+					<div class="tm_ver f_open">
+
+						<div class="folder_w">
+							<strong>기타정보</strong>
+							<div class="check_w">
+								<ul>
+									<li><input type="checkbox" class="check01" name="bonfire"
+										id="searchTrlerAcmpnyAt" value="Y" title="불멍 가능 여부"><label
+										for="bonfire" class="label_name">불멍 가능 여부(화로대 제공)</label></li>
+									<li><input type="checkbox" class="check01"
+										name="trailerAllowed" id="searchTrlerAcmpnyAt" value="Y"
+										title="개인 트레일러 입장가능"><label for="trailerAllowed"
+										class="label_name">개인 트레일러 입장가능</label></li>
+									<li><input type="checkbox" class="check01"
+										name="caravanAllowed" id="searchCaravAcmpnyAt" value="Y"
+										title="개인 캠핑카 입장가능"><label for="caravanAllowed"
+										class="label_name">개인 캠핑카 입장가능</label></li>
+									<li><input type="checkbox" class="check01"
+										name="petAllowed" id="petAllowed" value="가능" title="반려동물 동반가능"><label
+										for="petAllowed" class="label_name">반려동물 동반가능</label></li>
+								</ul>
+								<br /> (※ 실제 결과는 현장사정 및 계절에 따라 달라질수 있으니 캠핑장 사업주에 직접 확인 후
+								이용바랍니다.)
+							</div>
+						</div>
+						<!--//folder_w-->
+					</div> <!--//tm_ver-->
+				</li>
+				<!-- 
+							<li class="p_relative">
+								<div class="tm_ver f_open">
+									<button type="button">가격대</button>
+									<div class="folder_w">
+										<strong>가격대 <span>(1박 기준 세금포함)</span></strong>
+										<div id="slider-range"></div>
+										<p class="slider_amount_input">
+											<label for="searchMummPc" class="skip">가격대검색 최소금액</label> <input type="text" name="searchMummPc" id="searchMummPc" maxlength="7" title="최저금액" /> <label
+												for="searchMxmmPc" class="skip">가격대검색 최대금액</label> <input type="text" name="searchMxmmPc" id="searchMxmmPc" maxlength="7" title="최대금액" />
+										</p>
+									</div>
+								</div>
+							</li>
+							 -->
+				<li class="detail_btn_w">
+					<button type="reset" class="b_lightgray" id="searchForm3ResetBtn">
+						<i class="btn_reset">초기화</i>
+					</button>
+					<button type="submit" class="b_blue">
+						<i class="btn_search">검색하기</i>
+					</button>
+				</li>
+			</ul>
+		</div>
+	</form>
+
+
+
+</body>
+</html>
