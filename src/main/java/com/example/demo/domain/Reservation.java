@@ -26,9 +26,9 @@ public class Reservation {
 
     private int person;  //인원수
 
-    private Date checkin;	//체크인
+    private Date checkin;   //체크인
     
-    private Date checkout;	//체크아웃
+    private Date checkout;   //체크아웃
 
     private String bottom;
     @ManyToOne
@@ -39,7 +39,6 @@ public class Reservation {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public void setBottom(String bottom) {
-    }
-}
-
+    @Column(name = "hasreview")
+    private Boolean hasreview;  
+   }
