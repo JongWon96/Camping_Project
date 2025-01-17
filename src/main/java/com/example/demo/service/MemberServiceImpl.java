@@ -129,7 +129,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    @Value("${file.upload-dir}")
+    @Value("${com.demo.upload.path}")
     private String uploadDir;
     public void submitInquiry(String memberId, String title, String content, MultipartFile imgFile) throws IOException {
         Member member = memberRepository.findMemberByMemberId(memberId);
@@ -162,4 +162,12 @@ public class MemberServiceImpl implements MemberService {
 
         return "/uploads/" + fileName; // 저장된 파일 경로 반환
     }
-    }
+    
+	@Override
+	public List<Member> getMemberList(String name) {
+		
+		return memberRepository.findMemberByNameContaining(name);
+	}
+	
+	
+}

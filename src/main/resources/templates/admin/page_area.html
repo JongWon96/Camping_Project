@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<style>
+        /* ul.pagination을 가로로 나열 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        /* li.paging을 가로로 나열 */
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        /* li.paging에 기본 스타일 적용 */
+        .pagination li a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 활성 페이지 스타일 */
+        .pagination li.active a {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* 비활성화된 페이지 스타일 */
+        .pagination li.disabled a {
+            color: #ddd;
+            pointer-events: none;
+        }
+    </style>
+    
+    </head>
+
+<!--  �� ȭ���� ������ ��ȣ�� ǥ�õǴ� ������ ���� -->
+<div id="page_area">
+<ul class="pagination">
+    <th:block th:with="start=${T(java.lang.Math).floor(pageInfo.number / 10) * 10 + 1},
+                         last=(${start + 9 < pageInfo.totalPages ? start + 9 : pageInfo.totalPages})">
+        
+        <li th:class="paging">
+            <a th:href="@{/admin_camping_list(page=1)}" aria-label="First">First</a>
+        </li>
+        
+        <li th:class="${pageInfo.first} ? 'disabled'" class="paging">
+            <a th:href="${pageInfo.first} ? '#' : @{/admin_camping_list(page=${pageInfo.number - 1})}" aria-label="Previous">&lt;</a>
+        </li>
+        
+        <!-- 페이지 번호 -->
+        <li th:each="page : ${#numbers.sequence(start, last)}" th:class="${page == pageInfo.number + 1} ? 'active'" class="paging">
+            <a th:text="${page}" th:href="@{/admin_camping_list(page=${page})}"></a>
+        </li>
+        
+        <!-- 다음 버튼 -->
+        <li th:class="${pageInfo.last} ? 'disabled'" class="paging">
+            <a th:href="${pageInfo.last} ? '#' : @{/admin_camping_list(page=${pageInfo.number + 2})}" aria-label="Next">&gt;</a>
+        </li>
+        
+        <!-- 마지막 버튼 -->
+        <li>
+            <a th:href="@{/admin_camping_list(page=${pageInfo.totalPages})}" aria-label="Last">Last</a>
+        </li>
+    </th:block>
+</ul>
+</div>
+
+
+
+

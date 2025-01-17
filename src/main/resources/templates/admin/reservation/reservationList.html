@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>
+<script type="text/javascript">
+function go_reservation_save() {
+	  var count = 0;
+	  var selectedIds = [];
+	  
+	  // 체크박스가 하나만 있을 경우 처리
+	  if (document.frm.result.length == undefined) {
+	    if (document.frm.result.checked == true) {
+	      //selectedIds.push(document.frm.result.value);
+	      count++;
+	    }
+	  } else {  // 체크박스가 여러 개 있을 경우 처리
+	    for (var i = 0; i < document.frm.result.length; i++) {
+	      if (document.frm.result[i].checked == true) {
+	        //selectedIds.push(document.frm.result[i].value);
+	        count++;
+	      }
+	    }
+	  }
+
+	  /* 선택된 항목이 없으면 알림 */
+	  if (count == 0) {
+	    alert("주문처리할 항목을 선택해 주세요.");
+	  } else {
+	    // 선택된 항목의 ID를 서버로 전송
+	    var form = document.frm;
+	    form.action = "admin_reservation_save";  // 서버로 전송할 URL 설정
+	    //form.selectedIds.value = selectedIds.join(',');  // 선택된 ID들을 서버에 전달
+	    form.submit();
+	  }
+	
+    }
+  
+  function go_search() {
+	var theForm = document.frm;
+	theForm.action =  "admin_reservation_list";
+	theForm.submit();
+  }
+</script>
+<article>
+<h1>주문리스트</h1>
+<form name="frm" method="post">
+<input type="hidden" name="selectedIds" />
+  <table style="float: right;">
+    <tr>
+      <td>주문자 이름 <input type="text" name="key"> 
+      <input class="btn" type="button" value="검색" onclick="go_search()">
+      </td>
+    </tr>
+  </table>
+  <br>
+  <table id="reservationList">
+  <tr>
+    <th>예약번호(처리여부)</th><th>체크인</th><th>체크아웃</th><th>예약일자</th>
+    <th>예약자</th><th>주소</th><th>전화</th><th>이메일</th>
+  </tr>
+  <th:block th:each="reservation : ${reservationList}">
+  <tr>
+    <td>
+      <th:block th:if="${reservation.result == '0'}">
+        <span style="font-weight: bold; color: blue" th:text="${reservation.id}"></span>
+        (<input type="checkbox" name="result" th:value="${reservation.id}"> 미처리)
+      </th:block>
+       <th:block th:unless="${reservation.result == '0'}">
+         <span style="font-weight: bold; color: red" th:text="${reservation.id}"></span>
+          (<input type="checkbox" checked="checked" disabled="disabled">처리완료)
+       </th:block>
+    </td>
+    <td>[[${reservation.checkin}]]</td> <td>[[${reservation.checkout}]]</td>
+    <td>[[${reservation.createddate}]]</td> <td>[[${reservation.member.name}]]</td>
+    <td>[[${reservation.member.address}]]</td>  <td>[[${reservation.member.phone}]]</td>
+    <td>[[${reservation.member.email}]]
+  </tr>
+  </th:block>
+  </table>
+  <input type="button" class="btn" style="width: 200px"
+      value="예약처리(예약확인)" onClick="go_reservation_save()">
+</form>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

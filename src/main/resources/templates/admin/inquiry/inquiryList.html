@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>  
+<script type="text/javascript">
+  function go_view(id) {
+    var theForm = document.frm;
+    theForm.id.value = id;
+    theForm.action = "admin_inquiry_detail";
+    theForm.submit();
+  }
+</script>
+
+<article>
+<h1>Q&amp;A 게시글 리스트</h1>  
+<form name="frm" method="post">
+<input type="hidden" name="id">  
+<table id="orderList">
+  <tr>
+    <th>번호(답변여부)</th> <th>제목</th> <th>작성자</th> <th>작성일</th>    
+  </tr>
+  <th:block th:each="inquiryVO : ${inquiryList}">
+      <tr>
+      <td>
+      [[${inquiryVO.id}]]
+      <span th:if="${inquiryVO.status==0}">(미처리)</span>  
+	  <span th:unless="${inquiryVO.status==0}">(답변처리완료)</span> 
+      </td>
+      <td>
+      <a href="#" th:onClick="'javascript:go_view(' + ${inquiryVO.id} + ');'">
+        [[${inquiryVO.title}]] 
+      </a>
+      </td>
+      <td> [[${inquiryVO.member.id}]] </td>
+      <td>[[${inquiryVO.createddate}]]</td>
+      </tr>
+    </th:block>
+    </table>
+    </form>    
+  </article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

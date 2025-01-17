@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>
+
+<article>
+<h1>켐핑수정</h1>  
+<form name="frm" id="update_form" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" th:value="${campingVO.id}">
+<input type="hidden" name="code" >
+<input type="hidden" th:value="${campingVO.createdtime}">
+<input type="hidden" name="nonmakeImg" th:value="${campingVO.firstimageurl}"> <!-- 기존 이미지 저장  -->
+<table id="list">
+  <tr>
+    <th>켐핑분류</th>
+    <td colspan="5">
+    <select name="category" id="category">
+      <th:block th:each="category, status : ${categoryList}">
+		  <th:block th:if="${category==status.count}">
+            <option th:value="${status.count}" selected="selected">[[${category}]]</option>
+          </th:block>
+          <th:block th:unless="${category==status.count}">
+            <option th:value="${status.count}">[[${category}]]</option>
+          </th:block>
+
+      </th:block>
+    </select> 
+    </td>
+  </tr>
+  <tr>
+    <th>켐핑장명</th>
+    <td width="343" colspan="5">
+      <input type="text" name="facltnm" id="facltnm" size="47" maxlength="100" th:value="${campingVO.facltnm}">
+    </td>
+  </tr>
+  <tr>
+    <th>주소</th>
+    <td width="70">        
+      <input type="text" name="addr1" id="addr1" size="11" onKeyUp='NumFormat(this)' th:value="${campingVO.addr1}">
+    </td>
+     <th>예약가능방개수</th>
+    <td width="70">
+      <input type="text" name="roomcount" id="roomcount" size="11" onKeyUp='NumFormat(this)' th:value="${campingVO.roomcount}">
+    </td>
+     
+    <th>만든날짜</th>
+    <td width="72">
+      <input type="text" name="creadtedtime" id="creadtedtime" size="11" readonly onKeyUp='NumFormat(this)'>
+    </td>
+    
+  </tr>
+  <tr>
+    
+    <!-- 
+    <th>베스트켐핑</th>
+    <td>
+	    <th:block th:if="${campingVO.bestyn=='y'}">
+          <input type="checkbox" name="bestyn" value="y" id="bestyn" checked="checked">
+        </th:block>
+        <th:block th:if="${campingVO.bestyn=='n'}">
+          <input type="checkbox" name="bestyn" value="n" id="bestyn" >
+        </th:block>
+    </td>
+            
+    <th>예약가능유무</th>
+    <td>
+	    <th:block th:if="${campingVO.useyn=='y'}">
+          <input type="checkbox" name="useyn" id="useyn" value="y" checked="checked">
+        </th:block>
+        <th:block th:if="${campingVO.useyn=='n'}">
+        <input type="checkbox" name="useyn" id="useyn" value="n">
+      </th:block>
+    </td>
+     -->
+  </tr>
+  <tr>
+    <th>켐핑설명</th>
+    <td colspan="5">
+      <textarea name="featurenm" id="featurenm" rows="8" cols="70" >[[${campingVO.featurenm}]]</textarea>
+    </td>
+  </tr>
+  <tr>
+    <th>켐핑이미지</th>
+    <td colspan="5">
+      <img th:src="@{/camping_images/} + ${campingVO.firstimageurl}" width="200pt">     
+      <br>
+      <input type="file" name="camping_image" id="camping_image">
+      <input type="hidden" name=".firstimageurl" th:value="${campingVO.firstimageurl}">
+    </td> 
+  </tr>    
+</table>
+<input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod_save('+${campingVO.id}+');'">           
+<input class="btn" type="button" value="취소" onClick="go_mov()">
+</form> 
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

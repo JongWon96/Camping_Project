@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>
+<script type="text/javascript">
+   function go_list()
+   {
+	   var theForm = document.frm;
+	   theForm.action="admin_camping_list";
+	   theForm.submit();
+   }
+
+</script>
+
+
+<article>
+<h1>켐핑장 상세 보기</h1> 
+<form name="frm" id="detail_form" method="post">
+<table id="list">
+    <tr>
+    	<th>켐핑장분류</th>
+    	<td  colspan="5">
+    	[[${campingVO.id}]]
+    	</td>    
+    </tr>    
+    <tr>
+        <th align="center" >켐핑장명</th>
+        <td colspan="5">[[${campingVO.facltnm}]]</td>
+    </tr>
+    
+    <tr>
+        <th >주소</th>
+        <td width="60">[[${campingVO.addr1}]]</td>
+         
+        <th>예약가능방개수</th>
+        <td width="60">[[${campingVO.roomcount}]]</td>
+        <th>만든날짜</th><td>[[${campingVO.createdtime}]]</td>
+    	 
+    </tr>
+     
+    <tr>
+        <th>상세설명</th>
+        <td colspan="5">[[${campingVO.featurenm}]]</td>
+    </tr>
+    
+    <tr>
+     <th>켐핑장이미지</th>
+     <td colspan="5" align="center">
+  <!--[7] 상품 이미지를 출력하기 -->     
+     <img th:src="@{/camping_images/}+${campingVO.firstimageurl}" width="200pt">    
+     </td>
+    </tr>
+     
+</table>
+<input class="btn"  type="button" value="수정" th:onClick="'javascript:go_mod('+${campingVO.id}+');'">
+<input class="btn"  type="button" value="목록" onClick="go_list()">           
+</form>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+
+
+
+
+
+
+

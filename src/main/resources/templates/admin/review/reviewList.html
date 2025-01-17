@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>  
+
+<div th:unless="${reviewList == null or #lists.size(reviewList) == 0}">
+<script type="text/javascript">
+  // 리뷰 상세 보기 함수
+  function go_view(id) {
+    var theForm = document.frm;
+    theForm.id.value = id;  // 리뷰 id를 폼에 설정
+    theForm.action = "admin_review_detail";  // 상세 페이지로 이동
+    theForm.submit();
+  }
+
+  // 리뷰 삭제 함수
+  function delete_review(id) {
+    if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+      var theForm = document.frm;
+      theForm.id.value = id;  // 리뷰 id를 폼에 설정
+      theForm.action = "/admin_review_delete";  // 리뷰 삭제를 처리할 액션으로 폼 제출
+      theForm.submit();  // 폼 제출
+    }
+  }
+</script>
+<!-- 리뷰 리스트가 없을 경우 처리 메시지 -->
+<div th:if="${message != null}">
+    <p th:text="${message}"></p>
+</div>
+
+<article>
+<h1>신고된 리뷰 리스트</h1>  
+<form name="frm" method="post">
+<input type="hidden" name="id">  <!-- 리뷰 id를 담을 숨겨진 필드 -->
+<table id="reviewList">
+  <tr>
+    <th>번호(답변여부)</th> 
+    <th>제목</th> 
+    <th>작성자</th> 
+    <th>작성일</th>    
+    <th>조치</th> <!-- 삭제 버튼을 위한 추가 열 -->
+  </tr>
+  <th:block th:each="reviewVO : ${reviewList}">
+    <tr>
+      <td>
+        [[${reviewVO.id}]]
+        <span th:if="${reviewVO.danger == 1}">(신고됨)</span>  
+        <span th:unless="${reviewVO.danger == 1}">(삭제완료)</span> 
+      </td>
+      <td>
+        <a href="#" th:onClick="'javascript:go_view(' + ${reviewVO.id} + ');'">
+          [[${reviewVO.content}]] 
+        </a>
+      </td>
+      <td>[[${reviewVO.member.id}]]</td>
+      <td>[[${reviewVO.reviewdate}]]</td>
+      <td>
+        <!-- danger가 1인 경우 삭제 버튼 표시 -->
+        <span th:if="${reviewVO.danger == 1}">
+          <button type="button" th:onClick="|delete_review(${reviewVO.id})|">삭제</button>
+        </span>
+      </td>
+    </tr>
+  </th:block>
+</table>
+</form> 
+</article>
+</div>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

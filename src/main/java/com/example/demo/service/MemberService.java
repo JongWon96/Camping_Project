@@ -36,4 +36,6 @@ public interface MemberService {
 
     // 문의 등록
     void submitInquiry(String memberId, String title, String content, MultipartFile img) throws IOException;
+    
+    List<Member> getMemberList(String name);
 }

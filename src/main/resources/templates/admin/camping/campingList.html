@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>
+
+<article>
+<h1>켐핑리스트</h1>	
+<form name="frm" id="camping_form" method="get">
+<table>
+  <tr>
+  <td width="642">
+      켐핑명 
+     <input type="text" name="key" id="key">
+     <input class="btn" type="button" name="btn_search" value="검색" onClick="go_search()">
+     <input class="btn" type="button" name="btn_total" value="전체보기" onClick="go_total()">
+     <input class="btn" type="button" name="btn_write" value="켐핑등록" onClick="go_wrt()">
+     <!-- <input class="btn" type="button" name="btn_chart" value="켐핑별 실적" onClick="location.href='admin_sales_record_form'"> -->
+  </td>
+  </tr>
+</table>
+<div th:if="${campingList == null or #lists.size(campingList) == 0}">
+    <!-- Content when campingList is empty -->
+    <tr>
+        <td width="100%" colspan="7" align="center" height="23">
+          등록된 켐핑이 없습니다.
+        </td>      
+      </tr>
+</div>
+<div th:if="${campingList != null and #lists.size(campingList) > 0}">
+<table id="campingList">
+    <tr>
+        <th>아이디</th><th>켐핑장명</th><th>예약가능방개수</th><th>등록일</th><th>예약가능여부</th>
+    </tr>
+    <th:block th:if="${campingList != null and #lists.size(campingList) > 0}">
+      <th:block th:each="campingVO, status : ${campingList}">
+        <tr>
+        <!-- <td height="23" align="center" >${productVO.pseq}</td> -->
+       
+        <td style="text-align: center; padding-left: 50px; padding-right: 0px;">   
+  		   <a th:href="@{admin_camping_detail(id=${campingVO.id})}">    
+    	    [[${campingVO.id}]]     
+   		   </a>
+   	    </td>
+   	     <td height="23" align="center" th:text="${campingVO.facltnm}"></td>
+   	    <!-- <td>[[${campingVO.id}]]</td> -->
+   	    <td>[[${campingVO.roomcount}]]</td>
+   	    <td>[[${campingVO.createdtime}]]</td>
+        <td>
+          <th:block th:if="${campingVO.roomcount == '0' or campingVO.roomcount == null}">예약불가능</th:block>
+          <th:block th:unless="${campingVO.roomcount == '0' or campingVO.roomcount == null}">예약가능</th:block>
+   	    </td> 
+      </tr>
+    </th:block>
+    
+    <tr>
+				<!--  <td colspan="6" style="text-align: center;">
+		    <div th:if="${pageInfo.totalPages != null && pageInfo.totalPages > 1}"> 
+		       
+		        <span th:each="i : ${#numbers.sequence(
+		            (pageInfo.number != null ? (pageInfo.number / 10) * 10 + 1 : 1), 
+		            (pageInfo.totalPages != null ? Math.min(
+		                (pageInfo.number != null ? (pageInfo.number / 10) * 10 + 10 : 10), 
+		                pageInfo.totalPages
+		            ) : 1)
+		        )}">
+		            <a th:href="@{admin/camping/campingList(page=${i}, size=${pageInfo.size})}" th:text="${i}">Page [[${i}]]</a>
+		        </span>
+		
+		      
+		        <span th:if="${pageInfo.number != null && pageInfo.number > 0}">
+		            <a th:href="@{admin/camping/campingList(page=${pageInfo.number - 1}, size=${pageInfo.size})}">Prev</a>
+		        </span>
+		        <span th:if="${pageInfo.number != null && pageInfo.number < pageInfo.totalPages - 1}">
+		            <a th:href="@{admin/camping/campingList(page=${pageInfo.number + 1}, size=${pageInfo.size})}">Next</a>
+		        </span>
+		        
+		    </div>
+		</td>
+		  -->
+    </tr> 
+   
+</th:block>
+</table>
+</div>
+
+</form> 
+<th:block th:insert="~{/admin/page_area}"></th:block>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>

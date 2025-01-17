@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block> 
+<script type="text/javascript">
+   function go_list()
+   {
+	   var theForm = document.frm;
+	   theForm.action="admin_inquiry_list";
+	   theForm.submit();
+   }
+
+   function go_reply() {
+	    var theForm = document.frm;
+	    var replyText = theForm.reply.value.trim();  // textarea의 내용 가져오기
+	    if (replyText === '') {
+	        alert("댓글을 작성해주세요.");
+	        return;
+	    }
+
+	    // 서버로 보낼 데이터 설정
+	    theForm.action = "admin_inquiry_replysave";
+	    theForm.method = "POST"; // POST 방식으로 전송
+
+	    // 댓글을 입력하고 상태를 '1'로 변경
+	    /*
+	    var statusField = document.createElement("input");
+	    statusField.type = "hidden";
+	    statusField.name = "status";
+	    statusField.value = "1"; // 댓글 작성 후 상태를 1로 설정
+
+	    theForm.appendChild(statusField);
+
+	    // reply 값도 함께 전송
+	    var replyField = document.createElement("input");
+	    replyField.type = "hidden";
+	    replyField.name = "reply";
+	    replyField.value = replyText;
+
+	    theForm.appendChild(replyField);
+		*/
+		
+	    theForm.submit();
+	}
+</script>
+<article>
+<h1>Q&amp;A 게시판</h1>   
+<form name="frm" method="post">
+<input type="hidden" name="id" th:value="${inquiryVO.id}">
+<table id="inquiryList">
+    <tr>
+        <th width="20%">제목</th>
+        <td> [[${inquiryVO.title}]]  </td>
+    </tr>
+   <tr>
+         <th>등록일</th>
+         <td>[[${inquiryVO.createddate}]]</td>
+    </tr>
+    <tr>
+        <th>내용</th>
+        <td> [[${inquiryVO.content}]]</td>  
+    </tr>
+</table>
+<th:block th:unless="${inquiryVO.status == 0 }">
+  <table id="inquiryList">
+    <tr>
+     <th>댓글</th>
+     <td> [[${inquiryVO.reply}]]</td>
+    </tr>
+  </table>
+</th:block>
+<th:block th:if="${inquiryVO.status == 0}">
+  <table id="inquiryList">
+      <tr>
+          <td colspan="2">
+      <img src="images/admin/opinionimg01.gif">
+      </td>
+      </tr>
+    <tr>
+          <td colspan="2">    
+      <textarea name="reply" rows="3" cols="50"></textarea>
+      <input type="button" class="btn" value="저장" th:onClick="'javascript:go_reply();'"> 
+      </td>
+      </tr>
+  </table>
+  <br>
+</th:block>
+
+<input type="button" class="btn" value="목록" onClick="go_list()">
+</form>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block> 
+<script type="text/javascript">
+   function go_list()
+   {
+	   var theForm = document.frm;
+	   theForm.action="admin_review_list";
+	   theForm.submit();
+   }
+
+   function go_rep(id)
+   {
+	   var theForm = document.frm;
+	   //theForm.qseq.value=qseq;
+	   console.log
+	   theForm.action="admin_review_repsave";
+	   theForm.submit();
+   }   
+</script>
+
+<div th:if="${message != null}">
+    <p th:text="${message}"></p>
+</div>
+<article>
+<h1>Comment 게시판</h1>   
+<form name="frm" method="post">
+<input type="hidden" name="id" th:value="${reviewVO.id}">
+<table id="reviewList">
+    <tr>
+        <th width="20%">제목</th>
+        <td> [[${reviewVO.content}]] [[${reviewVO.danger}]] </td>
+    </tr>
+   <tr>
+         <th>등록일</th>
+         <td>[[${reviewVO.reviewdate}]]</td>
+    </tr>
+    <tr>
+        <th>내용</th>
+        <td> [[${reviewVO.content}]]</td>  
+    </tr>
+</table>
+<th:block th:if="${reviewVO.danger == '1'}">
+  <table id="reviewList">
+      <tr>
+          <td colspan="2">
+      <img src="images/admin/opinionimg01.gif">
+      </td>
+      </tr>
+    <tr>
+          <td colspan="2">    
+      <textarea name="reply" rows="3" cols="50"></textarea>
+      <input type="button" class="btn" value="저장" th:onClick="'javascript:go_rep('+${reviewVO.id}+');'"> 
+      </td>
+      </tr>
+  </table>
+  <br>
+</th:block>
+<th:block th:unless="${reviewVO.danger == '1'}">
+  <table id="reviewList">
+    <tr>
+     <th>삭제</th>
+     <td> [[${reviewVO.danger}]]</td>
+    </tr>
+  </table>
+</th:block>
+<input type="button" class="btn" value="목록" onClick="go_list()">
+</form>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

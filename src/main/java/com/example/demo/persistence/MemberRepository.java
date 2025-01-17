@@ -22,7 +22,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 이름에 특정 문자열이 포함된 회원 목록 검색
     List<Member> findByNameContaining(String name);
 
-    public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
-        List<Inquiry> findByMemberId(String memberId);
-    }
+	List<Member> findMemberByNameContaining(String name);
 }
