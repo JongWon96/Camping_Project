@@ -1,166 +1,193 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Shop Item - Start Bootstrap Template</title>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/Camping/styles.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .checkin-checkout {
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-        }
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Shop Item - Start Bootstrap Template</title>
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="css/Camping/styles.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+.checkin-checkout {
+	display: flex;
+	justify-content: space-between;
+	gap: 5px;
+}
 
-        .checkin, .checkout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.checkin, .checkout {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 
-        .checkin h5, .checkout h5 {
-            margin-bottom: 10px;
-        }
+.checkin h5, .checkout h5 {
+	margin-bottom: 10px;
+}
 
-        .date-input {
-            width: 200px;
-        }
-    </style>
+.date-input {
+	width: 200px;
+}
+</style>
 </head>
 <body>
-    <!-- Navigation-->
-    <nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
-        <th:block th:include="~{/include/navigater}"></th:block>
-    </nav>
-    
-    <!-- Product section-->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="row gx-4 gx-lg-5 align-items-center">
-                <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." />
-                </div>
-                <div class="col-md-6">
-                    <h1 class="display-5 fw-bolder" th:text="${product.camping.facltnm} + ' ' + ${product.room} + '번 방 예약'"></h1>
-                    <div class="fs-5 mb-5">
-                        <span th:text="'가격: ' + ${price} + '원'"></span>
-                    </div>
+	<!-- Navigation-->
+	<nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
+		<th:block th:include="~{/include/navigater}"></th:block>
+	</nav>
 
-                    <p class="lead" th:text="'전체 방 개수: ' + ${product.roomcount}">전체 방 개수:</p>
+	<!-- Product section-->
+	<section class="py-5">
+		<div class="container px-4 px-lg-5 my-5">
+			<div class="row gx-4 gx-lg-5 align-items-center">
+				<div class="col-md-6">
+					<img class="card-img-top mb-5 mb-md-0"
+						src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." />
+				</div>
+				<div class="col-md-6">
+					<h1 class="display-5 fw-bolder"
+						th:text="${product.camping.facltnm} + ' ' + ${product.room} + '번 방 예약'"></h1>
+					<div class="fs-5 mb-5">
+						<span th:text="'가격: ' + ${price} + '원'"></span>
+					</div>
 
-                    <p class="lead" id="remainingRoomCount" th:text="'남은 방 개수: ' + ${remainingRoomCount}">남은 방 개수:</p>
+					<p class="lead" th:text="'전체 방 개수: ' + ${product.roomcount}">전체
+						방 개수:</p>
 
-                    
-                   <form id="reservationform" method="POST" action="/reservation_process">
-            
-    <input type="hidden" id="checkinValue" name="checkin">
-    <input type="hidden" id="checkoutValue" name="checkout">
-    <div class="col mb-5">
-        <div class="card h-100">
-            <div class="card-body p-4">
-                <div class="text-center">
-                    <div class="checkin-checkout">
-                        <div class="checkin" style="margin: 7%; display: flex; width:38%;">
-                            <h5 class="fw-bolder">체크인</h5>
-                            <input type="date" class="date-input" id="checkin" style="width:95%" onchange="updateFormValues()">
-                        </div>
-                        <div class="checkout" style="margin: 7%; display: flex; width:30%;">
-                            <h5 class="fw-bolder">체크아웃</h5>
-                            <input type="date" class="date-input" id="checkout" style="width:95%" onchange="updateFormValues()">
-                        </div>
-                    </div>
-                    <div class="checkin-checkout">
-                        <div class="checkin" style="display: flex; width:38%; margin: 7%;">
-                            <h5 class="fw-bolder">바닥재 종류</h5>
-                            <select style="padding-top: 6px; width:80%" id="bottom">
-                                <option>선택하세요</option>
-                                <option value="잔디">잔디</option>
-                                <option value="파쇄석">파쇄석</option>
-                                <option value="태크">태크</option>
-                                <option value="자갈">자갈</option>
-                                <option value="맨흙">맨흙</option>
-                            </select>
-                        </div>
-                        <div class="checkout" style="display: flex; margin: 7%; width:30%;">
-                            <h5 class="fw-bolder">인원수</h5>
-                            <input type="text" placeholder="인원수" style="width: 60%;" id="people">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex">
-        <button class="btn btn-outline-dark  flex-shrink-0" type="button" onclick="reservation_check()">
-            <i class="bi-cart-fill me-1"></i> 예약하기
-        </button>
-    </div>
-</form>
+					<p class="lead" id="remainingRoomCount"
+						th:text="'남은 방 개수: ' + ${remainingRoomCount}">남은 방 개수:</p>
 
-                </div>
-            </div>
-        </div>
-    </section>
+					<form id="reservationform" method="POST" action="/reservation">
 
-    <!-- Related items section-->
-    <section class="py-5 bg-light">
-        <div class="container px-4 px-lg-5 mt-5">
-            <h2 class="fw-bolder mb-4" th:text="${product.camping.facltnm} + '의 다른 방'"></h2>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <!-- Product 1 -->
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder" th:text="${otherRoom1.room} + '번 방'"></h5>
-                                <p>가격: <span th:text="${price1} + '원'"></span></p>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" th:href="@{/reservationpage(campingid=${campingid}, room=${otherRoom1.room})}">
-                                    예약하기 &raquo;
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 2 -->
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder" th:text="${otherRoom2.room} + '번 방'"></h5>
-                                <p>가격: <span th:text="${price2} + '원'"></span></p>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" th:href="@{/reservationpage(campingid=${campingid}, room=${otherRoom2.room})}">
-                                    예약하기 &raquo;
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Camping Product 2025</p>
-        </div>
-    </footer>
+						<input type="hidden" id="checkinValue" name="checkin"> <input
+							type="hidden" id="checkoutValue" name="checkout">
 
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="/js/reservationScript.js"></script>
+
+						<div class="col mb-5">
+							<div class="card h-100">
+								<div class="card-body p-4">
+									<div class="text-center">
+										<div class="checkin-checkout">
+											<div class="checkin"
+												style="margin: 7%; display: flex; width: 38%;">
+												<h5 class="fw-bolder">체크인</h5>
+												<input type="date" class="date-input" id="checkin"
+													style="width: 95%" onchange="updateFormValues()">
+											</div>
+											<div class="checkout"
+												style="margin: 7%; display: flex; width: 30%;">
+												<h5 class="fw-bolder">체크아웃</h5>
+												<input type="date" class="date-input" id="checkout"
+													style="width: 95%" onchange="updateFormValues()">
+											</div>
+										</div>
+										<div class="checkin-checkout">
+											<div class="checkin"
+												style="display: flex; width: 38%; margin: 7%;">
+												<h5 class="fw-bolder">바닥재 종류</h5>
+												<select style="padding-top: 6px; width: 80%" id="bottom" name="bottom" >
+													<option>선택하세요</option>
+													<option value="잔디">잔디</option>
+													<option value="파쇄석">파쇄석</option>
+													<option value="태크">태크</option>
+													<option value="자갈">자갈</option>
+													<option value="맨흙">맨흙</option>
+												</select>
+											</div>
+											<div class="checkout"
+												style="display: flex; margin: 7%; width: 30%;">
+												<h5 class="fw-bolder">인원수</h5>
+												  <input type="number" placeholder="인원수" style="width: 60%;" id="people" name="person" required>
+</div>
+											</div>
+											<input type="hidden" name="campingid" th:value="${campingid}" id="campingid">
+											<input type="hidden" name="room" th:value="${room}" id="room">
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Submit 버튼을 type="submit"으로 변경 -->
+						<div class="d-flex">
+							<button class="btn btn-outline-dark flex-shrink-0" type="submit" onclick="reservation_check()">
+							    <i class="bi-cart-fill me-1"></i> 예약하기
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	<!-- Related items section-->
+	<section class="py-5 bg-light">
+		<div class="container px-4 px-lg-5 mt-5">
+			<h2 class="fw-bolder mb-4"
+				th:text="${product.camping.facltnm} + '의 다른 방'"></h2>
+			<div
+				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+				<!-- Product 1 -->
+				<div class="col mb-5">
+					<div class="card h-100">
+						<div class="card-body p-4">
+							<div class="text-center">
+								<h5 class="fw-bolder" th:text="${otherRoom1.room} + '번 방'"></h5>
+								<p>
+									가격: <span th:text="${price1} + '원'"></span>
+								</p>
+							</div>
+						</div>
+						<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+							<div class="text-center">
+								<a class="btn btn-outline-dark mt-auto"
+									th:href="@{/reservationpage(campingid=${campingid}, room=${otherRoom1.room})}">
+									예약하기 &raquo; </a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Product 2 -->
+				<div class="col mb-5">
+					<div class="card h-100">
+						<div class="card-body p-4">
+							<div class="text-center">
+								<h5 class="fw-bolder" th:text="${otherRoom2.room} + '번 방'"></h5>
+								<p>
+									가격: <span th:text="${price2} + '원'"></span>
+								</p>
+							</div>
+						</div>
+						<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+							<div class="text-center">
+								<a class="btn btn-outline-dark mt-auto"
+									th:href="@{/reservationpage(campingid=${campingid}, room=${otherRoom2.room})}">
+									예약하기 &raquo; </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer-->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Copyright &copy; Camping
+				Product 2025</p>
+		</div>
+	</footer>
+
+	<!-- Bootstrap core JS-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="/js/reservationScript.js"></script>
 </body>
 </html>
