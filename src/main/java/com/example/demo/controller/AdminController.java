@@ -75,26 +75,31 @@ public class AdminController {
 	// 관리자 로그인 구현
 	@PostMapping("/admin_login")
 	public String adminLogin(Admin vo, Model model) {
-		String url = "";
-		
-		// (1) 관리자 계정 인증 호출: adminCheck()
-		long result = adminService.adminCheck(vo);
-		
-		// (2) 인증 결과에 따라 
-		// -- 정상 사용자이면 상품 목록 출력(admin/productList.html) (url: admin_product_list)
-		//    관리자 정보를 세션에 저장: "adminUser" 속성에 저장
-		// -- 비정상 사용자이면 관리자 로그인 화면 출력 
-		if (result == 1) {  // 정상 사용자
-			Admin admin = adminService.getAdmin(vo.getId());
-			model.addAttribute("adminUser", admin);
-			
-			url = "redirect:admin_camping_list";
-		} else {
-			model.addAttribute("message", "아이디 또는 비밀번호가 맞지 않습니다.");
-			url = "admin/main";
-		}
-		
-		return url;
+		  String url = "";
+		    
+		    // id 값이 잘못된 경우 처리
+		    try {
+		        Long id = Long.valueOf(vo.getId().toString());  // id 값이 Long 타입으로 변환되는지 확인
+		        vo.setId(id);
+		    } catch (NumberFormatException e) {
+		        model.addAttribute("message", "아이디는 숫자만 입력 가능합니다.");
+		        return "admin/main";  // 아이디 입력 오류 처리
+		    }
+		    
+		    // (1) 관리자 계정 인증 호출: adminCheck()
+		    long result = adminService.adminCheck(vo);
+		    
+		    // (2) 인증 결과에 따라 
+		    if (result == 1) {  // 정상 사용자
+		        Admin admin = adminService.getAdmin(vo.getId());
+		        model.addAttribute("adminUser", admin);
+		        url = "redirect:admin_camping_list";
+		    } else {
+		        model.addAttribute("message", "아이디 또는 비밀번호가 맞지 않습니다.");
+		        url = "admin/main";
+		    }
+		    
+		    return url;
 	}
 	
 	@GetMapping("/admin_logout")
