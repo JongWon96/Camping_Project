@@ -71,7 +71,7 @@ public class CampingController {
 		Integer result = 0;
 		for (Camping place : CampingPlaces) {
 			Long campingId = place.getId();
-			List<Review> tmpReviews = reviewService.getRate(campingId);
+			List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
 			
 			if (tmpReviews.size() != 0) {
 				for (Review review : tmpReviews) {
@@ -97,7 +97,7 @@ public class CampingController {
 		List<Product> products = productService.getProducts(campingId);
 
 		// 남겨진 평점의 평균으로 평점 출력
-		List<Review> tmpReviews = reviewService.getRate(campingId);
+		List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
 		
 		Integer result = 0;
 		
@@ -145,9 +145,9 @@ public class CampingController {
 		System.out.println(Sbrscl);
 		
 		//리뷰 전달
-		Page<Review> reviews = reviewService.getReview(campingId, page, size);
+		//Page<Review> reviews = reviewService.getReview(campingId, page, size);
 
-		model.addAttribute("reviews", reviews);
+		//model.addAttribute("reviews", reviews);
 		
 		//방 출력
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);

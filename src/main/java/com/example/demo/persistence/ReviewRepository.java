@@ -18,9 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     boolean existsByMemberIdAndCampingId(Long memberId, Long campingId);
 
-public interface ReviewRepository extends JpaRepository<Review, Long>{
-
-
 	public Page<Review> findReviewByCampingId(Long campingId, Pageable pageable);
 
 	public List<Review> findAllReviewByCampingId(Long campingId);

@@ -2,8 +2,16 @@ package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.domain.Camping;
+import com.example.demo.domain.Member;
+import com.example.demo.domain.Review;
+import com.example.demo.persistence.CampingRepository;
+import com.example.demo.persistence.MemberRepository;
+import com.example.demo.persistence.ReviewRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -168,5 +176,11 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(review);
 
     }
+
+
+
+
+
+	
 
 }

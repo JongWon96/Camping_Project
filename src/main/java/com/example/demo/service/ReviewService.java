@@ -13,10 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ReviewService {
 
-	public Page<Review> getReview(Long campingId, int page, int size);
 	
-	public List<Review> getRate(Long campingId);
-}
+
     // 후기 저장 메소드 (이미지 파일을 받기 위한 MultipartFile 추가)
     public Review saveReview(Long memberId, Long campingId, String content, Integer rate, MultipartFile imgFile ,Integer danger) throws IOException;
 
