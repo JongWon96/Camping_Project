@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private InquiryRepository inquiryRepository;
-    
+
     @Autowired
     public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -36,8 +36,8 @@ public class MemberServiceImpl implements MemberService {
     public Optional<Member> findByUsername(String memberId) {
         return memberRepository.findByMemberId(memberId);
     }
-    
-    
+
+
     @Transactional
     @Override
     public Member updateMemberInfo(String memberId, String phone) {
@@ -176,6 +176,14 @@ public class MemberServiceImpl implements MemberService {
 
         return "/uploads/" + fileName; // 저장된 파일 경로 반환
     }
-    }
+
+	@Override
+	public List<Member> getMemberList(String name) {
+
+		return memberRepository.findMemberByNameContaining(name);
+	}
+
+
+}
 
 

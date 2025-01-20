@@ -26,6 +26,7 @@ public class Product {
 
     private Integer roomcount;
 
+
     @ManyToOne
     @JoinColumn(name = "camping_id")
     private Camping camping;
