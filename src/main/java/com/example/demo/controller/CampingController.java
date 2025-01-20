@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Locale;
 
 import com.example.demo.domain.Member;
+import com.example.demo.service.LikesService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Camping;
@@ -33,6 +37,9 @@ public class CampingController {
 
 	@Autowired
 	private RecommendationController recommendationController;
+
+	@Autowired
+	private LikesService likesService;
 
 
 	@GetMapping("/campinglist")
@@ -198,6 +205,31 @@ public class CampingController {
 		model.addAttribute("price3", formattedPrice3);
 		
 		return "Camping/DetailPage";
+	}
+	@PostMapping("/toggle-like")
+	public ResponseEntity<String> toggleLike(@RequestParam("campingid") Long campingId, HttpSession session) {
+		// 로그인된 사용자 정보 가져오기
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+		}
+
+		Long memberId = loginUser.getId();
+
+		try {
+			// 찜 상태 확인 후 추가 또는 삭제
+			boolean alreadyLiked = likesService.isLiked(memberId, campingId);
+
+			if (alreadyLiked) {
+				likesService.removeLike(String.valueOf(memberId), campingId);
+				return ResponseEntity.ok("찜이 삭제되었습니다.");
+			} else {
+				likesService.saveLike(memberId, campingId);
+				return ResponseEntity.ok("찜이 추가되었습니다.");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("찜 상태 변경 중 오류가 발생했습니다.");
+		}
 	}
 
 	//임시 확인용
