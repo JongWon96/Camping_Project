@@ -4,7 +4,7 @@
 
 function reservation_check() {
     // 이벤트 기본 동작 방지
-    // event.preventDefault(); // 폼 제출 방지
+     event.preventDefault(); // 폼 제출 방지
 
     // 입력한 값 가져오기    
     var checkin = document.getElementById("checkin").value;
@@ -56,7 +56,7 @@ function reservation_check() {
             document.getElementById("checkoutValue").value = checkout;
 
             // 예약 폼 제출
- 
+ 			 document.getElementById("reservationform").submit();
         }
     }
 }
