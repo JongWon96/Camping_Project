@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,11 +32,13 @@ public class CampingController {
 
 	@GetMapping("/campinglist")
 	private String campingList(
-			@RequestParam(value = "donm", required = false) String doNm,
+			@RequestParam(value = "donm", required = false) String donm,
 			@RequestParam(value = "sigungunm", required = false) String sigungunm,
 			@RequestParam(value = "category", required = false) String category,
 			@RequestParam(value = "campingName", required = false) String campingName,
 			@RequestParam(value = "flooring", required = false) String flooring,
+			@RequestParam(value = "startDate", required = false) LocalDate startDate,
+			@RequestParam(value = "endDate", required = false) LocalDate endDate,
 			@RequestParam(value = "bonfire", required = false) String bonfire,
 			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
@@ -90,6 +93,19 @@ public class CampingController {
 		}
 		String rate = result.toString();
 		model.addAttribute("rate", rate);
+		
+		// 페이징에 필터 요인 추가
+		model.addAttribute("donm", donm);
+		model.addAttribute("sigungunm", sigungunm);
+		model.addAttribute("category", category);
+		model.addAttribute("campingName", campingName);
+		model.addAttribute("flooring", flooring);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
+		model.addAttribute("bonfire", bonfire);
+		model.addAttribute("petAllowed", petAllowed);
+		model.addAttribute("trailerAllowed", trailerAllowed);
+		model.addAttribute("caravanAllowed", caravanAllowed);
 
 		return "Camping/ListPage";
 	}

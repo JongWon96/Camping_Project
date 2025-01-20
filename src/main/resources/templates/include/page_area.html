@@ -4,10 +4,10 @@
                 last=(${start + 9 < pageInfo.totalPages ? start+9 : pageInfo.totalPages})">
 		<th:block
 			th:with="
-            firstPage=@{/campinglist(page=1)},
-            previous=@{/campinglist(page=${pageInfo.number})},
-            next=@{/campinglist(page=${pageInfo.number + 2})},
-            lastPage=@{/campinglist(page=${pageInfo.totalPages})}">
+            firstPage=@{/campinglist(page=1, donm=${donm}, sigungunm=${sigungunm}, category=${category}, campingName=${campingName}, flooring=${flooring}, startDate=${startDate}, endDate=${endDate}, bonfire=${bonfire}, petAllowed=${petAllowed}, trailerAllowed=${trailerAllowed}, caravanAllowed=${caravanAllowed})},
+            previous=@{/campinglist(page=${pageInfo.number}, donm=${donm}, sigungunm=${sigungunm}, category=${category}, campingName=${campingName}, flooring=${flooring}, startDate=${startDate}, endDate=${endDate}, bonfire=${bonfire}, petAllowed=${petAllowed}, trailerAllowed=${trailerAllowed}, caravanAllowed=${caravanAllowed})},
+            next=@{/campinglist(page=${pageInfo.number + 2}, donm=${donm}, sigungunm=${sigungunm}, category=${category}, campingName=${campingName}, flooring=${flooring}, startDate=${startDate}, endDate=${endDate}, bonfire=${bonfire}, petAllowed=${petAllowed}, trailerAllowed=${trailerAllowed}, caravanAllowed=${caravanAllowed})},
+            lastPage=@{/campinglist(page=${pageInfo.totalPages}, donm=${donm}, sigungunm=${sigungunm}, category=${category}, campingName=${campingName}, flooring=${flooring}, startDate=${startDate}, endDate=${endDate}, bonfire=${bonfire}, petAllowed=${petAllowed}, trailerAllowed=${trailerAllowed}, caravanAllowed=${caravanAllowed})}">
 
 			<!-- 첫 페이지로 이동 -->
 			<li th:class="paging" class="page-item">
@@ -28,7 +28,7 @@
 			<li th:each="page : ${#numbers.sequence(start, last)}"
 				th:class="${page == pageInfo.number + 1} ? 'active' "
 				class="paging page-item">
-				<a th:text="${page}" th:href="@{/campinglist(page=${page})}" class="page-link"></a>
+				<a th:text="${page}" th:href="@{/campinglist(page=${page}, donm=${donm}, sigungunm=${sigungunm}, category=${category}, campingName=${campingName}, flooring=${flooring}, startDate=${startDate}, endDate=${endDate}, bonfire=${bonfire}, petAllowed=${petAllowed}, trailerAllowed=${trailerAllowed}, caravanAllowed=${caravanAllowed})}" class="page-link"></a>
 			</li>
 
 			<!-- 다음 페이지로 이동 -->

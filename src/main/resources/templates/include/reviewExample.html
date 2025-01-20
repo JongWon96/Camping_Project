@@ -44,7 +44,7 @@
     
     #reviewImg {
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
         width: 30%;
     }
 
@@ -60,24 +60,28 @@
 
                 <div class="content">
                     <block th:each="review : ${reviews}" style="width:100%">
-                        <div class="ms-3" style="width:65%">
-                            <div class="fw-bold" th:text="'작성자: ' + ${review.member.name}"></div>
-                            <div class="star-rating">
-                                <div class="stars">
-                                    <span>평점: </span>
-                                    <span th:each="i : ${#numbers.sequence(1, 5)}"> 
-                                        <span th:if="${i<= T(java.lang.Math).floor(review.rate)}" class="star filled-star">★</span>
-                                        <span th:if="${i > review.rate}" class="star empty-star">★</span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <span th:text="${review.content}"></span>
-                            </div>
-                        </div>
-
-                        <div th:if="${review.img != null}" id="reviewImg"> 
-                            <img th:src="${review.img}" style="width: 140px; height: 140px;" />
+                    	<div style="display:flex">
+	                        <div class="ms-3" style="width:65%">
+	                            <div class="fw-bold" th:text="'작성자: ' + ${review.member.name}"></div>
+	                            <div class="star-rating">
+	                                <div class="stars">
+	                                    <span>평점: </span>
+	                                    <span th:each="i : ${#numbers.sequence(1, 5)}"> 
+	                                        <span th:if="${i<= T(java.lang.Math).floor(review.rate)}" class="star filled-star">★</span>
+	                                        <span th:if="${i > review.rate}" class="star empty-star">★</span>
+	                                    </span>
+	                                </div>
+	                            </div>
+	                            <div>
+	                                <span th:text="${review.content}"></span>
+	                            </div>
+	                        </div>
+	                        
+							<!-- 리뷰 이미지 - 이미지 저장 경로에 맞게 변경 필요 -->
+	                        <div th:if="${review.img != null}" id="reviewImg"> 
+	                            <img th:src="${review.img}" style="width: 140px; height: 140px;" />
+	                        </div>
+	                        
                         </div>
                     </block>
                 </div>
