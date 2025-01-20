@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import com.example.demo.domain.Review;
 import com.example.demo.service.CampingService;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.ReviewService;
+import com.example.demo.service.SearchService;
 
 @Controller
 public class CampingController {
@@ -28,21 +30,32 @@ public class CampingController {
 	private ReviewService reviewService;
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private SearchService searchService;
 
 	@GetMapping("/campinglist")
-	private String campingList(@RequestParam(value = "campingName", required = false) String campingName,
-			@RequestParam(value = "searchDo", required = false) String doNm,
-			@RequestParam(value = "category", required = false) String category,
-			@RequestParam(value = "bonfire", required = false) String bonfire,
-			@RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
-			@RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
-			@RequestParam(value = "petAllowed", required = false) String petAllowed,
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "9") int size, Model model) {
+	private String campingList(
+	        @RequestParam(value = "campingName", required = false) String campingName,
+	        @RequestParam(value = "donm", required = false) String donm,
+	        @RequestParam(value = "sigungunm", required = false) String sigungunm,
+	        @RequestParam(value = "category", required = false) String category,
+	        @RequestParam(value = "flooring", required = false) String flooring,
+	        @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+	        @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+	        @RequestParam(value = "bonfire", required = false) String bonfire,
+	        @RequestParam(value = "petAllowed", required = false) String petAllowed,
+	        @RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
+	        @RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
+	        Model model
+	) {
+	    // 검색 조건에 따른 캠핑장 데이터 조회
+	    List<Camping> campings = searchService.searchCampings(
+	            donm, sigungunm, category, campingName, flooring,
+	            startDate, endDate, bonfire, petAllowed, trailerAllowed, caravanAllowed
+	    );
 
-		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
-
-		model.addAttribute("CampingPlaces", CampingPlaces);
+	    // 검색 결과를 모델에 추가
+	    model.addAttribute("CampingPlaces", campings);
 
 		/*
 		 * / 추천 목록에 띄울 임시 캠핑장 리스트
@@ -69,18 +82,18 @@ public class CampingController {
 
 		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
 		Integer result = 0;
-		for (Camping place : CampingPlaces) {
-			Long campingId = place.getId();
-			List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
-			
-			if (tmpReviews.size() != 0) {
-				for (Review review : tmpReviews) {
-					result += review.getRate();
-				}
-				result = Math.round(result / (Integer) tmpReviews.size());
-			} else {
-				result = 0;
-			}
+		for (Camping place : campings) {
+		    Long campingId = place.getId();
+		    List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
+
+		    if (!tmpReviews.isEmpty()) {
+		        for (Review review : tmpReviews) {
+		            result += review.getRate();
+		        }
+		        result = Math.round(result / tmpReviews.size());
+		    } else {
+		        result = 0;
+		    }
 		}
 		String rate = result.toString();
 		model.addAttribute("rate", rate);
