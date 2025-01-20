@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캠핑 추천 시스템</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+		integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{js/member.js}"></script>
+    <style>
+        /* Reset 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        header nav {
+            margin-top: 10px;
+        }
+
+        header nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #d4d4d4;
+        }
+
+          /* 배너 섹션 스타일 */
+    .banner {
+        background: url('img/main.jpg') no-repeat center/cover;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        padding: 20px;
+        position: relative;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); /* 배경 어둡게 */
+    }
+
+    .banner h2 {
+        font-size: 42px;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* 텍스트 그림자 */
+    }
+
+    .banner p {
+        font-size: 20px;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* 텍스트 그림자 */
+    }
+
+    /* 해시태그 스타일 */
+    .highlight-tags {
+        margin-top: 10px;
+    }
+
+    .highlight-tags span {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.8);
+        color: #28a745;
+        padding: 8px 15px;
+        margin: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+        /* 카드 섹션 스타일 */
+        .card-section {
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+        }
+
+        .card-section h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* 푸터 스타일 */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #28a745;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>캠핑 추천 시스템</h1>
+    <nav id="catagory_menu">
+		<ul>
+			<th:block th:if="${session.loginUser == null}">
+				<li>
+					<a th:href="@{login_form}" style="width:100px;">회원로그인</a>					
+				</li>	
+				<li>					
+					<a th:href="@{admin_login_form}" style="width:100px;">관리자로그인</a>
+				</li>					
+				<li><a href="contract">회원가입</a></li>
+			</th:block>
+			<th:block th:unless="${session.loginUser == null}">
+				<li style="color:orange">
+					<!-- 사용자명 (로그인ID) 표시-->
+					[[${session.loginUser.name}]]([[${session.loginUser.memberId}]])
+				</li>
+				<li><a href="logout">LOGOUT</a></li>
+			</th:block>	
+			<div th:if="${userName}">
+			    <a th:href="@{/logout}" class="btn btn-info active" role="button">로그아웃</a>
+			    <label th:text="${userName} + 님"></label>
+			</div>				
+		</ul>
+	</nav>
+</header>
+
+<section class="banner">
+    <div>
+        <h2>캠핑 추천 시스템</h2>
+        <p>맞춤형 식단과 건강 솔루션으로 당신의 일상을 바꿔보세요.</p>
+        <div class="highlight-tags">
+            <span>#건강한일상</span>
+            <span>#맞춤식단</span>
+            <span>#매일건강</span>
+        </div>
+    </div>
+</section>
+<section class="card-section">
+    <h2>추천 서비스</h2>
+    <div class="card-container">
+        <div class="card">
+            <img src="img/식단추천.jpg" alt="서비스 이미지">
+            <h3>식단 추천</h3>
+            <p>나만의 건강한 식단을 추천받아 보세요!</p>
+            <a th:href="@{/foodcategory?category=추천}">추천받기</a>
+        </div>
+        <div class="card">
+            <img src="img/식단정보.jpg" alt="서비스 이미지">
+            <h3>식단 정보</h3>
+            <p>건강한 식단 정보를 제공합니다.</p>
+            <a th:href="@{/foodlist}">자세히 보기</a>
+        </div>
+        <div class="card">
+            <img src="img/레시피.jpg" alt="서비스 이미지">
+            <h3>레시피 정보</h3>
+            <p>쉽고 건강한 요리 레시피를 제공합니다.</p>
+            <a th:href="@{/foodrecipelist}">자세히 보기</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Greating 유사 페이지. All rights reserved.</p>
+    <p><a href="#">개인정보처리방침</a> | <a href="#">이용약관</a></p>
+</footer>
+
+</body>
+</html>

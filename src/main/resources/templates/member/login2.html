@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="js/member.js"></script>
+    <meta charset="UTF-8">
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+	<!-- gsi 클라이언트 라이브러리 -->
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>로그인</title>
+    <style>
+        /* 전체 배경 및 컨텐츠 스타일 */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #28a745, #1e7d34);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .content-wrapper {
+            background: white;
+            color: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: #28a745;
+        }
+
+        form div {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        input[type="text"], input[type="password"], button, input[type="button"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        }
+
+        button, input[type="button"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        button:hover, input[type="button"]:hover {
+            background-color: #218838;
+        }
+
+        input[type="button"].cancel {
+            background-color: #007bff;
+        }
+
+        input[type="button"].cancel:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="button"].submit {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        input[type="button"].submit:hover {
+            background-color: #e0a800;
+        }
+
+        /* 팝업 스타일 */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .popup-content button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .popup-content button:hover {
+            background-color: #218838;
+        }
+
+        /* 숨김 클래스 */
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        // 팝업 닫기 함수
+        function closePopup() {
+            document.getElementById("successPopup").classList.add("hidden");
+        }        
+    </script>
+</head>
+<body>
+<div class="content-wrapper">
+    <!-- 성공 팝업 메시지 -->
+    <div id="successPopup" class="popup hidden" th:if="${successMessage}">
+        <div class="popup-content">
+            <p th:text="${successMessage}"></p>
+            <button onclick="closePopup()">확인</button>
+        </div>
+    </div>
+
+    <h1>로그인</h1>
+    <form action="/login" method="post">
+        <div>
+            <label for="memberId">아이디:</label>
+            <input type="text" id="memberId" name="memberId" required>
+        </div>
+        <div>
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <button type="submit">로그인</button>
+        </div>
+        <div>
+            <input type="button" value="회원가입" class="cancel" onclick="location='contract'">
+            <input type="button" value="아이디 찾기" class="submit" onclick="find_id_form()">
+        </div>
+        <div>
+            <input type="button" value="비밀번호 찾기" class="submit" onclick="find_pwd_form()">
+        </div>
+        <div>
+	        <!-- 아래와같이 아이디를 꼭 써준다. -->
+	        <input type="button" value="네이버 로그인" id="naverIdLogin_loginButton" 
+	            onclick="javascript:void(0)">
+	        <input type="button" value="네이버 로그아웃" onclick="naverLogout(); return false;">
+	        	<a href="javascript:void(0)"><br><br>
+	        	
+        	<input type="button" value="카카오 로그인" onclick="kakaoLogin()">
+	        	<a href="javascript:void(0)">
+	        <input type="button" value="카카오 로그아웃" onclick="kakaoLogout()">
+	        	<a href="javascript:void(0)"><br><br>
+       	</div> 
+		<div id="g_id_onload" data-client_id="738584432318-lt6u5ec13i4s4ed4h4n6qag0ejg0t0ap.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
+		<div style="width:220px; height:220px" class="g_id_signin" data-type="standard"></div>
+		<button type="button" onclick="signOut();">구글 로그아웃</button>
+    </form>
+</div>
+<br>
+
+<!-- 네이버 스크립트 -->
+<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+<script>
+	var naverLogin = new naver.LoginWithNaverId(
+			{
+				clientId: "BtMJqkTwL1JEIGIog24B", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
+				callbackUrl: "http://localhost:8080/naverLogin", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
+				isPopup: false,
+				callbackHandle: true
+			}
+		);	
+	
+	naverLogin.init();
+	
+	window.addEventListener('load', function () {
+		naverLogin.getLoginStatus(function (status) {
+			if (status) {
+				var email = naverLogin.user.getEmail(); // 필수로 설정할것을 받아와 아래처럼 조건문을 줍니다.
+	    		
+				console.log(naverLogin.user); 
+	    		
+	            if( email == undefined || email == null) {
+					alert("이메일은 필수정보입니다. 정보제공을 동의해주세요.");
+					naverLogin.reprompt();
+					return;
+				}
+			} else {
+				console.log("callback 처리에 실패하였습니다.");
+			}
+		});
+	});	
+	
+	var testPopUp;
+	function openPopUp() {
+	    testPopUp= window.open("https://nid.naver.com/nidlogin.logout", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1,height=1");
+	}
+	function closePopUp(){
+	    testPopUp.close();
+	}
+	
+	function naverLogout() {
+		openPopUp();
+		setTimeout(function() {
+			closePopUp();
+			}, 1000);		
+	}
+</script>
+
+<!-- 카카오 스크립트 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+	Kakao.init('aa31bb90f924f7d7ef773cebd05051dc'); //발급받은 키 중 javascript키를 사용해준다.
+	console.log(Kakao.isInitialized()); // sdk초기화여부판단
+	//카카오로그인
+	function kakaoLogin() {
+	    Kakao.Auth.login({
+	      success: function (response) {
+	        Kakao.API.request({
+	          url: '/v2/user/me',
+	          success: function (response) {
+	        	  console.log(response)
+	          },
+	          fail: function (error) {
+	            console.log(error)
+	          },
+	        })
+	      },
+	      fail: function (error) {
+	        console.log(error)
+	      },
+	    })
+	  }
+	//카카오로그아웃  
+	function kakaoLogout() {
+	    if (Kakao.Auth.getAccessToken()) {
+	      Kakao.API.request({
+	        url: '/v1/user/unlink',
+	        success: function (response) {
+	        	console.log(response)
+	        },
+	        fail: function (error) {
+	          console.log(error)
+	        },
+	      })
+	      Kakao.Auth.setAccessToken(undefined)
+	    }
+	  }  
+</script>
+
+<!-- 구글 스크립트 -->
+<script>
+	//처음 실행하는 함수
+	function init() {
+		gapi.load('auth2', function() {
+			gapi.auth2.init();
+			options = new gapi.auth2.SigninOptionsBuilder();
+			options.setPrompt('select_account');
+	        // 추가는 Oauth 승인 권한 추가 후 띄어쓰기 기준으로 추가
+			options.setScope('email profile openid https://www.googleapis.com/auth/user.birthday.read');
+	        // 인스턴스의 함수 호출 - element에 로그인 기능 추가
+	        // GgCustomLogin은 li태그안에 있는 ID, 위에 설정한 options와 아래 성공,실패시 실행하는 함수들
+			gapi.auth2.getAuthInstance().attachClickHandler('GgCustomLogin', options, onSignIn, onSignInFailure);
+		})
+	}
+</script>
+
+<script>
+	function handleCredentialResponse(response) {
+    	console.log("Encoded JWT ID token: " + response.credential);
+    	// 서버로 토큰 전송하여 사용자 인증 진행
+  	}
+  	window.onload = function () {
+    	google.accounts.id.initialize({
+      		client_id: "738584432318-lt6u5ec13i4s4ed4h4n6qag0ejg0t0ap.apps.googleusercontent.com",
+      		callback: handleCredentialResponse
+    	});
+    	google.accounts.id.renderButton(
+      		document.getElementById("g_id_signin"),
+      		{ theme: "outline", size: "large" }  // customization attributes
+    	);
+    	google.accounts.id.prompt(); // also display the One Tap dialog
+  	}
+  	
+  	const {OAuth2Client} = require('google-auth-library');
+  	const client = new OAuth2Client("738584432318-lt6u5ec13i4s4ed4h4n6qag0ejg0t0ap.apps.googleusercontent.com");
+
+  	async function verify(token) {
+  	    const ticket = await client.verifyIdToken({
+  	        idToken: token,
+  	        audience: "738584432318-lt6u5ec13i4s4ed4h4n6qag0ejg0t0ap.apps.googleusercontent.com",
+  	    });
+  	    const payload = ticket.getPayload();
+  	    console.log(payload);
+  	}
+</script>
+
+<script>
+        function signOut() {        
+        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8080";        
+        }
+    
+        function onLoad() {
+          gapi.load('auth2', function() {
+            gapi.auth2.init();
+          });
+        }
+</script>
+
+</body>
+</html>

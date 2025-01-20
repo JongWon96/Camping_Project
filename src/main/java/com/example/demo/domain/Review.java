@@ -25,10 +25,11 @@ public class Review {
 
     private String content;
 
-    private Date date;
+    private Date reviewdate;
 
     private String img;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer danger;
 
     private Integer rate;
