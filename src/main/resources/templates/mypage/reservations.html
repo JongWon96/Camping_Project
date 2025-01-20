@@ -241,6 +241,11 @@
     <div class="main-content">
         <div class="container">
             <div class="reservation-list">
+            
+            <div th:if="${reservations.isEmpty()}">
+			     <h2>예약 목록이 없습니다.</h2>
+		    </div>
+            
                 <div th:each="reservation : ${reservations}" class="reservation-card"
                      th:data-checkin-date="${reservation.checkin}"
                      th:data-checkout-date="${reservation.checkout}">
@@ -287,50 +292,63 @@
 </footer>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const reviewButtons = document.querySelectorAll(".review-button");
-        const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
-        const cancelButtons = document.querySelectorAll(".cancel-button");
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
+document.addEventListener("DOMContentLoaded", function() {
+    const reviewButtons = document.querySelectorAll(".review-button");
+    const reviewDisabledButtons = document.querySelectorAll(".review-disabled-button");
+    const cancelButtons = document.querySelectorAll(".cancel-button");
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
 
-        reviewButtons.forEach(function(button, index) {
-            const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
-            const disabledButton = reviewDisabledButtons[index];
+    // 후기 작성 버튼 처리
+    reviewButtons.forEach(function(button, index) {
+        const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
+        const disabledButton = reviewDisabledButtons[index];
 
-            if (checkoutDateString) {
-                const checkoutDate = new Date(checkoutDateString);
-                const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0];
+        if (checkoutDateString && button) { // 요소가 존재할 때만 작업
+            const checkoutDate = new Date(checkoutDateString);
+            const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0];
 
-                if (checkoutDateStringFormatted < todayString) {
-                    button.style.display = 'inline-block';
+            // 체크아웃 날짜가 오늘 날짜보다 이전일 때 후기 작성 버튼 활성화
+            if (checkoutDateStringFormatted < todayString) {
+                button.style.display = 'inline-block';
+
+                // disabledButton이 존재할 경우에만 스타일 변경
+                if (disabledButton) {
                     disabledButton.style.display = 'none';
-                } else {
-                    button.style.display = 'none';
+                }
+            } else {
+                button.style.display = 'none';
+
+                // disabledButton이 존재할 경우에만 스타일 변경
+                if (disabledButton) {
                     disabledButton.style.display = 'inline-block';
                 }
             }
-        });
-
-        cancelButtons.forEach(function(button, index) {
-            const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
-            const checkinDate = new Date(checkinDateString);
-
-            if (isNaN(checkinDate)) {
-                console.error("잘못된 체크인 날짜:", checkinDateString);
-                return;
-            }
-
-            const diffInTime = checkinDate - today;
-            const diffInDays = diffInTime / (1000 * 3600 * 24);
-
-            if (diffInDays >= 10) {
-                button.disabled = false;
-            } else {
-                button.disabled = true;
-            }
-        });
+        }
     });
+
+    // 예약 취소 버튼 처리
+    cancelButtons.forEach(function(button, index) {
+        const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
+        const checkinDate = new Date(checkinDateString);
+
+        if (isNaN(checkinDate)) {
+            console.error("잘못된 체크인 날짜:", checkinDateString);
+            return;
+        }
+
+        const diffInTime = checkinDate - today;
+        const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+        // 체크인 날짜가 오늘로부터 10일 이상 남아있는 경우 예약 취소 버튼 활성화
+        if (diffInDays >= 10) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    });
+});
+
 </script>
 
 </body>

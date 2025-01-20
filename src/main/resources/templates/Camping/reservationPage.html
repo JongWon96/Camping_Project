@@ -53,12 +53,11 @@
 						<span th:text="'가격: ' + ${price} + '원'"></span>
 					</div>
 
-					<p class="lead" th:text="'전체 방 개수: ' + ${product.roomcount}">전체
-						방 개수:</p>
 
-					<p class="lead" id="remainingRoomCount"
-						th:text="'남은 방 개수: ' + ${remainingRoomCount}">남은 방 개수:</p>
-
+					<h4> 전체 방 개수:<span th:text="${product.roomcount}"></span>개</h4>			
+	<h4>남은 방 개수: <span id="remainingRoomCount" th:text="${remainingRoomCount}"></span>개</h4>
+	
+	
 					<form id="reservationform" method="POST" action="/reservation">
 
 
@@ -89,7 +88,7 @@
 												style="display: flex; width: 38%; margin: 7%;">
 												<h5 class="fw-bolder">바닥재 종류</h5>
 												<select style="padding-top: 6px; width: 80%" id="bottom" name="bottom" >
-													<option>선택하세요</option>
+													<option value="">선택해 주세요</option>
 													<option value="잔디">잔디</option>
 													<option value="파쇄석">파쇄석</option>
 													<option value="태크">태크</option>
