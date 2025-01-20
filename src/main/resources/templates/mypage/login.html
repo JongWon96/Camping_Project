@@ -151,8 +151,7 @@
         <!-- 왼쪽 메뉴 -->
         <nav class="side-menu">
             <ul>
-                <li><a th:href="@{/main}">메인페이지 이동</a></li>
-                <li><a th:href="@{/diary}">다이어리 이동</a></li>
+                <li><a href="/landingpage">메인페이지</a>
                 <li>
                     <form th:action="@{/mypage/delete}" method="post" style="display: inline;">
                         <button type="submit" style="all: unset; color: #28a745; cursor: pointer;">회원탈퇴</button>
