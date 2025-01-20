@@ -75,80 +75,80 @@ public class ReservationController {
         return "/Reservation/reservationPage"; // 예약 페이지
     }
  // 남은 방 개수를 계산하는 엔드포인트 추가
-    @GetMapping("/checkRemainingRooms")
-    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
-                                                                   @RequestParam int room, 
-                                                                   @RequestParam String checkin, 
-                                                                   @RequestParam String checkout) {
-        Date checkinDate = Date.valueOf(checkin);
-        Date checkoutDate = Date.valueOf(checkout);
-
-        // 남은 방 개수 계산
-        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
-
-        // 결과를 Map에 담아 반환
-        Map<String, Integer> response = new HashMap<>();
-        response.put("remainingRooms", remainingRoomCount);
-
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/checkRemainingRooms")
+//    public ResponseEntity<Map<String, Integer>> checkRemainingRooms(@RequestParam Long campingId, 
+//                                                                   @RequestParam int room, 
+//                                                                   @RequestParam String checkin, 
+//                                                                   @RequestParam String checkout) {
+//        Date checkinDate = Date.valueOf(checkin);
+//        Date checkoutDate = Date.valueOf(checkout);
+//
+//        // 남은 방 개수 계산
+//        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+//
+//        // 결과를 Map에 담아 반환
+//        Map<String, Integer> response = new HashMap<>();
+//        response.put("remainingRooms", remainingRoomCount);
+//
+//        return ResponseEntity.ok(response);
+//    }
 
     // 예약 처리
-    @PostMapping("/reservation")
-    public String reserve(@RequestParam Long campingId, 
-                          @RequestParam int room, 
-                          @RequestParam String checkin, 
-                          @RequestParam String checkout, 
-                          @RequestParam int person, 
-                          @RequestParam(value = "bottom", required = false) String bottom,
-                          HttpSession session,
-                          Model model) {
-
-        // 로그인된 사용자 확인
-        Member member = (Member) session.getAttribute("loginUser");
-        if (member == null) {
-            session.invalidate(); // 세션 무효화
-            return "redirect:/login";  // 로그인되지 않으면 로그인 페이지로 리다이렉트
-        }
-
-        // 캠핑장 정보 가져오기
-        Camping camping = campingService.findById(campingId);
-
-        // 방 정보 가져오기 (Product에서 캠핑장 ID와 방 타입으로 찾기)
-        Product product = productService.findByCamping_IdAndRoom(campingId, room);
-
-        // 날짜 형식 검증
-        Date checkinDate;
-        Date checkoutDate;
-        try {
-            checkinDate = Date.valueOf(checkin);  // 체크인 날짜 설정
-            checkoutDate = Date.valueOf(checkout);  // 체크아웃 날짜 설정
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("message", "잘못된 날짜 형식입니다. 올바른 날짜를 입력해주세요.");
-            return "/Reservation/reservationPage";
-        }
-
-        // 방 갯수 확인 (날짜별로 남은 방 수 계산)
-        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
-
-        if (remainingRoomCount <= 0) {
-            model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
-            return "noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
-        }
-
-        // 예약 처리
-        Reservation reservation = new Reservation();
-        reservation.setProduct(product);  
-        reservation.setMember(member);    
-        reservation.setCheckin(checkinDate);  
-        reservation.setCheckout(checkoutDate);  
-        reservation.setPerson(person);  
-        reservation.setBottom(bottom); 
-
-        // 예약 저장
-        reservationService.save(reservation);
-
-        // 예약 완료 후 예약 내역 페이지로 리다이렉트
-        return "redirect:/Reservation/reservation_details";
-    }
+//    @PostMapping("/reservation")
+//    public String reserve(@RequestParam Long campingId, 
+//                          @RequestParam int room, 
+//                          @RequestParam String checkin, 
+//                          @RequestParam String checkout, 
+//                          @RequestParam int person, 
+//                          @RequestParam(value = "bottom", required = false) String bottom,
+//                          HttpSession session,
+//                          Model model) {
+//
+//        // 로그인된 사용자 확인
+//        Member member = (Member) session.getAttribute("loginUser");
+//        if (member == null) {
+//            session.invalidate(); // 세션 무효화
+//            return "redirect:/login";  // 로그인되지 않으면 로그인 페이지로 리다이렉트
+//        }
+//
+//        // 캠핑장 정보 가져오기
+//        Camping camping = campingService.findById(campingId);
+//
+//        // 방 정보 가져오기 (Product에서 캠핑장 ID와 방 타입으로 찾기)
+//        e checkinDate;
+//        Date checkoutDate;
+//        try {Product product = productService.findByCamping_IdAndRoom(campingId, room);
+//
+//        // 날짜 형식 검증
+//        Dat
+//            checkinDate = Date.valueOf(checkin);  // 체크인 날짜 설정
+//            checkoutDate = Date.valueOf(checkout);  // 체크아웃 날짜 설정
+//        } catch (IllegalArgumentException e) {
+//            model.addAttribute("message", "잘못된 날짜 형식입니다. 올바른 날짜를 입력해주세요.");
+//            return "/Reservation/reservationPage";
+//        }
+//
+//        // 방 갯수 확인 (날짜별로 남은 방 수 계산)
+//        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+//
+//        if (remainingRoomCount <= 0) {
+//            model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
+//            return "noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
+//        }
+//
+//        // 예약 처리
+//        Reservation reservation = new Reservation();
+//        reservation.setProduct(product);  
+//        reservation.setMember(member);    
+//        reservation.setCheckin(checkinDate);  
+//        reservation.setCheckout(checkoutDate);  
+//        reservation.setPerson(person);  
+//        reservation.setBottom(bottom); 
+//
+//        // 예약 저장
+//        reservationService.save(reservation);
+//
+//        // 예약 완료 후 예약 내역 페이지로 리다이렉트
+//        return "redirect:/Reservation/reservation_details";
+//    }
 }
