@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
+import java.sql.Date;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -118,36 +119,35 @@ public class CampingController {
 
 	@GetMapping("/detailpage")
 	private String campingDetail(@RequestParam("campingid") Long campingId,
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, Model model,
-		HttpSession session) {
+								 @RequestParam(value = "page", defaultValue = "1") int page,
+								 @RequestParam(value = "size", defaultValue = "10") int size, Model model,
+								 HttpSession session) {
 
-			Member loginUser = (Member) session.getAttribute("loginUser");
-			model.addAttribute("loginUser", loginUser);
+		// 로그인 사용자 정보
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
+
 		Camping campingPlace = campingService.getCampingDetail(campingId);
 		List<Product> products = productService.getProducts(campingId);
 
 		// 남겨진 평점의 평균으로 평점 출력
 		List<Review> tmpReviews = reviewService.getRate(campingId);
-		
 		Integer result = 0;
-		
+
 		if (!tmpReviews.isEmpty()) {
 			double sum = 0.0;
-			for(Review review : tmpReviews) {
-				 sum += review.getRate();
+			for (Review review : tmpReviews) {
+				sum += review.getRate();
 			}
-			double average = sum / tmpReviews.size();		
+			double average = sum / tmpReviews.size();
 			result = (int) Math.round(average);
 		} else {
 			result = 0;
-		} 
+		}
 		String rate = result.toString();
-
 		if ("0".equals(rate)) {
 			rate = "아직 리뷰가 등록되지 않음";
-		} 
-		
+		}
 		model.addAttribute("rate", rate);
 
 		String carav = campingPlace.getCaravacmpnyat();
@@ -155,13 +155,13 @@ public class CampingController {
 
 		String caravResult = "";
 		String trlerResult = "";
-		if (carav == "Y") {
+		if ("Y".equals(carav)) {
 			caravResult = "가능";
 		} else {
 			caravResult = "불가능";
 		}
 
-		if (trler == "Y") {
+		if ("Y".equals(trler)) {
 			trlerResult = "가능";
 		} else {
 			trlerResult = "불가능";
@@ -173,42 +173,52 @@ public class CampingController {
 
 		String[] Sbrscl = campingPlace.getSbrscl().split(",");
 		model.addAttribute("Sbrscl", Sbrscl);
-		System.out.println(Sbrscl);
-		
-		//리뷰 전달
-		Page<Review> reviews = reviewService.getReview(campingId, page, size);
 
+		// 리뷰 전달
+		Page<Review> reviews = reviewService.getReview(campingId, page, size);
 		model.addAttribute("reviews", reviews);
-		
-		//방 출력
+
+		// 방 출력
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
-		
+
 		Product Room1 = products.get(0);
 		model.addAttribute("Room1", Room1);
-		
-		int price1 = (int)Room1.getPrice().doubleValue();
+
+		int price1 = (int) Room1.getPrice().doubleValue();
 		String formattedPrice1 = numberFormat.format(price1);
 		model.addAttribute("price1", formattedPrice1);
-		
+
 		Product Room2 = products.get(1);
 		model.addAttribute("Room2", Room2);
-		
-		int price2 = (int)Room2.getPrice().doubleValue();
+
+		int price2 = (int) Room2.getPrice().doubleValue();
 		String formattedPrice2 = numberFormat.format(price2);
 		model.addAttribute("price2", formattedPrice2);
-		
+
 		Product Room3 = products.get(2);
 		model.addAttribute("Room3", Room3);
-		
-		int price3 = (int)Room3.getPrice().doubleValue();		
+
+		int price3 = (int) Room3.getPrice().doubleValue();
 		String formattedPrice3 = numberFormat.format(price3);
 		model.addAttribute("price3", formattedPrice3);
-		
+
+		// **찜 상태 확인 추가**
+		if (loginUser != null) {
+			Long memberId = loginUser.getId();
+			boolean isLiked = likesService.isLiked(memberId, campingId);
+			model.addAttribute("isLiked", isLiked); // 찜 상태 추가
+		} else {
+			model.addAttribute("isLiked", false); // 비로그인 시 기본값 false
+		}
+
 		return "Camping/DetailPage";
 	}
+
+
+
+
 	@PostMapping("/toggle-like")
 	public ResponseEntity<String> toggleLike(@RequestParam("campingid") Long campingId, HttpSession session) {
-		// 로그인된 사용자 정보 가져오기
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
@@ -217,20 +227,32 @@ public class CampingController {
 		Long memberId = loginUser.getId();
 
 		try {
-			// 찜 상태 확인 후 추가 또는 삭제
-			boolean alreadyLiked = likesService.isLiked(memberId, campingId);
+			System.out.println("Processing toggle-like for Member ID: " + memberId + ", Camping ID: " + campingId);
 
+			// 찜 상태 확인
+			boolean alreadyLiked = likesService.isLiked(memberId, campingId);
 			if (alreadyLiked) {
-				likesService.removeLike(String.valueOf(memberId), campingId);
+				// 찜 삭제
+				System.out.println("Removing like...");
+				likesService.removeLike(memberId, campingId);
 				return ResponseEntity.ok("찜이 삭제되었습니다.");
 			} else {
+				// 찜 추가
+				System.out.println("Adding like...");
 				likesService.saveLike(memberId, campingId);
 				return ResponseEntity.ok("찜이 추가되었습니다.");
 			}
+		} catch (IllegalArgumentException e) {
+			System.err.println("IllegalArgumentException: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
+			System.err.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("찜 상태 변경 중 오류가 발생했습니다.");
 		}
 	}
+
+
 
 	//임시 확인용
 	@GetMapping("/cheatsheet")

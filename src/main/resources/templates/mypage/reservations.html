@@ -246,7 +246,10 @@
                      th:data-checkout-date="${reservation.checkout}">
                     <div class="reservation-header">
                         <div>
-                            <p><strong>캠핑장 이름:</strong> <span th:text="${reservation.product.camping.facltnm}">캠핑장 이름</span></p>
+                            <p><strong>캠핑장 이름:</strong>
+                                <a th:href="@{/detailpage(campingid=${reservation.product.camping.id})}"
+                                   th:text="${reservation.product.camping.facltnm}">캠핑장 이름</a>
+                            </p>
                             <p><strong>예약자 이름:</strong> <span th:text="${reservation.member.name}">예약자 이름</span></p>
                         </div>
                         <div class="reservation-image">

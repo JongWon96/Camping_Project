@@ -11,5 +11,7 @@ public interface LikesService {
 
     void removeLike(String memberId, Long campingId);
 
+    void removeLike(Long memberId, Long campingId);
+
     boolean isLiked(Long memberId, Long campingId);
 }

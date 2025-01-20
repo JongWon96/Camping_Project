@@ -186,7 +186,10 @@
             color: #fff;
         }
     </style>
+
 </head>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="/js/reservationScript.js"></script>
 <body>
 
 <header>
@@ -238,7 +241,9 @@
             <div th:each="like : ${likes}" class="likes-card">
                 <div class="likes-header">
                     <div>
-                        <h2 th:text="${like.camping.facltnm}">캠핑장 이름</h2>
+                        <h2>
+                            <a th:href="@{/detailpage(campingid=${like.camping.id})}" th:text="${like.camping.facltnm}">캠핑장 이름</a>
+                        </h2>
                         <p th:text="${like.camping.addr1}">캠핑장 주소</p>
                     </div>
                     <div class="likes-image">

@@ -112,3 +112,70 @@ $(document).ready(function() {
 $('#checkin, #checkout').on('change', function() {
     updateRemainingRooms();
 });
+
+
+$(document).ready(function() {
+    // 찜 버튼 클릭 이벤트
+    $(".like-button").on("click", function() {
+        const button = $(this); // 클릭된 버튼
+        const campingId = button.data("id"); // 캠핑장 ID
+        const liked = button.data("liked"); // 현재 상태 (찜 여부)
+
+
+        // 서버로 요청 보내기
+        $.ajax({
+            url: "/toggle-like",
+            type: "POST",
+            data: {campingid: campingId },
+            success: function(response) {
+                // 상태 토글
+                if (liked) {
+                    button.data("liked", false);
+                    button.text("찜에 추가");
+                    alert("찜이 삭제되었습니다.");
+                } else {
+                    button.data("liked", true);
+                    button.text("찜 취소");
+                    alert("찜이 추가되었습니다.");
+
+                    location.reload();
+                }
+                $(".like-button").data("liked", false).text("찜에 추가");
+            },
+            error: function(xhr, status, error) {
+                alert("요청 중 오류가 발생했습니다. 다시 시도해주세요.");
+                console.error(error);
+            }
+        });
+    });
+  // **마이페이지 삭제와 상세 페이지 상태 동기화**
+    updateLikeButtonFromServer();
+});
+
+/**
+ * 서버로부터 찜 상태 동기화
+ * - 마이페이지에서 삭제된 찜 상태를 반영하여 상세 페이지 버튼 업데이트
+ */
+function updateLikeButtonFromServer() {
+    const button = $(".like-button");
+    const campingId = button.data("id");
+
+    // 서버로 현재 찜 상태 요청
+    $.ajax({
+        url: "/check-like-status", // 서버에서 찜 상태를 확인하는 엔드포인트
+        type: "POST",
+        data: { campingid: campingId },
+        success: function (response) {
+            // 서버의 현재 상태에 따라 버튼 업데이트
+            if (response.liked) {
+                button.data("liked", true).text("찜 취소");
+            } else {
+                button.data("liked", false).text("찜에 추가");
+            }
+        },
+        error: function () {
+            console.error("찜 상태를 동기화하는 데 실패했습니다.");
+        },
+        dataType: "json"
+    });
+}
