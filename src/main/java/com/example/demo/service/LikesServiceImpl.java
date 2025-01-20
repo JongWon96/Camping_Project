@@ -6,6 +6,7 @@ import com.example.demo.domain.Member;
 import com.example.demo.persistence.CampingRepository;
 import com.example.demo.persistence.LikesRepository;
 import com.example.demo.persistence.MemberRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +68,23 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
+    @Transactional
+    public void removeLike(Long memberId, Long campingId) {
+        System.out.println("Removing like for Member ID: " + memberId + ", Camping ID: " + campingId);
+
+        // 삭제 대상 확인
+        boolean exists = likesRepository.existsByMemberIdAndCampingId(memberId, campingId);
+        if (!exists) {
+            throw new IllegalArgumentException("삭제하려는 찜 데이터가 존재하지 않습니다.");
+        }
+
+        // 데이터 삭제
+        likesRepository.deleteByMemberIdAndCampingId(memberId, campingId);
+        System.out.println("Like successfully removed for Member ID: " + memberId + ", Camping ID: " + campingId);
+    }
+
+
+    @Override
     public boolean isLiked(Long memberId, Long campingId) {
         // 1. 멤버 조회
         Member member = memberRepository.findById(memberId)
@@ -79,4 +97,6 @@ public class LikesServiceImpl implements LikesService {
         // 3. 찜 여부 확인
         return likesRepository.existsByMemberAndCamping(member, camping);
     }
+
+
 }

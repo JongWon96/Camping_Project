@@ -8,14 +8,13 @@ import com.example.demo.domain.Camping;
 
 public interface CampingService {
 
-	 Camping findById(Long id);public Camping getCampingDetail(Long campingId);
+	Camping findById(Long id);public Camping getCampingDetail(Long campingId);
 
 	public Page<Camping> getAllCamping(int page, int size);
-	
+
 	public List<Camping> getTmpCamping();
-	
+
 	public Camping getCampingByProductId(Long productId);
 
-	public Camping findById(Long campingId);
-	
+
 }
