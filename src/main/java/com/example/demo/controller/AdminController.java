@@ -78,20 +78,20 @@ public class AdminController {
 		  String url = "";
 		    
 		    // id 값이 잘못된 경우 처리
-		    try {
+		    /*try {
 		        Long id = Long.valueOf(vo.getId().toString());  // id 값이 Long 타입으로 변환되는지 확인
 		        vo.setId(id);
 		    } catch (NumberFormatException e) {
 		        model.addAttribute("message", "아이디는 숫자만 입력 가능합니다.");
 		        return "admin/main";  // 아이디 입력 오류 처리
-		    }
+		    }*/
 		    
 		    // (1) 관리자 계정 인증 호출: adminCheck()
 		    long result = adminService.adminCheck(vo);
 		    
 		    // (2) 인증 결과에 따라 
 		    if (result == 1) {  // 정상 사용자
-		        Admin admin = adminService.getAdmin(vo.getId());
+		        Admin admin = adminService.getAdmin(vo.getAdminId());
 		        model.addAttribute("adminUser", admin);
 		        url = "redirect:admin_camping_list";
 		    } else {

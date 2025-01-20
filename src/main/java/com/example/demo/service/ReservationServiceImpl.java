@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Reservation;
 import com.example.demo.domain.ReservationDetail;
-import com.example.demo.persistence.ReservationRepository;
 
 
 import jakarta.transaction.Transactional;
@@ -49,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService {
 	private ReservationRepository reservationRepo;
 
 	@Override
-	public void insertReservation(Reservation Reservation) {
+    public void insertReservation(Reservation Reservation) {
 
 		reservationRepo.save(Reservation);
 	}
@@ -178,4 +177,4 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
-}
+

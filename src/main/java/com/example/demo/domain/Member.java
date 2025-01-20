@@ -17,7 +17,6 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@ToString(exclude = "inquiries")
 @Table(name = "member")
 public class Member {
     @Id
@@ -66,4 +65,3 @@ public class Member {
 
 
 }
-

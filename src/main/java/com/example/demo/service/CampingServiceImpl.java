@@ -65,7 +65,9 @@ public class CampingServiceImpl implements CampingService{
 		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
 
 		return campRepo.findAll(paging);
-	public List<Camping> getAllCampings(String facltnm) {
+	}
+
+		public List<Camping> getAllCampings(String facltnm) {
 
 		return campingRepo.findCampingsByFacltnmContainingOrderByFacltnm(facltnm);
 	}
@@ -74,6 +76,8 @@ public class CampingServiceImpl implements CampingService{
 	public List<Camping> getTmpCamping() {
 
 		return campRepo.findAll();
+	}
+
 	public void insertCamping(Camping vo) {
 
 		Long nextId = campingRepo.getMaxId();
@@ -85,23 +89,34 @@ public class CampingServiceImpl implements CampingService{
 
 	@Override
 	public Camping getCampingByProductId(Long productId) {
-	public void updateCamping(Camping vo) {
-		Camping p = campingRepo.findById(vo.getId()).get();
+		return campingRepo.findCampingByProductid(productId);
+	}
 
-		vo.setCreatedtime(p.getCreatedtime());  // 기존의 등록일 사용
+	public void updateCamping(Camping vo) {
+		// 기존 데이터 조회
+		Camping existingCamping = campingRepo.findById(vo.getId())
+				.orElseThrow(() -> new IllegalArgumentException("캠핑 데이터가 존재하지 않습니다: " + vo.getId()));
+
+		// 기존의 등록일 유지
+		vo.setCreatedtime(existingCamping.getCreatedtime());
+
+		// 업데이트된 엔티티 저장
 		campingRepo.save(vo);
 	}
 
-		return campRepo.findCampingByProductid(productId);
+
 	@Override
-	public Page<Camping> getAllCampingsByFacltnm(String facltnm, int page, int size) {
-		// page 번호는 0부터 시작함. 제품명(name)순으로 정렬
-		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "facltnm");
+	public Page<Camping> getAllCampingsByFacltnm (String facltnm, int page, int size){
+			// page 번호는 0부터 시작함. 제품명(name)순으로 정렬
+			Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
 
 		return campingRepo.findAllCampingsByFacltnmContaining(facltnm, paging);
 	}
 
 	public Page<Camping> getAllCamping(Pageable pageable) {
-	    return campingRepo.findAll(pageable);
+
+		return campingRepo.findAll(pageable);
 	}
 }
+
+

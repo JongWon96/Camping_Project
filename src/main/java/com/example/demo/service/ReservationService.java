@@ -18,7 +18,10 @@ public interface ReservationService {
 
     // 예약 ID로 예약 정보 찾기
     Reservation findById(Long id);
-	Reservation getReservation(long id);
+
+    void insertReservation(Reservation Reservation);
+
+    Reservation getReservation(long id);
 
     // 예약 취소 처리
     void cancelReservation(Long reservationId, Member member);

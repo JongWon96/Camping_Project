@@ -2,10 +2,13 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -45,9 +48,13 @@ public class Reservation {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "hasreview")
+    private Boolean hasreview;
 
-	@OneToMany(mappedBy="reservation", fetch=FetchType.EAGER)
+
+    @OneToMany(mappedBy="reservation", fetch=FetchType.EAGER)
 	@ToString.Exclude
 	private List<ReservationDetail> reservationDetail = new ArrayList<ReservationDetail>();
+
 }
 

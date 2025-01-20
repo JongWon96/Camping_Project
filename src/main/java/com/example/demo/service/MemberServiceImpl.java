@@ -30,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     public MemberServiceImpl(MemberRepository memberRepository) {
+
         this.memberRepository = memberRepository;
     }
 
