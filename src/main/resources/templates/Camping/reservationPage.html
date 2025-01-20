@@ -44,11 +44,20 @@
 		<div class="container px-4 px-lg-5 my-5">
 			<div class="row gx-4 gx-lg-5 align-items-center">
 				<div class="col-md-6">
-					<img class="card-img-top mb-5 mb-md-0"
-						src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." />
+				<!-- 이미지 넣는 구간 -->
+				<block th:if="${product.room} == 1" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/1번 예약.png'}" alt="image">
+				</block>
+				<block th:if="${product.room} == 2" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/2번 예약.png'}" alt="image">
+				</block>
+				<block th:if="${product.room} == 3" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/3번 예약.png'}" alt="image">
+				</block>
+				
 				</div>
 				<div class="col-md-6">
-					<!-- <div class="small mb-1">SKU: BST-498</div> -->
+					
 					<h1 class="display-5 fw-bolder"
 						th:text="${product.camping.facltnm} + ${product.room} + '번 방 예약'"></h1>
 					<div class="fs-5 mb-5">
@@ -80,7 +89,7 @@
 											<div class="checkin" style="display: flex; width:38%; margin: 7%;" >
 												<h5 class="fw-bolder">바닥재 종류</h5>
 												<select style="padding-top: 6px; width:80%" id="bottom">
-													<option>선택하세요</option>
+													<option value="" disabled selected>선택하세요</option>
 													<option value="잔디">잔디</option>
 													<option value="파쇄석">파쇄석</option>
 													<option value="태크">태크</option>

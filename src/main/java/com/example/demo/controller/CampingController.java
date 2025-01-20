@@ -30,17 +30,22 @@ public class CampingController {
 	private ProductService productService;
 
 	@GetMapping("/campinglist")
-	private String campingList(@RequestParam(value = "campingName", required = false) String campingName,
-			@RequestParam(value = "searchDo", required = false) String doNm,
+	private String campingList(
+			@RequestParam(value = "donm", required = false) String doNm,
+			@RequestParam(value = "sigungunm", required = false) String sigungunm,
 			@RequestParam(value = "category", required = false) String category,
+			@RequestParam(value = "campingName", required = false) String campingName,
+			@RequestParam(value = "flooring", required = false) String flooring,
 			@RequestParam(value = "bonfire", required = false) String bonfire,
+			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
 			@RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
-			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "9") int size, Model model) {
 
 		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
+		
+		//Page<Camping> PagingCampingPlaces = campingService.getSearhResult(doNm, sigungunm, category, campingName, flooring, null, null, bonfire, petAllowed, trailerAllowed, caravanAllowed, page, size);
 		
 		model.addAttribute("pageInfo", CampingPlaces);
 		model.addAttribute("CampingPlaces", CampingPlaces);

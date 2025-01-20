@@ -1,57 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>Blog Post - Start Bootstrap Template</title>
-<!-- Favicon-->
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-<!-- Core theme CSS (includes Bootstrap)-->
-<link href="css/styles.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 </head>
+<style>
+    .rating-container {
+        font-size: 24px; /* 별 크기 */
+        display: flex;
+    }
+
+    .filled-star {
+        color: gold; /* 노란색 별 */
+    }
+
+    .half-star {
+        color: gold;
+        position: relative;
+        display: inline-block;
+    }
+
+    .half-star::after {
+        content: '★';
+        color: #ccc; /* 빈 별 색상 */
+        position: absolute;
+        left: 50%; /* 반쪽 채우기 */
+        width: 50%;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .empty-star {
+        color: #ccc; /* 회색 빈 별 */
+    }
+
+    .content {
+        display: flex;
+        width: 100%;
+        justify-content: space-between; /* 내용 배치: 양쪽 끝 */
+    }
+    
+    #reviewImg {
+        display: flex;
+        justify-content: flex-end;
+        width: 30%;
+    }
+
+    .check_w {
+        text-align: center;
+    }
+</style>
 <body>
 
-	<section class="mb-5">
-		<div class="card bg-light">
-			<div class="card-body">
+    <section class="mb-5">
+        <div class="card bg-light">
+            <div class="card-body">
 
-				<div class="d-flex mb-4">
-					<block th:each="review : ${reviews}">
-					<div class="ms-3">
-						<div class="fw-bold" th:text="'작성자: ' + ${review.member.name}"></div>
-						<div class="star-rating">
-							<div class="stars">
-								<span>평점: </span>
-								<span th:each="i : ${#numbers.sequence(1, 5)}"> 
-								<span
-									th:if="${i<= T(java.lang.Math).floor(review.rate)}" class="star full-star"></span>
-								<!-- 									
-								<span
-									th:if="${i == T(java.lang.Math).ceil(review.rate) and T(java.lang.Double).parseDouble(review.rate) - T(java.lang.Math).floor(review.rate) >= 0.5}"
-									class="star half-star"></span> 
-								--> 
-								<span th:if="${i > review.rate}"
-									class="star empty-star"></span>
-								</span>
-							</div>
-							<div class="rating-number">
-								<span th:text="${review.rate} + '/5'"></span>
-							</div>
-						</div>
-						<div>
-							<span th:text="${review.content}"></span>
-						</div>
-					</div>
-					<div class="flex-shrink-0" th:if="${review.img != null}">
-						<img th:src="${review.img}"
-							alt="..." />
-							
-					</div>
-				</div>
-				
+                <div class="content">
+                    <block th:each="review : ${reviews}" style="width:100%">
+                        <div class="ms-3" style="width:65%">
+                            <div class="fw-bold" th:text="'작성자: ' + ${review.member.name}"></div>
+                            <div class="star-rating">
+                                <div class="stars">
+                                    <span>평점: </span>
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}"> 
+                                        <span th:if="${i<= T(java.lang.Math).floor(review.rate)}" class="star filled-star">★</span>
+                                        <span th:if="${i > review.rate}" class="star empty-star">★</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <span th:text="${review.content}"></span>
+                            </div>
+                        </div>
+
+                        <div th:if="${review.img != null}" id="reviewImg"> 
+                            <img th:src="${review.img}" style="width: 140px; height: 140px;" />
+                        </div>
+                    </block>
+                </div>
+
                 <div>
                     <form th:if="${review != null}" th:action="@{/camping/{campingId}/reviews/{reviewId}/report(campingId=${CampingPlace.id}, reviewId=${review.id})}" method="post">
                         <button type="submit" class="report-button">신고하기</button>
@@ -61,23 +91,15 @@
                 <div th:if="${loginUser != null and review.member != null and review.member.id == loginUser.id}">
                     <div class="edit-delete">
                         <a th:href="@{/camping/{campingId}/reviews/{reviewId}/edit(campingId=${camping.id}, reviewId=${review.id})}">수정</a>
-
                         <form th:action="@{/camping/{campingId}/reviews/{reviewId}/delete(campingId=${camping.id}, reviewId=${review.id})}" method="post" style="display:inline;">
                             <input type="hidden" name="_method" value="DELETE"> 
                             <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
                         </form>
                     </div>
                 </div>
-				
-				</block>
-			</div>
-		</div>
-	</section>
+            </div>
+        </div>
+    </section>
 
-	<!-- Bootstrap core JS-->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Core theme JS-->
-	<script src="js/scripts.js"></script>
 </body>
 </html>
