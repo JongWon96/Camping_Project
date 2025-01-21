@@ -167,7 +167,7 @@ public class CampingController {
             result = (float) (Math.round((sum / tmpReviews.size()) * 10) / 10.0);
         }
 	     else {
-			result = 0;
+			result = 0f;
 		}
 		String rate = result.toString();
 
