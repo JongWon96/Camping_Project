@@ -2,13 +2,12 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -20,8 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Table(name = "reservation")
-public class Reservation {
+@Table(name = "reservationDetail")
+public class ReservationDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +34,13 @@ public class Reservation {
 
     private String bottom;
 
-    private Date createddate;	// 예약 생성일자
-
 	@ColumnDefault("1")
 	private String result;	// 예약/예약완료 처리 여부
-
+    
+	@ManyToOne
+	@JoinColumn(name="reservation_id")
+	private Reservation reservation;
+	
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -47,14 +48,5 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
-    @Column(name = "hasreview")
-    private Boolean hasreview;
-
-
-    @OneToMany(mappedBy="reservation", fetch=FetchType.EAGER)
-	@ToString.Exclude
-	private List<ReservationDetail> reservationDetail = new ArrayList<ReservationDetail>();
-
 }
 

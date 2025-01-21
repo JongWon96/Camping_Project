@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+
+<th:block th:insert="~{/admin/sub_menu}"></th:block> 
+
+<head>
+    <style>
+        /* 전체 페이지 배경을 연한 회색으로 설정 */
+        body {
+            background-color: #f0f0f0; /* 배경색 연한 회색 */
+            color: #333; /* 글자 색은 어두운 회색 */
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 헤더, 서브 메뉴, 페이지 상단과 하단 스타일 */
+        header, footer, .sub-menu {
+            background-color: #333; /* 짙은 회색 배경 */
+            color: white; /* 글자 색을 흰색으로 설정 */
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc; /* 연한 회색 테두리 */
+        }
+
+        table th {
+            background-color: #666; /* 테이블 헤더 배경색 */
+            color: white;
+        }
+
+        /* 입력창과 버튼 스타일 */
+        input[type="text"], textarea, select {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            background-color: #fff; /* 배경색 흰색 */
+            color: #333;
+            width: 100%;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            background-color: #555; /* 버튼 배경색 */
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #777; /* 버튼 hover 시 색상 변경 */
+        }
+
+        /* 기타 스타일 */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .btn {
+            font-size: 14px;
+            background-color: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #777;
+        }
+
+        /* 댓글 입력 영역 스타일 */
+        .reply-section {
+            margin: 20px 0;
+        }
+
+        .reply-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .no-reply {
+            text-align: center;
+            color: #999;
+            font-size: 16px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+   function go_list()
+   {
+	   var theForm = document.frm;
+	   theForm.action="admin_inquiry_list";
+	   theForm.submit();
+   }
+
+   function go_reply() {
+	    var theForm = document.frm;
+	    var replyText = theForm.reply.value.trim();  // textarea의 내용 가져오기
+	    if (replyText === '') {
+	        alert("댓글을 작성해주세요.");
+	        return;
+	    }
+
+	    // 서버로 보낼 데이터 설정
+	    theForm.action = "admin_inquiry_replysave";
+	    theForm.method = "POST"; // POST 방식으로 전송
+
+	    // 댓글을 입력하고 상태를 '1'로 변경
+	    /*
+	    var statusField = document.createElement("input");
+	    statusField.type = "hidden";
+	    statusField.name = "status";
+	    statusField.value = "1"; // 댓글 작성 후 상태를 1로 설정
+
+	    theForm.appendChild(statusField);
+
+	    // reply 값도 함께 전송
+	    var replyField = document.createElement("input");
+	    replyField.type = "hidden";
+	    replyField.name = "reply";
+	    replyField.value = replyText;
+
+	    theForm.appendChild(replyField);
+		*/
+		
+	    theForm.submit();
+	}
+</script>
+<article>
+<h1>Q&amp;A 게시판</h1>   
+<form name="frm" method="post">
+<input type="hidden" name="id" th:value="${inquiryVO.id}">
+<table id="inquiryList">
+    <tr>
+        <th width="20%">제목</th>
+        <td> [[${inquiryVO.title}]]  </td>
+    </tr>
+   <tr>
+         <th>등록일</th>
+         <td>[[${inquiryVO.createddate}]]</td>
+    </tr>
+    <tr>
+        <th>내용</th>
+        <td> [[${inquiryVO.content}]]</td>  
+    </tr>
+</table>
+<th:block th:unless="${inquiryVO.status == 0 }">
+  <table id="inquiryList">
+    <tr>
+     <th>댓글</th>
+     <td> [[${inquiryVO.reply}]]</td>
+    </tr>
+  </table>
+</th:block>
+<th:block th:if="${inquiryVO.status == 0}">
+  <table id="inquiryList">
+      <tr>
+          <td colspan="2">
+      <img src="images/admin/opinionimg01.gif">
+      </td>
+      </tr>
+    <tr>
+          <td colspan="2">    
+      <textarea name="reply" rows="3" cols="50"></textarea>
+      <input type="button" class="btn" value="저장" th:onClick="'javascript:go_reply();'"> 
+      </td>
+      </tr>
+  </table>
+  <br>
+</th:block>
+
+<input type="button" class="btn" value="목록" onClick="go_list()">
+</form>
+</article>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>
