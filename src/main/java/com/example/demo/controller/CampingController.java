@@ -121,23 +121,17 @@ public class CampingController {
 		// 남겨진 평점의 평균으로 평점 출력
 		List<Review> tmpReviews = reviewService.getRate(campingId);
 		
-		Integer result = 0;
+		Float result = 0.0f;
 		
 		if (!tmpReviews.isEmpty()) {
-			double sum = 0.0;
-			for(Review review : tmpReviews) {
-				 sum += review.getRate();
-			}
-			double average = sum / tmpReviews.size();		
-			result = (int) Math.round(average);
-		} else {
-			result = 0;
-		} 
-		String rate = result.toString();
+		    double sum = tmpReviews.stream()
+		                           .mapToDouble(Review::getRate)
+		                           .sum();
 
-		if ("0".equals(rate)) {
-			rate = "아직 리뷰가 등록되지 않음";
-		} 
+		    result = (float) (Math.round((sum / tmpReviews.size()) * 10) / 10.0);
+		}
+
+		String rate = result == 0.0f ? "아직 리뷰가 등록되지 않음" : result.toString();
 
 		model.addAttribute("rate", rate);
 
