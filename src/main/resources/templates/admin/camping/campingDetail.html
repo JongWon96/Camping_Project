@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
-<th:block th:insert="~{/admin/header}"></th:block>
 <th:block th:insert="~{/admin/sub_menu}"></th:block>
 <script type="text/javascript">
-   function go_list()
-   {
-	   var theForm = document.frm;
-	   theForm.action="admin_camping_list";
-	   theForm.submit();
-   }
-
+    function go_list()
+    {
+        var theForm = document.frm;
+        theForm.action="admin_camping_list";
+        theForm.submit();
+    }
 </script>
 <head>
-<style>
-        /* 전체 페이지 배경을 회색으로 설정 */
+    <style>
+        /* 전체 페이지 스타일 */
         body {
             background-color: #f0f0f0; /* 밝은 회색 */
             color: #333; /* 글자 색은 어두운 회색 */
@@ -24,111 +22,203 @@
         }
 
         /* 헤더, 서브 메뉴, 페이지 상단과 하단 스타일 */
-        header, footer, .sub-menu {
-            background-color: #dcdcdc; /* 연한 회색 */
-            color: #333;
-            padding: 10px 0;
+        header,
+        footer,
+        .sub-menu {
+            background-color: #dcdcdc; /* 중간 회색 */
+            color: #333; /* 어두운 회색 */
+            padding: 5px 0;
             text-align: center;
+            position: relative;
+        }
+
+        /* 로그아웃 버튼 스타일 수정 */
+        header .logout {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            padding: 8px 12px;
+            font-size: 12px; /* 글자 크기 줄이기 */
+            background-color: #b0b0b0;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        header .logout:hover {
+            background-color: #888;
         }
 
         /* 테이블 스타일 */
-        table {
+         table {
             width: 100%;
-            margin: 20px 0;
             border-collapse: collapse;
-            background-color: #fff; /* 테이블 배경을 흰색으로 */
+            margin: 20px 0;
         }
 
         table th, table td {
             padding: 10px;
-            text-align: left;
-            border: 1px solid #ccc; /* 연한 회색 테두리 */
+            text-align: center;
+            border: 1px solid #ccc;
         }
 
         table th {
-            background-color: #e0e0e0; /* 헤더 배경색 */
+            background-color: #666;
+            color: white;
+        }
+        /* 입력 필드 스타일 */
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px; /* 간격 더 줄이기 */
+            margin: 4px auto; /* 여백 줄이기 */
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px; /* 글자 크기 더 줄이기 */
+            display: block;
+            box-sizing: border-box;
+            background-color: #fff; /* 흰색 */
+            color: #333; /* 어두운 글자색 */
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px; /* 상세설명 칸 크기 줄이기 */
         }
 
         /* 버튼 스타일 */
-        input[type="button"].btn {
-            padding: 10px 20px;
-            margin: 10px;
+        input[type="button"].btn,
+        button {
+            padding: 8px 15px; /* 버튼 크기 더 줄이기 */
+            margin: 4px; /* 여백 줄이기 */
             border: 1px solid #ccc;
-            background-color: #b0b0b0; /* 버튼 배경색을 회색으로 설정 */
+            background-color: #b0b0b0; /* 중간 회색 */
             color: white;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px; /* 글자 크기 더 줄이기 */
+            border-radius: 3px;
+            display: inline-block;
         }
 
-        input[type="button"].btn:hover {
-            background-color: #888; /* 버튼 hover 시 색상 변경 */
+        input[type="button"].btn:hover,
+        button:hover {
+            background-color: #888; /* 진한 회색 */
         }
 
         /* 제목 스타일 */
         h1 {
             text-align: center;
-            font-size: 24px;
-            margin-top: 20px;
+            font-size: 20px; /* 제목 크기 줄이기 */
+            margin-top: 10px;
+            color: #333; /* 어두운 회색 */
         }
 
         /* 이미지 스타일 */
         img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 6px;
+            display: block;
+            margin: 8px auto;
         }
-        </style>
+
+        /* 폼 섹션 정렬 */
+        form {
+            width: 85%; /* 폼 크기 더 줄이기 */
+            margin: 10px auto; /* 여백 줄이기 */
+            background: #f9f9f9; /* 밝은 회색 */
+            padding: 15px; /* 내부 간격 줄이기 */
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 테이블 내부 레이아웃 */
+        td[colspan="5"] {
+            text-align: center;
+        }
+
+        /* 캠핑장 이미지 스타일 */
+        td[align="center"] {
+            height: 150px; /* 이미지 칸 크기 더 줄이기 */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+            margin: 8px auto;
+        }
+
+        /* 파일 업로드 버튼 스타일 */
+        input[type="file"] {
+            display: block;
+            margin: 4px auto; /* 여백 줄이기 */
+        }
+
+        /* 페이지의 버튼 배치 */
+        .buttons {
+            text-align: center;
+            margin-top: 5px; /* 여백 줄이기 */
+        }
+
+        .buttons .btn {
+            margin: 0 3px; /* 버튼 간격 더 줄이기 */
+
+        }
+    </style>
 
 </head>
 
 <article>
-<h1>켐핑장 상세 보기</h1> 
-<form name="frm" id="detail_form" method="post">
-<table id="list">
-    <tr>
-    	<th>켐핑장분류</th>
-    	<td  colspan="5">
-    	[[${campingVO.id}]]
-    	</td>    
-    </tr>    
-    <tr>
-        <th align="center" >켐핑장명</th>
-        <td colspan="5">[[${campingVO.facltnm}]]</td>
-    </tr>
-    
-    <tr>
-        <th >주소</th>
-        <td width="60">[[${campingVO.addr1}]]</td>
-         
-        <th>예약가능방개수</th>
-        <td width="60">[[${campingVO.roomcount}]]</td>
-        <th>만든날짜</th><td>[[${campingVO.createdtime}]]</td>
-    	 
-    </tr>
-     
-    <tr>
-        <th>상세설명</th>
-        <td colspan="5">[[${campingVO.featurenm}]]</td>
-    </tr>
-    
-    <tr>
-     <th>켐핑장이미지</th>
-     <td colspan="5" align="center">
-  <!--[7] 상품 이미지를 출력하기 -->     
-     <img th:src="@{/camping_images/}+${campingVO.firstimageurl}" width="200pt">    
-     </td>
-    </tr>
-     
-</table>
-<input class="btn"  type="button" value="수정" th:onClick="'javascript:go_mod('+${campingVO.id}+');'">
-<input class="btn"  type="button" value="목록" onClick="go_list()">           
-</form>
+
+    <form name="frm" id="detail_form" method="post">
+        <table id="list">
+            <tr>
+                <th>캠핑장 분류</th>
+                <td colspan="5">[[${campingVO.id}]]</td>
+            </tr>
+            <tr>
+                <th>캠핑장명</th>
+                <td colspan="5">[[${campingVO.facltnm}]]</td>
+            </tr>
+            <tr>
+                <th>주소</th>
+                <td colspan="5">
+                    [[${campingVO.addr1}]]
+                </td>
+            </tr>
+            <tr>
+                <th>예약 가능 방 개수</th>
+                <td colspan="5">
+                    [[${campingVO.roomcount}]]
+                </td>
+            </tr>
+            <tr>
+                <th>만든 날짜</th>
+                <td colspan="5">
+                    [[${campingVO.createdtime}]]
+                </td>
+            </tr>
+            <tr>
+                <th>상세설명</th>
+                <td colspan="5">
+                    <textarea readonly>[[${campingVO.featurenm}]]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>캠핑장 이미지</th>
+                <td colspan="5" align="center">
+                    <img th:src="${campingVO.firstimageurl}" width="50%">
+                </td>
+            </tr>
+        </table>
+        <div class="buttons">
+            <input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod('+${campingVO.id}+');'">
+            <input class="btn" type="button" value="목록" onClick="go_list()">
+        </div>
+    </form>
 </article>
 <th:block th:insert="~{/admin/footer}"></th:block>
-
-
-
-
-
-
-

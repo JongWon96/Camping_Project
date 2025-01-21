@@ -63,7 +63,7 @@ public class AdminController {
 	
 	
 	// 파일 업로드 경로 변수 선언(application.properties 파일에서 속성값 읽기)
-	@Value("${com.demo.upload.path}")
+	@Value("${file.upload-dir}")
 	private String uploadPath;
 	
 	@GetMapping("/admin_login_form")

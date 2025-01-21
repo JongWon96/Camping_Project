@@ -1,12 +1,76 @@
 <html xmlns:th="http://www.thymeleaf.org">
+
 <meta charset="UTF-8">
+<head>
+    <style>
+        #sub_menu {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           background-color: #000; /* 검은색 배경 */
+           color: #fff; /* 흰색 텍스트 */
+           z-index: 1000;
+           padding: 10px 0;
+           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 고급스러움을 위한 그림자 */
+           text-align: center; /* 중앙 정렬 */
+       }
+
+       #sub_menu h1 {
+           font-size: 1.5rem;
+           margin: 0 auto;
+           padding: 0;
+           font-weight: 600;
+           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 세련된 폰트 */
+           text-align: center; /* 중앙 정렬 */
+       }
+
+       #sub_menu ul {
+           list-style: none;
+           margin: 0 auto;
+           padding: 0;
+           display: flex;
+           justify-content: center; /* 중앙 정렬 */
+           gap: 20px; /* 아이템 간 간격 */
+           align-items: center;
+       }
+
+       #sub_menu ul li {
+           display: inline;
+       }
+
+       #sub_menu ul li a {
+           color: #fff; /* 흰색 텍스트 */
+           text-decoration: none;
+           font-size: 1rem;
+           font-weight: 500;
+           padding: 5px 10px;
+           transition: color 0.3s ease, background-color 0.3s ease;
+       }
+
+       #sub_menu ul li a:hover {
+           color: #000; /* 호버 시 검은 텍스트 */
+           background-color: #fff; /* 호버 시 흰색 배경 */
+           border-radius: 5px; /* 부드러운 모서리 */
+       }
+
+       /* 본문 내용과 겹치지 않도록 여백 추가 */
+       body {
+           margin-top: 60px; /* 네비게이션 높이만큼 여백 */
+       }
+
+
+
+    </style>
+</head>>
 <nav id="sub_menu">
-<h1>Admin Setting</h1>
+
 <ul>
 <li><a th:href='@{admin_camping_list}'> 캠핑장 리스트</a></li>
 <li><a th:href='@{admin_member_list}'> 회원 리스트</a></li>
 <li><a th:href='@{admin_reservation_list}'> 예약 리스트</a></li>
 <li><a th:href='@{admin_inquiry_list}'> Q&amp;A 리스트</a></li>
 <li><a th:href='@{admin_review_list}'> 신고된 댓글</a></li>
+    <li><a th:href="@{admin_logout}">로그아웃</a></li>
 </ul>
 </nav>

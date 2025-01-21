@@ -86,7 +86,7 @@
     </style>
 </head>
 <article>
-<h1>켐핑수정</h1>  
+<h1>캠핑 수정</h1>
 <form name="frm" id="update_form" method="post" enctype="multipart/form-data">
 <input type="hidden" name="id" th:value="${campingVO.id}">
 <input type="hidden" name="code" >
@@ -94,7 +94,7 @@
 <input type="hidden" name="nonmakeImg" th:value="${campingVO.firstimageurl}"> <!-- 기존 이미지 저장  -->
 <table id="list">
   <tr>
-    <th>켐핑분류</th>
+    <th>캠핑 분류</th>
     <td colspan="5">
     <select name="category" id="category">
       <th:block th:each="category, status : ${categoryList}">
@@ -110,7 +110,7 @@
     </td>
   </tr>
   <tr>
-    <th>켐핑장명</th>
+    <th>캠핑장명</th>
     <td width="343" colspan="5">
       <input type="text" name="facltnm" id="facltnm" size="47" maxlength="100" th:value="${campingVO.facltnm}">
     </td>
@@ -120,12 +120,12 @@
     <td width="70">        
       <input type="text" name="addr1" id="addr1" size="11" onKeyUp='NumFormat(this)' th:value="${campingVO.addr1}">
     </td>
-     <th>예약가능방개수</th>
+     <th>예약가능 방 개수</th>
     <td width="70">
       <input type="text" name="roomcount" id="roomcount" size="11" onKeyUp='NumFormat(this)' th:value="${campingVO.roomcount}">
     </td>
      
-    <th>만든날짜</th>
+    <th>만든 날짜</th>
     <td width="72">
       <input type="text" name="creadtedtime" id="creadtedtime" size="11" readonly onKeyUp='NumFormat(this)'>
     </td>
@@ -156,23 +156,23 @@
      -->
   </tr>
   <tr>
-    <th>켐핑설명</th>
+    <th>캠핑 설명</th>
     <td colspan="5">
       <textarea name="featurenm" id="featurenm" rows="8" cols="70" >[[${campingVO.featurenm}]]</textarea>
     </td>
   </tr>
   <tr>
-    <th>켐핑이미지</th>
+    <th>캠핑 이미지</th>
     <td colspan="5">
-      <img th:src="@{/camping_images/} + ${campingVO.firstimageurl}" width="200pt">     
+      <img th:src="${campingVO.firstimageurl}" width="200pt">
       <br>
       <input type="file" name="camping_image" id="camping_image">
-      <input type="hidden" name=".firstimageurl" th:value="${campingVO.firstimageurl}">
+      <input type="hidden" name="firstimageurl" th:value="${campingVO.firstimageurl}">
     </td> 
   </tr>    
 </table>
 <input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod_save('+${campingVO.id}+');'">           
-<input class="btn" type="button" value="취소" onClick="go_mov()">
+<input class="btn" type="button" value="취소" onClick="window.history.back()">
 </form> 
 </article>
 <th:block th:insert="~{/admin/footer}"></th:block>
