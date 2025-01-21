@@ -128,8 +128,6 @@
      -->
        <input type="text" name="zipcode" id="zipcode" size="11" value="08821" readonly onKeyUp='NumFormat(this)' onclick='NumFormat(this)'>
     </td>
-    
-   
   </tr>
     
   <tr>
@@ -138,13 +136,21 @@
       <textarea name="featurenm" id="featurenm" rows="8" cols="70" >이뻐요</textarea>
     </td>
   </tr>
-  <tr>
-    <th>켐핑이미지</th>
-    <td width="343" colspan="5">
 <!--  [2] 파일 업로드를 하기 위한 input 태그는 타입 속성 값을 file로 지정해야 한다.  -->
-      <input type="file" name="camping_image" id="camping_image">
-    </td>
-  </tr>    
+      <tr>
+            <th>캠핑이미지</th>
+            <td width="343" colspan="5">
+                <input type="file" name="camping_image" id="camping_image" onchange="previewImage(event)">
+            </td>
+        </tr>
+      <!-- 업로드된 이미지 미리보기 -->
+        <tr>
+            <th></th>
+            <td colspan="5">
+                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; max-width: 300px;"/>
+            </td>
+        </tr>  
+  
 </table>
 <input class="btn" type="button" value="등록" onClick="go_save()">           
 <input class="btn" type="button" value="취소" onClick="window.history.back()">

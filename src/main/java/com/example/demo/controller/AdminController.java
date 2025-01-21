@@ -66,6 +66,30 @@ public class AdminController {
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
 	
+	@PostMapping("/uploadImage")
+	@ResponseBody
+	public String uploadImage(@RequestParam("camping_image") MultipartFile file) {
+	    // 업로드 경로가 존재하는지 확인
+	    File uploadDir = new File(uploadPath);
+	    if (!uploadDir.exists()) {
+	        uploadDir.mkdirs();  // 디렉토리가 없으면 생성
+	    }
+
+	    // 파일 저장 경로 지정
+	    String fileName = UUID.randomUUID().toString() + ".jpg";
+	    File destinationFile = new File(uploadPath + fileName);
+	    
+	    try {
+	        // 파일을 지정된 경로에 저장
+	        file.transferTo(destinationFile);
+	        // 업로드된 파일의 URL을 반환
+	        return "/uploads/" + fileName + "?t=" + System.currentTimeMillis();// 실제 URL 반환
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return "파일 업로드 실패: " + e.getMessage();
+	    }
+	}
+	
 	@GetMapping("/admin_login_form")
 	public String adminLoginView() {
 		
@@ -76,7 +100,7 @@ public class AdminController {
 	@PostMapping("/admin_login")
 	public String adminLogin(Admin vo, Model model) {
 		  String url = "";
-		    
+		    /*
 		    // id 값이 잘못된 경우 처리
 		    try {
 		        Long id = Long.valueOf(vo.getId().toString());  // id 값이 Long 타입으로 변환되는지 확인
@@ -85,13 +109,13 @@ public class AdminController {
 		        model.addAttribute("message", "아이디는 숫자만 입력 가능합니다.");
 		        return "admin/main";  // 아이디 입력 오류 처리
 		    }
-		    
+		    */
 		    // (1) 관리자 계정 인증 호출: adminCheck()
 		    long result = adminService.adminCheck(vo);
 		    
 		    // (2) 인증 결과에 따라 
 		    if (result == 1) {  // 정상 사용자
-		        Admin admin = adminService.getAdmin(vo.getId());
+		        Admin admin = adminService.getAdmin(vo.getAdminId());
 		        model.addAttribute("adminUser", admin);
 		        url = "redirect:admin_camping_list";
 		    } else {
@@ -163,6 +187,10 @@ public class AdminController {
 			
 			// 새로운 파일명 생성
 			String saveName = uuid + "_" + fileName;
+			
+			 // 파일 시스템 경로 지정
+	        //String fullPath = uploadPath + File.separator + saveName;
+	        
 			vo.setFirstimageurl(saveName);
 			
 			// 서버로 파일 업로드
@@ -242,6 +270,9 @@ public class AdminController {
 			
 			// 새로운 파일명 생성
 			String saveName = uuid + "_" + fileName;
+			
+	        //String fullPath = uploadPath + File.separator + saveName;
+	        
 			vo.setFirstimageurl(saveName);
 			
 			// 서버로 파일 업로드

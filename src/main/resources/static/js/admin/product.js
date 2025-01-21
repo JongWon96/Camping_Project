@@ -106,8 +106,34 @@ function go_save() {
 		theform.attr("action", "admin_camping_write");
 		theform.submit();
 	}
+	 var formData = new FormData(document.getElementById('write_form'));
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/uploadImage', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // 서버에서 이미지 URL을 반환하면 해당 URL을 hidden 필드에 저장
+                document.getElementById('camping_image').value = xhr.responseText; 
+                document.getElementById('write_form').submit(); // 폼 제출
+            } else {
+                alert('파일 업로드 실패');
+            }
+        };
+        xhr.send(formData);
+	
 }
 
+ // 파일을 선택하면 이미지 미리보기 표시
+function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var imagePreview = document.getElementById('imagePreview');
+            imagePreview.src = reader.result;
+            imagePreview.style.display = 'block';  // 이미지 미리보기 표시
+        };
+        reader.readAsDataURL(event.target.files[0]);  // 선택한 파일 읽기
+       
+}
 /*
 **  숫자 데이터에서 콤마 제거
 */

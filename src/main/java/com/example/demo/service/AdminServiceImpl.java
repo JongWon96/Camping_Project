@@ -24,7 +24,7 @@ public class AdminServiceImpl implements AdminService {
 		int result = -1;	// 로그인 결과 저장
 		
 		// admin 테이블에서 관리자 정보 조회
-		Optional<Admin> admin = adminRepo.findById(vo.getId());
+		Optional<Admin> admin = adminRepo.findByAdminId(vo.getAdminId());
 		
 		if (admin.isEmpty()) {
 			result = -1;
@@ -41,9 +41,9 @@ public class AdminServiceImpl implements AdminService {
 	 * 관리자 정보 조회
 	 */
 	@Override
-	public Admin getAdmin(Long id) {
+	public Admin getAdmin(String adminId) {
 		
-		return adminRepo.findById(id).get();
+		return adminRepo.findByAdminId(adminId).get();
 	}
 }
 

@@ -15,6 +15,6 @@ public interface AdminService {
 	/*
 	 * 관리자 정보 조회
 	 */
-	Admin getAdmin(Long id);
+	Admin getAdmin(String adminId);
 
 }

@@ -164,15 +164,15 @@
   <tr>
     <th>켐핑이미지</th>
     <td colspan="5">
-      <img th:src="@{/camping_images/} + ${campingVO.firstimageurl}" width="200pt">     
+      <img th:src="${campingVO.firstimageurl}" width="200pt">     
       <br>
       <input type="file" name="camping_image" id="camping_image">
-      <input type="hidden" name=".firstimageurl" th:value="${campingVO.firstimageurl}">
+      <input type="hidden" name="firstimageurl" th:value="${campingVO.firstimageurl}">
     </td> 
   </tr>    
 </table>
 <input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod_save('+${campingVO.id}+');'">           
-<input class="btn" type="button" value="취소" onClick="go_mov()">
+<input class="btn" type="button" value="취소" onClick="window.history.back()">
 </form> 
 </article>
 <th:block th:insert="~{/admin/footer}"></th:block>
