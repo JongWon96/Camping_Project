@@ -2,7 +2,18 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Product;
 
+import java.util.List;
+
+import com.example.demo.domain.Camping;
+import com.example.demo.domain.Product;
+
 public interface ProductService {
+
+	public List<Product> getProducts(Long campingId);
+
+	public Product getProduct(Long productId);
+
+	public Product getProductByRoom(Long campingId, Integer roomNum);
 
     // 캠핑장에 맞는 3개의 상품을 생성하는 메서드
     void generateProductsForExistingCampings();

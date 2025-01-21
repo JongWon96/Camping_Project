@@ -33,7 +33,7 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findById(id).orElse(null);
     }
 
-    // 예약 취소 처리 (방 수량 복구는 불필요)
+    
     @Override
     public void cancelReservation(Long reservationId, Member member) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);

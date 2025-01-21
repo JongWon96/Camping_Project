@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Blog Post - Start Bootstrap Template</title>
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="css/styles.css" rel="stylesheet" />
+</head>
+<body>
+
+	<section class="mb-5">
+		<div class="card bg-light">
+			<div class="card-body">
+
+				<div class="d-flex mb-4">
+					<block th:each="review : ${reviews}">
+					<div class="ms-3">
+						<div class="fw-bold">임시 작성자</div>
+						<div class="star-rating">
+							<div class="stars">
+								<span th:each="i : ${#numbers.sequence(1, 5)}"> 
+								<span
+									th:if="${i<= #numbers.floor(review.rate)}" class="star full-star"></span> 									
+								<span
+									th:if="${i == #numbers.ceil(review.rate) and rate - #numbers.floor(review.rate) >= 0.5}"
+									class="star half-star"></span> 
+								<span th:if="${i > review.rate}"
+									class="star empty-star"></span>
+								</span>
+							</div>
+							<div class="rating-number">
+								<span th:text="${review.rate} + '/5'"></span>
+							</div>
+						</div>
+						<div>
+							<span th:text="${review.content}"></span>
+						</div>
+					</div>
+					<div class="flex-shrink-0">
+						<img th:src="${review.img}"
+							alt="..." />
+					</div>
+				</div>
+				</block>
+			</div>
+		</div>
+	</section>
+
+	<!-- Bootstrap core JS-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="js/scripts.js"></script>
+</body>
+</html>

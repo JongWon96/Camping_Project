@@ -1,37 +1,264 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Likes</title>
+    <title>찜 목록</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+         main {
+    display: flex;
+    flex: 1;
+    margin: 100px auto; /* 가운데 정렬 */
+    box-sizing: border-box;
+    width: 100%; /* 전체 화면의 80%를 사용 */
+    max-width: 1500px; /* 최대 폭 제한 */
+    min-width: 1400px; /* 최소 폭 설정 */
+    padding: 30px;
+    background: #ffffff; /* 박스 배경 */
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+ .side-menu {
+            background-color: #555;
+            width: 220px;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: fit-content;
+            align-self: flex-start;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .side-menu ul li {
+            margin: 20px 0;
+        }
+
+        .side-menu ul li a, .side-menu ul li form button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .side-menu ul li a:hover, .side-menu ul li form button:hover {
+            background: #666;
+            color: #f0f0f0;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 260px;
+        }
+
+        .likes-list h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .likes-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        .likes-card:not(:last-child) {
+            margin-bottom: 30px;
+        }
+
+        .likes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .likes-header h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .likes-header p {
+            color: #666;
+            margin: 0;
+        }
+
+        .likes-footer {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .likes-image img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #4682b4;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #333;
+            color: #fff;
+            font-size: 14px;
+            border-top: 1px solid #444;
+        }
+
+        footer a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<h1>My Likes</h1>
 
-<!-- 로그인된 유저 정보 표시 -->
-<p>Welcome, <span th:text="${member.name}"></span>!</p>
+<header>
+    찜 목록
+</header>
 
-<!-- 찜 목록 -->
-<section>
-    <h2>Your Liked Campings</h2>
-    <ul>
-        <th:block th:if="${likes.isEmpty()}">
-            <p>찜 목록이 없습니다.</p>
-        </th:block>
-        <th:block th:each="like : ${likes}">
+<main class="content-wrapper">
+    <nav class="side-menu">
+        <ul>
+            <li><a th:href="@{/main}">메인페이지</a></li>
             <li>
-                <!-- 캠핑장 이름과 상세보기 링크 -->
-                <a th:href="@{/camping/detail/{id}(id=${like.camping.id})}" th:text="${like.camping.facltnm}"></a>
-                <p th:text="${like.camping.addr1}"></p>
-
-                <!-- 찜 삭제 버튼 -->
-                <form action="/mypage/likes/remove" method="POST">
-                    <input type="hidden" name="campingId" th:value="${like.camping.id}">
-                    <button type="submit">Remove</button>
+                <form th:action="@{/mypage/Inquiry}" method="get">
+                    <button type="submit">1:1 문의</button>
                 </form>
             </li>
-        </th:block>
-    </ul>
-</section>
+            <li>
+                <form th:action="@{/reservationDetails}" method="get">
+                    <button type="submit">예약내역</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/likes}" method="get">
+                    <button type="submit">찜목록</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/edit-info}" method="get">
+                    <button type="submit">회원정보 수정</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/changepassword}" method="get">
+                    <button type="submit">비밀번호 변경</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/mypage/delete}" method="post">
+                    <button type="submit">회원탈퇴</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <div class="likes-list">
+            <h2>찜 목록</h2>
+            <div th:if="${likes.isEmpty()}">
+                <p>찜 목록이 비어 있습니다.</p>
+            </div>
+            <div th:each="like : ${likes}" class="likes-card">
+                <div class="likes-header">
+                    <div>
+                        <h2 th:text="${like.camping.facltnm}">캠핑장 이름</h2>
+                        <p th:text="${like.camping.addr1}">캠핑장 주소</p>
+                    </div>
+                    <div class="likes-image">
+                        <img th:src="${like.camping.firstimageurl}" alt="찜 이미지">
+                    </div>
+                </div>
+                <div class="likes-footer">
+                    <form th:action="@{/mypage/remove}" method="post">
+                        <input type="hidden" name="campingId" th:value="${like.camping.id}">
+                        <button type="submit" class="button">찜 삭제</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2025 <a href="#">MyWebsite</a>. All Rights Reserved.
+</footer>
+
 </body>
 </html>
