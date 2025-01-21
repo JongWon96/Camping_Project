@@ -14,14 +14,14 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <!-- 네이버 지도 api 인증키 -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<script type="text/javascript"
-	th:src="@{http://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ejrkepww5a}"></script>
+	<script type="text/javascript"
+			th:src="@{http://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ejrkepww5a}"></script>
 
-<link rel="canonical"
-	th:href="@{http://getbootstrap.com/docs/5.3/examples/carousel/}">
+	<link rel="canonical"
+		  th:href="@{http://getbootstrap.com/docs/5.3/examples/carousel/}">
 
-<link rel="stylesheet"
-	th:href="@{http://cdn.jsdelivr.net/npm/@docsearch/css@3}">
+	<link rel="stylesheet"
+		  th:href="@{http://cdn.jsdelivr.net/npm/@docsearch/css@3}">
 
 <style>
 .bd-placeholder-img {
@@ -187,13 +187,7 @@
 							</svg>
 						<div class="carousel-caption bgbbox" align="center">
 							<h1 th:text="${CampingPlace.facltnm}">캠핑장 이름</h1>
-							<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
-							<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
-							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a>
-							<a class="btn btn-lg btn-primary like-button" id="AddLike"
-							   th:data-id="${CampingPlace.id}"
-							   th:data-liked="${isLiked}"
-							   th:text="${isLiked} ? '찜 취소' : '찜에 추가'"></a>
+
 
 
 							</p>
@@ -386,22 +380,15 @@
 			<hr class="featurette-divider">
 
 			<h2 class="fw-normal"> 리뷰 </h2>
-
-			<!-- 리뷰 넣을 공간 -->
-			<!--
-			<div id="review">
-				<th:block th:insert="~{/include/review}"></th:block>
-			</div>
-			 -->
-			<!--
 			<div id="review">
 				<th:block th:insert="~{/include/reviewExample}"></th:block>
 			</div>
 
 			<hr class="featurette-divider">
-		-->
+
+			<!-- 리뷰 넣을 공간 -->
+
 		</div>
-		<!-- /.container -->
 
 
 		<!-- FOOTER -->
@@ -412,7 +399,7 @@
 			<p>&copy; Camping Product 2025</p>
 		</footer>
 	</main>
-	<!-- <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script> -->
+
 
 </body>
 </html>

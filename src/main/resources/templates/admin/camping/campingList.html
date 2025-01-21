@@ -150,30 +150,7 @@
     </th:block>
 
     <tr>
-				<!--  <td colspan="6" style="text-align: center;">
-		    <div th:if="${pageInfo.totalPages != null && pageInfo.totalPages > 1}">
 
-		        <span th:each="i : ${#numbers.sequence(
-		            (pageInfo.number != null ? (pageInfo.number / 10) * 10 + 1 : 1),
-		            (pageInfo.totalPages != null ? Math.min(
-		                (pageInfo.number != null ? (pageInfo.number / 10) * 10 + 10 : 10),
-		                pageInfo.totalPages
-		            ) : 1)
-		        )}">
-		            <a th:href="@{admin/camping/campingList(page=${i}, size=${pageInfo.size})}" th:text="${i}">Page [[${i}]]</a>
-		        </span>
-
-
-		        <span th:if="${pageInfo.number != null && pageInfo.number > 0}">
-		            <a th:href="@{admin/camping/campingList(page=${pageInfo.number - 1}, size=${pageInfo.size})}">Prev</a>
-		        </span>
-		        <span th:if="${pageInfo.number != null && pageInfo.number < pageInfo.totalPages - 1}">
-		            <a th:href="@{admin/camping/campingList(page=${pageInfo.number + 1}, size=${pageInfo.size})}">Next</a>
-		        </span>
-
-		    </div>
-		</td>
-		  -->
     </tr>
 
 </th:block>

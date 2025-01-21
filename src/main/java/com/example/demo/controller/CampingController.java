@@ -176,7 +176,7 @@ public class CampingController {
 		}
 
 
-		String rate = result == 0.0f ? "아직 리뷰가 등록되지 않음" : result.toString();
+		 rate = result == 0.0f ? "아직 리뷰가 등록되지 않음" : result.toString();
 
 		model.addAttribute("rate", rate);
 

@@ -25,6 +25,7 @@ import com.example.demo.service.ProductService;
 import com.example.demo.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class ReservationContoller {
@@ -42,15 +43,20 @@ public class ReservationContoller {
     private String reservationPage(@RequestParam("campingid") Long campingId, 
                                    @RequestParam("room") Integer roomNum, 
                                    @RequestParam(required = false) String checkin, 
-                                   @RequestParam(required = false) String checkout, 
+                                   @RequestParam(required = false) String checkout,
+                                   @SessionAttribute("loginUser") Member member,
+                                   HttpSession session,
                                    Model model) {
     	  System.out.println("Received room number: " + roomNum);  // 디버깅을 위한 로그
         // 날짜 형식 변환
     	 Date checkinDate = new Date(System.currentTimeMillis()); // 오늘
          Date checkoutDate = new Date(System.currentTimeMillis() + 86400000L); // 하루 후 (1일: 86400000ms
-         
 
-         if (checkin != null && checkout != null) {
+
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        model.addAttribute("loginUser", loginUser);
+
+        if (checkin != null && checkout != null) {
              try {
                  // 사용자가 날짜를 입력한 경우, 날짜 형식 변환
                  checkinDate = Date.valueOf(checkin);
@@ -175,7 +181,7 @@ public class ReservationContoller {
 
         if (remainingRoomCount <= 0) {
             model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
-            return "noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
+            return "/Camping/noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
         }
 
         // 예약 처리
@@ -191,7 +197,7 @@ public class ReservationContoller {
         reservationService.save(reservation);
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
-        return "redirect:/camping_details";
+        return "redirect:http://localhost:8080/reservations";
     }
 //    @PostMapping("/reservation_success")
 //    public String reservationSuccess(@RequestParam("id") Long id, Reservation reservation, HttpSession session) {
