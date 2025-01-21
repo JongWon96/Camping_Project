@@ -1,27 +1,29 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
 <head>
-	<script src="../assets/js/color-modes.js"></script>
+    <script src="../assets/js/color-modes.js"></script>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author"
-		  content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-	<meta name="generator" content="Hugo 0.122.0">
-	<title>Album example · Bootstrap v5.3</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author"
+          content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>Album example · Bootstrap v5.3</title>
 
-	<link rel="canonical"
-		  th:href="@{https://getbootstrap.com/docs/5.3/examples/album/}">
+    <link rel="canonical"
+          th:href="@{https://getbootstrap.com/docs/5.3/examples/album/}">
 
-	<link rel="stylesheet"
-		  th:href="@{https://cdn.jsdelivr.net/npm/@docsearch/css@3}">
+    <link rel="stylesheet"
+          th:href="@{https://cdn.jsdelivr.net/npm/@docsearch/css@3}">
 
-	<link th:href="@{css/Camping/bootstrap_tmp.min.css}" rel="stylesheet">
-	<link th:href="@{css/Camping/checkbox.css}" rel="stylesheet" />
+    <link th:href="@{css/Camping/bootstrap_tmp.min.css}" rel="stylesheet">
+    <link th:href="@{css/Camping/checkbox.css}" rel="stylesheet" />
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-	<style>
-		.bd-placeholder-img {
+    <style>
+        .bd-placeholder-img {
            font-size: 1.125rem;
            text-anchor: middle;
            -webkit-user-select: none;
@@ -91,107 +93,123 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
            display: block !important;
         }
-	</style>
-
+    </style>
 
 </head>
 <body>
 <header data-bs-theme="dark">
-	<nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
-		<th:block th:insert="~{/include/navigater}"></th:block>
-	</nav>
+    <nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
+        <th:block th:insert="~{/include/navigater}"></th:block>
+    </nav>
 </header>
 
 <main>
+    <main id="listPage">
 
-	<section class="py-5 text-center container">
-		<div class="row py-lg-5">
-			<div class="col-lg-6 col-md-8 mx-auto">
-				<h1 class="fw-light">캠핑장 목록</h1>
-				<p class="lead text-body-secondary">다양한 캠핑장을 확인해보세요</p>
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">캠핑장 목록</h1>
+                    <p class="lead text-body-secondary">다양한 캠핑장을 확인해보세요</p>
 
-				<div class="accordion">
-					<div class="accordion-item">
-						<h4 class="accordion-header">
-							<button class="accordion-button " type="button"
-									data-bs-toggle="collapse" data-bs-target="#collapseOne"
-									aria-expanded="true" aria-controls="collapseOne">상세검색</button>
-						</h4>
-						<div id="collapseOne" class="accordion-collapse collapse"
-							 data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<th:block th:insert="~{/include/SearchForm}"></th:block>
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <h4 class="accordion-header">
+                                <button class="accordion-button " type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">상세검색</button>
+                            </h4>
+                            <div id="collapseOne" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <th:block th:insert="~{/include/SearchForm}"></th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-			</div>
-		</div>
-	</section>
+                </div>
+            </div>
+        </section>
 
-	<div class="album py-5 bg-body-tertiary">
-		<div class="container">
+        <div class="album py-5 bg-body-tertiary">
+            <div class="container">
 
-			<th:block th:insert="~{/Camping/Recommend}"></th:block>
+                <th:block th:insert="~{/Camping/Recommend}"></th:block>
+                <div class="container" style="width: 85%; height:90%;">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <th:block th:each="CampingPlace : ${thirdPlace}">
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%"
+                                         height="225" xmlns="http://www.w3.org/2000/svg" role="img"
+                                         aria-label="Placeholder: Thumbnail"
+                                         preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <image x="0" y="0" width="100%" height="100%"
+                                               th:attr="href=${CampingPlace.firstimageurl}" />
+                                    </svg>
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <strong th:text="${CampingPlace.facltnm}"></strong>
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <a th:href="@{/detailpage(campingid=${CampingPlace.id})}"
+                                                   class="btn btn-sm btn-outline-secondary">상세보기</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-				<block th:each="CampingPlace : ${CampingPlaces}">
-					<div class="col">
-						<div class="card shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								 height="225" xmlns="http://www.w3.org/2000/svg" role="img"
-								 aria-label="Placeholder: Thumbnail"
-								 preserveAspectRatio="xMidYMid slice" focusable="false">
+        <hr style="margin-top: 50px; margin-bottom: 50px">
 
-								<image x="0" y="0" width="100%" height="100%"
-									   th:attr="href=${CampingPlace.firstimageurl}" />
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <th:block th:each="CampingPlace : ${CampingPlaces}">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <svg class="bd-placeholder-img card-img-top" width="100%"
+                             height="225" xmlns="http://www.w3.org/2000/svg" role="img"
+                             aria-label="Placeholder: Thumbnail"
+                             preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <image x="0" y="0" width="100%" height="100%"
+                                   th:attr="href=${CampingPlace.firstimageurl}" />
+                        </svg>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong th:text="${CampingPlace.facltnm}"></strong>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="@{/detailpage(campingid=${CampingPlace.id})}"
+                                       class="btn btn-sm btn-outline-secondary">상세보기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
 
-								<div class="card-body">
-									<p class="card-text">
-										<strong th:text="${CampingPlace.facltnm}"></strong>
-									</p>
-									<p class="card-text"></p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button"
-													class="btn btn-sm btn-outline-secondary">
-												<a th:href="@{/detailpage(campingid=${CampingPlace.id})}">상세보기</a>
-											</button>
+        <div style="display:flex; justify-content: center;" id="pagenation">
+            <th:block th:insert="~{/include/page_area}"></th:block>
+        </div>
 
-											<!-- <p th:text="'평점' + ${CampingPlace.}"> -->
-										</div>
+    </main>
 
-									</div>
-								</div>
-
-
-
-
-						</div>
-					</div>
-				</block>
-			</div>
-		</div>
-	</div>
-
-	<block>
-</main>
-
-<!-- 아래내용 -->
-<footer class="text-body-secondary py-5">
-	<div class="container">
-		<p class="float-end mb-1">
-			<a href="#">Back to top</a>
-		</p>
-		<p class="mb-1">Album example is &copy; Bootstrap, but please
-			download and customize it for yourself!</p>
-		<p class="mb-0">
-			New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-				href="../getting-started/introduction/">getting started guide</a>.
-		</p>
-	</div>
-</footer>
+    <footer class="text-body-secondary py-5">
+        <div class="container">
+            <p class="float-end mb-1">
+                <a href="#listPage">Back to top</a>
+            </p>
+            <p class="mb-1">&copy; Camping Product 2025</p>
+        </div>
+    </footer>
 
 </body>
 </html>

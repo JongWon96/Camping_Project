@@ -118,6 +118,35 @@
 	align-items: center; /* 수직 중앙 정렬 */
 	position: relative; /* 위치 설정 */
 }
+
+.rating-container {
+    font-size: 24px; /* 별 크기 */
+	justify-content: center;
+	margin:30;
+}
+
+.filled-star {
+    color: gold; /* 노란색 별 */
+}
+
+.star {
+    font-size: 24px; /* 별 크기 조정 */
+    display: inline-block;
+    position: relative;
+}
+
+.half-star{
+	background: linear-gradient( to right, gold 0%, gold 50%, #A9A9A9 50% );
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+
+
+.empty-star {
+    color: #ccc; /* 회색 빈 별 */
+}
+
 </style>
 
 <link th:href="@{/css/Camping/carousel.css}" rel="stylesheet">
@@ -160,7 +189,7 @@
 							<h1 th:text="${CampingPlace.facltnm}">캠핑장 이름</h1>
 							<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
 							<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
-							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> <a
+							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a>
 							<a class="btn btn-lg btn-primary like-button" id="AddLike"
 							   th:data-id="${CampingPlace.id}"
 							   th:data-liked="${isLiked}"
@@ -168,6 +197,21 @@
 
 
 							</p>
+
+							<p style="margin:0;">평점: </p>
+							<p th:if="${rate} != '아직 리뷰가 등록되지 않음'" th:text="${rate} + ' / 5'" style="margin:0;">
+								<div class="rating-container" th:if="${rate} != '아직 리뷰가 등록되지 않음'">
+									<span th:each="i : ${#numbers.sequence(1, 5)}">
+										<span th:if="${i <= T(java.lang.Math).floor(rate)}" class="star filled-star">★</span>
+										<span th:if="${i == T(java.lang.Math).ceil(rate) and T(java.lang.Double).parseDouble(rate) - T(java.lang.Math).floor(rate) >= 0.5}" class="half-star">★</span>
+										<span th:if="${i > T(java.lang.Math).floor(rate) + (T(java.lang.Double).parseDouble(rate) - T(java.lang.Math).floor(rate) >= 0.5 ? 1 : 0)}" class="star empty-star">★</span>
+									</span>
+								</div>
+								<p th:if="${rate} == '아직 리뷰가 등록되지 않음'" th:text="${rate}"></p>
+							<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a>
+							<a class="btn btn-lg btn-primary" onClick="AddLike" id="AddLike"
+								data-id="${CampingPlace.id}">찜에 추가</a>
+
 						</div>
 					</div>
 				</div>
@@ -181,37 +225,14 @@
 					<button class="nav-link active" id="nav-home-tab"
 						data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
 						role="tab" aria-controls="nav-home" aria-selected="true">소개글</button>
-					<!-- 
-					<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-						data-bs-target="#nav-profile" type="button" role="tab"
-						aria-controls="nav-profile" aria-selected="false">임시2</button>
-					<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
-						data-bs-target="#nav-contact" type="button" role="tab"
-						aria-controls="nav-contact" aria-selected="false">임시3</button>
-						 -->
 				</div>
 			</nav>
-			<!-- 
-			<div class="tab-content" id="nav-tabContent">
-				<div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-					aria-labelledby="nav-home-tab">
-					<p>임시 내용1</p>
-				</div>
-				<div class="tab-pane fade" id="nav-profile" role="tabpanel"
-					aria-labelledby="nav-profile-tab">
-					<p>임시 내용2</p>
-				</div>
-				<div class="tab-pane fade" id="nav-contact" role="tabpanel"
-					aria-labelledby="nav-contact-tab">
-					<p>임시 내용3</p>
-				</div>
-			</div> -->
 
 			<div class="row">
 				<div>
 					<th:block
 						th:if="${CampingPlace != null and CampingPlace.intro != null}">
-						<p th:text="${CampingPlace.intro}">임시 텍스트</p>
+						<p th:text="${CampingPlace.intro}"></p>
 					</th:block>
 				</div>
 			</div>
@@ -286,13 +307,13 @@
 			<hr class="featurette-divider">
 
 			<div class="row featurette">
-				<div class="col-md-7">
+				<div class="col-md-5">
 					<h2 class="featurette-heading fw-normal lh-1">상세주소</h2>
 					<p class="lead"
 						th:text="${CampingPlace.donm} + ${CampingPlace.sigungunm} + ${CampingPlace.addr1}"></p>
 				</div>
 
-				<div class="col-md-5">
+				<div class="col-md-7">
 					<!-- 네이버 지도 출력 -->
 
 					<th:block th:insert="~{/include/navermap}"></th:block>
@@ -318,11 +339,10 @@
 
 			<div class="row" id="reservation">
 				<div class="col-lg-4">
-					<svg class="bd-placeholder-img rounded-circle" width="140"
-						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
-						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
-						focusable="false">
-						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
+					<div style="height:90px; padding:10px">
+						<img th:src="@{'/images/icon/1번방.png'}" alt="icon"
+							width=60px height=60px>
+					</div>
 					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room1.room} + '번'"></h2>
 					<p th:text="'가격: ' + ${price1} + '원'"></p>
 					<p>
@@ -333,11 +353,10 @@
 				</div>
 
 				<div class="col-lg-4">
-					<svg class="bd-placeholder-img rounded-circle" width="140"
-						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
-						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
-						focusable="false">
-						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
+					<div style="height:90px;">
+					<img th:src="@{'/images/icon/2번방.png'}" alt="icon"
+							width=80px height=80px>
+					</div>
 					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room2.room} + '번'"></h2>
 					<p th:text="'가격: ' + ${price2} + '원'"></p>
 					<p>
@@ -348,10 +367,10 @@
 				</div>
 				
 				<div class="col-lg-4">
-					<svg class="bd-placeholder-img rounded-circle" width="140"
-						height="140" xmlns="http://www.w3.org/2000/svg" role="img"
-						aria-label="Placeholder" preserveAspectRatio="xMidYMid slice"
-						focusable="false">
+					<div style="height:90px">
+					<img th:src="@{'/images/icon/3번방.png'}" alt="icon"
+							width=80px height=80px>
+					</div>
 						<rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></svg>
 					<h2 class="fw-normal" th:text="'캠핑장 방 ' + ${Room3.room} + '번'"></h2>
 					<p th:text="'가격: ' + ${price3} + '원'"></p>
@@ -366,8 +385,10 @@
 
 			<hr class="featurette-divider">
 
+			<h2 class="fw-normal"> 리뷰 </h2>
+
 			<!-- 리뷰 넣을 공간 -->
-			<!-- 
+			<!--
 			<div id="review">
 				<th:block th:insert="~{/include/review}"></th:block>
 			</div>
@@ -376,6 +397,7 @@
 			<div id="review">
 				<th:block th:insert="~{/include/reviewExample}"></th:block>
 			</div>
+
 			<hr class="featurette-divider">
 		-->
 		</div>
