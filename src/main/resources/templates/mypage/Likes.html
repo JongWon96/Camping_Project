@@ -237,8 +237,10 @@
             </div>
             <div th:each="like : ${likes}" class="likes-card">
                 <div class="likes-header">
-                    <div>
-                        <h2 th:text="${like.camping.facltnm}">캠핑장 이름</h2>
+                    <div>	
+                      <h2>
+                <a th:href="@{/detailpage(campingid=${like.camping.id})}" th:text="${like.camping.facltnm}">캠핑장 이름</a>
+            </h2>
                         <p th:text="${like.camping.addr1}">캠핑장 주소</p>
                     </div>
                     <div class="likes-image">

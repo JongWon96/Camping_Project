@@ -44,10 +44,7 @@ public class ReviewController {
 
         // 로그인된 사용자의 예약 정보를 가져오기
         List<Reservation> reservations = reservationService.findReservationsByMember(loginUser);
-//        if (reservations.isEmpty()) {
-//            model.addAttribute("errorMessage", "예약 정보를 찾을 수 없습니다.");
-//            return "errorPage";  // 예약이 없을 경우 errorPage를 반환
-//        }
+      
 
         // 각 예약에 대해 후기가 작성되었는지 확인하고, 예약 객체에 추가
         for (Reservation reservation : reservations) {
