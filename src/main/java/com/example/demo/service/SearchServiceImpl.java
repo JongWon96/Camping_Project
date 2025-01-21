@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Camping;
-import com.example.demo.persistence.SearchRepository;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.example.demo.domain.Camping;
+import com.example.demo.persistence.SearchRepository;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -20,7 +23,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Camping> searchCampings(
+    public Page<Camping> searchCampings(
         String donm,
         String sigungunm,
         String category,
@@ -31,9 +34,12 @@ public class SearchServiceImpl implements SearchService {
         String bonfire,
         String petAllowed,
         String trailerAllowed,
-        String caravanAllowed
-    ) {
-        return searchRepository.searchCampings(
+        String caravanAllowed,
+        int page, int size
+    )			{    
+    	Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+        
+    	return searchRepository.searchCampings(
             donm,
             sigungunm,
             category,
@@ -44,7 +50,8 @@ public class SearchServiceImpl implements SearchService {
             bonfire,
             petAllowed,
             trailerAllowed,
-            caravanAllowed
+            caravanAllowed,
+            paging
         );
     }
 }

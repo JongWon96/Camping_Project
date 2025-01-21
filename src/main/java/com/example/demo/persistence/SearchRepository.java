@@ -1,8 +1,9 @@
 package com.example.demo.persistence;
 
 import java.time.LocalDate;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,7 +47,7 @@ public interface SearchRepository extends JpaRepository<Camping, Long> {
 		                 AND ((r.checkin BETWEEN :startDate AND :endDate) OR
 		                      (r.checkout BETWEEN :startDate AND :endDate))), 0) > 0)
 		    """, nativeQuery = true)
-		List<Camping> searchCampings(
+		Page<Camping> searchCampings(
 		    @Param("donm") String donm,
 		    @Param("sigungunm") String sigungunm,
 		    @Param("category") String category,
@@ -57,7 +58,8 @@ public interface SearchRepository extends JpaRepository<Camping, Long> {
 		    @Param("bonfire") String bonfire,
 		    @Param("petAllowed") String petAllowed,
 		    @Param("trailerAllowed") String trailerAllowed,
-		    @Param("caravanAllowed") String caravanAllowed
+		    @Param("caravanAllowed") String caravanAllowed,
+		    Pageable Pageable
 		);
 
 

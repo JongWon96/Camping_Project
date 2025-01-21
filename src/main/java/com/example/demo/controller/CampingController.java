@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,12 @@ public class CampingController {
 	@Autowired
 	private SearchService searchService;
 
+	@GetMapping("/landingpage")
+	private String landingPage() {
+
+		return "Camping/landingPage";
+	}
+	
 	@GetMapping("/campinglist")
 	private String campingList(
 	        @RequestParam(value = "campingName", required = false) String campingName,
@@ -46,16 +53,18 @@ public class CampingController {
 	        @RequestParam(value = "petAllowed", required = false) String petAllowed,
 	        @RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
 	        @RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "size", defaultValue = "9") int size,
 	        Model model
 	) {
 	    // 검색 조건에 따른 캠핑장 데이터 조회
-	    List<Camping> campings = searchService.searchCampings(
+	    Page<Camping> campingPlaces = searchService.searchCampings(
 	            donm, sigungunm, category, campingName, flooring,
-	            startDate, endDate, bonfire, petAllowed, trailerAllowed, caravanAllowed
+	            startDate, endDate, bonfire, petAllowed, trailerAllowed, caravanAllowed,page, size
 	    );
-
-	    // 검색 결과를 모델에 추가
-	    model.addAttribute("CampingPlaces", campings);
+		
+		model.addAttribute("pageInfo", campingPlaces);
+		model.addAttribute("CampingPlaces", campingPlaces);
 
 		/*
 		 * / 추천 목록에 띄울 임시 캠핑장 리스트
@@ -79,24 +88,6 @@ public class CampingController {
 		model.addAttribute("firstPlace", firstPlace);
 		model.addAttribute("secondPlace", secondPlace);
 		model.addAttribute("thirdPlace", thirdPlace);
-
-		// 남겨진 평점의 평균으로 평점 출력 -> 데이터가 없어서 에러남
-		Integer result = 0;
-		for (Camping place : campings) {
-		    Long campingId = place.getId();
-		    List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
-
-		    if (!tmpReviews.isEmpty()) {
-		        for (Review review : tmpReviews) {
-		            result += review.getRate();
-		        }
-		        result = Math.round(result / tmpReviews.size());
-		    } else {
-		        result = 0;
-		    }
-		}
-		String rate = result.toString();
-		model.addAttribute("rate", rate);
 
 		return "Camping/ListPage";
 	}
@@ -129,7 +120,7 @@ public class CampingController {
 		if ("0".equals(rate)) {
 			rate = "아직 리뷰가 등록되지 않음";
 		} 
-		
+
 		model.addAttribute("rate", rate);
 
 		String carav = campingPlace.getCaravacmpnyat();
@@ -186,6 +177,8 @@ public class CampingController {
 		String formattedPrice3 = numberFormat.format(price3);
 		model.addAttribute("price3", formattedPrice3);
 		
+		model.addAttribute("math", Math.class);
+		
 		return "Camping/DetailPage";
 	}
 
@@ -196,12 +189,7 @@ public class CampingController {
 		return "Camping/cheatsheet";
 	}
 
-	//임시 확인용
-	@GetMapping("/landingpage")
-	private String landingPage() {
 
-		return "Camping/landingPage";
-	}
 
 	//임시 확인용
 	@GetMapping("/reviewpage")

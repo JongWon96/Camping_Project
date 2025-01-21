@@ -3,12 +3,12 @@ package com.example.demo.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import com.example.demo.domain.Camping;
 
@@ -24,7 +24,7 @@ class SearchRepositoryTest {
         String campingName = "힐링";
 
         // When: 캠핑장 이름으로 검색
-        List<Camping> campings = searchRepository.searchCampings(
+        Page<Camping> campings = searchRepository.searchCampings(
                 null, null, null, campingName, null,
                 null, null, null, null, null, null);
 
@@ -54,7 +54,7 @@ class SearchRepositoryTest {
         String caravanAllowed = "N";
 
         // When: 조건 검색
-        List<Camping> campings = searchRepository.searchCampings(
+        Page<Camping> campings = searchRepository.searchCampings(
                 donm, sigungunm, category, campingName, flooring, null, null,
                 bonfire, petAllowed, trailerAllowed, caravanAllowed);
 
@@ -79,7 +79,7 @@ class SearchRepositoryTest {
         LocalDate endDate = LocalDate.of(2024, 12, 31);
 
         // When: 날짜로 검색
-        List<Camping> campings = searchRepository.searchCampings(
+        Page<Camping> campings = searchRepository.searchCampings(
                 null, null, null, null, null, startDate, endDate,
                 null, null, null, null);
 

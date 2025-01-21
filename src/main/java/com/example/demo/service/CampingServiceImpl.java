@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Camping;
-import com.example.demo.persistence.CampingRepository;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.domain.Camping;
+import com.example.demo.persistence.CampingRepository;
 
 
 @Service
@@ -50,6 +52,18 @@ public class CampingServiceImpl implements CampingService{
 	public Camping getCampingByProductId(Long productId) {
 
 		return campRepo.findCampingByProductid(productId);
+	}
+
+	@Override
+	public Page<Camping> getSearhResult(String donm, String sigungunm, String category, String campingName, String flooring,
+			LocalDate startDate, LocalDate endDate, String bonfire, String petAllowed, String trailerAllowed,
+			String carananAllowed,int page, int size) 
+	{
+		
+			Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+			
+		return campRepo.searchCampings(donm, sigungunm, category, campingName, flooring,
+			startDate, endDate, bonfire, petAllowed, trailerAllowed, carananAllowed, paging);
 	}
 
 }

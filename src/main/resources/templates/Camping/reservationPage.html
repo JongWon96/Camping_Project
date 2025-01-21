@@ -32,6 +32,7 @@
     </style>
 </head>
 <body>
+<<<<<<< HEAD
     <!-- Navigation-->
     <nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
         <th:block th:include="~{/include/navigater}"></th:block>
@@ -49,6 +50,36 @@
                     <div class="fs-5 mb-5">
                         <span th:text="'가격: ' + ${price} + '원'"></span>
                     </div>
+=======
+	<!-- Navigation-->
+	<nav class="navbar-expand-md navbar-dark fixed-top bg-dark">
+		<th:block th:insert="~{/include/navigater}"></th:block>
+	</nav>
+	<!-- Product section-->
+	<section class="py-5">
+		<div class="container px-4 px-lg-5 my-5">
+			<div class="row gx-4 gx-lg-5 align-items-center">
+				<div class="col-md-6">
+				<!-- 이미지 넣는 구간 -->
+				<block th:if="${product.room} == 1" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/1번 예약.png'}" alt="image">
+				</block>
+				<block th:if="${product.room} == 2" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/2번 예약.png'}" alt="image">
+				</block>
+				<block th:if="${product.room} == 3" >
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{'/images/3번 예약.png'}" alt="image">
+				</block>
+				
+				</div>
+				<div class="col-md-6">
+					
+					<h1 class="display-5 fw-bolder"
+						th:text="${product.camping.facltnm} + ${product.room} + '번 방 예약'"></h1>
+					<div class="fs-5 mb-5">
+						<span th:text="'가격: ' + ${price} + '원'" ></span>
+					</div>
+>>>>>>> refs/heads/HS504-test
 
                     <p class="lead" th:text="'전체 방 개수: ' + ${product.roomcount}">전체 방 개수:</p>
 
@@ -101,10 +132,53 @@
     </div>
 </form>
 
+<<<<<<< HEAD
                 </div>
             </div>
         </div>
     </section>
+=======
+										</div>
+										<div class="checkin-checkout" >
+											<div class="checkin" style="display: flex; width:38%; margin: 7%;" >
+												<h5 class="fw-bolder">바닥재 종류</h5>
+												<select style="padding-top: 6px; width:80%" id="bottom">
+													<option value="" disabled selected>선택하세요</option>
+													<option value="잔디">잔디</option>
+													<option value="파쇄석">파쇄석</option>
+													<option value="태크">태크</option>
+													<option value="자갈">자갈</option>
+													<option value="맨흙">맨흙</option>
+												</select>
+											</div>
+											<div class="checkout" style="display: flex; margin: 7%; width:30%;">
+												<h5 class="fw-bolder">인원수</h5>
+												<input type="text" placeholder="인원수" style="width: 60%;" id="people">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="d-flex">
+							<button class="btn btn-outline-dark  flex-shrink-0" type="button"
+								onclick="reservation_check()">
+								<i class="bi-cart-fill me-1"></i> 예약하기
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Related items section-->
+	<section class="py-5 bg-light">
+		<div class="container px-4 px-lg-5 mt-5">
+			<h2 class="fw-bolder mb-4"
+				th:text="${product.camping.facltnm} + '의 다른 방'"></h2>
+			<div
+				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+>>>>>>> refs/heads/HS504-test
 
     <!-- Related items section-->
     <section class="py-5 bg-light">
