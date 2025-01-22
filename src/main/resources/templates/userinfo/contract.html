@@ -6,109 +6,113 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="js/member.js"></script>
     <Style>
-        /* 전체 페이지 스타일 */
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #90EE90; /* 연한 청록색 배경 */
-        color: #2c3e50; /* 글자 색상은 어두운 회색 */
-        margin: 0;
-        padding: 0;
-    }
 
-    /* 헤더 스타일 */
-    header {
-        background-color: #4caf50; /* 녹색 배경 */
-        color: white;
-        text-align: center;
-        padding: 20px 0;
-    }
+       /* 전체 페이지 스타일 */
+       body {
+           font-family: 'Arial', sans-serif;
+           background: linear-gradient(135deg, #6c757d, #343a40); /* 어두운 그라데이션 배경 */
+           color: white;
+           margin: 0;
+           padding: 0;
+       }
 
-    header h1 {
-        font-size: 2.5rem;
-        margin: 0;
-    }
+       /* 헤더 스타일 */
+       header {
+           background-color: #007bff; /* 파란색 배경 */
+           color: white;
+           text-align: center;
+           padding: 20px 0;
+       }
 
-    /* 본문 영역 */
-    article {
-        max-width: 1000px;
-        margin: 50px auto;
-        padding: 30px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+       header h1 {
+           font-size: 2.5rem;
+           margin: 0;
+       }
 
-    /* 약관 제목 스타일 */
-    h2 {
-        font-size: 2rem;
-        color: #27ae60; /* 제목을 강조하는 녹색 계열 */
-        margin-bottom: 20px;
-        text-align: center;
-    }
+       /* 본문 영역 */
+       article {
+           max-width: 1000px;
+           margin: 50px auto;
+           padding: 30px;
+           background: white; /* 흰색 배경 */
+           color: #343a40; /* 어두운 글자 색상 */
+           border-radius: 10px;
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+       }
 
-    /* 약관 내용 텍스트 영역 */
-    textarea {
-        width: 100%;
-        height: 300px;
-        padding: 15px;
-        font-size: 1rem;
-        line-height: 1.5;
-        border: 2px solid #4caf50; /* 테두리는 녹색 */
-        border-radius: 5px;
-        resize: none;
-        background-color: #f4f7f6; /* 배경은 밝은 회색 */
-        color: #34495e; /* 어두운 글자 색상 */
-        box-sizing: border-box;
-    }
+       /* 약관 제목 스타일 */
+       h2 {
+           font-size: 2rem;
+           color: #007bff; /* 제목 파란색 */
+           margin-bottom: 20px;
+           text-align: center;
+       }
 
-    /* 동의 체크박스 스타일 */
-    label {
-        font-size: 1.2rem;
-        display: block;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
+       /* 약관 내용 텍스트 영역 */
+       textarea {
+           width: 100%;
+           height: 300px;
+           padding: 15px;
+           font-size: 1rem;
+           line-height: 1.5;
+           border: 1px solid #ccc; /* 밝은 회색 테두리 */
+           border-radius: 5px;
+           resize: none;
+           background-color: #f8f9fa; /* 밝은 회색 배경 */
+           color: #343a40; /* 어두운 글자 색상 */
+           box-sizing: border-box;
+       }
 
-    input[type="checkbox"] {
-        margin-right: 10px;
-    }
+       textarea:focus {
+           outline: none;
+           border-color: #007bff; /* 포커스 시 파란색 테두리 */
+           box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+       }
 
-    /* 회원가입 버튼 스타일 */
-    button {
-        display: #90EE90 ;
-        width: 100%;
-        padding: 15px;
-        background-color: #27ae60; /* 녹색 버튼 */
-        color: white;
-        font-size: 1.5rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background-color 0.3s ease;
-    }
+       /* 동의 체크박스 스타일 */
+       label {
+           font-weight: bold;
+           font-size: 1em;
+           display: block;
+           margin-top: 20px;
+           margin-bottom: 10px;
+       }
 
-    button:hover {
-        background-color: #2ecc71; /* 버튼 호버 시 밝은 녹색 */
-    }
+       input[type="checkbox"] {
+           margin-right: 10px;
+       }
 
-    /* 약관 내용 길어지면 스크롤이 생기도록 */
-    textarea:focus {
-        outline: none;
-        border-color: #2ecc71; /* 포커스 시 더 밝은 녹색 테두리 */
-    }
+       /* 회원가입 버튼 스타일 */
+       button {
+           display: block;
+           width: 100%;
+           padding: 10px;
+           background-color: #007bff; /* 파란색 버튼 */
+           color: white;
+           font-size: 1.1em;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+           margin-top: 20px;
+           transition: background-color 0.3s ease;
+       }
 
-    /* 폼 제출 버튼 중앙 정렬 */
-    form {
-        text-align: center;
-    }
+       button:hover {
+           background-color: #0056b3; /* 버튼 호버 시 더 어두운 파란색 */
+       }
 
-    </Style>
+       /* 폼 제출 버튼 중앙 정렬 */
+       form {
+           text-align: center;
+       }
+    </style>
+
+
 </head>
 <body>
 <article>
     <h2>Join Us</h2>
-    <form id="join" action="join_form" method="get" name="form">
+    <form id="contract">
         언제나 새로운 즐거움이 가득한 Food System의 회원가입 페이지 입니다. <br>
         Food System의 회원가입은 무료이며, 회원님의 개인신상에 관한 정보는
         ‘정보통신망이용촉진 및 정보보호등에관한법률’에 의해 회원님의 동의없이
@@ -290,10 +294,10 @@
       </textarea>
         <br><br>
         <div style="text-align: center;">
-            <input type="radio" name="okon1" class="agree" checked> 동의함 &nbsp; &nbsp; &nbsp;
-            <input type="radio" name="okon1" class="agree" checked> 동의안함
+            <input type="radio" name="okon1" class="agree" value="동의함"> 동의함 &nbsp; &nbsp; &nbsp;
+            <input type="radio" name="okon1" class="agree" value="동의안함"> 동의안함
         </div>
-        <input type="button" value="Next" class="submit"  onclick="go_next()" style="float: right;">
+        <input type="button" value="Next" class="submit" onclick="go_next()" style="float: right;">
     </form>
 
 </article>

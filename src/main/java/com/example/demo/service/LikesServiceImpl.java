@@ -26,8 +26,8 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public List<Likes> getLikesByMember(String memberId) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+        Member member = memberRepository.findByMemberId(memberId);
+
         return likesRepository.findByMember(member);
     }
 
@@ -52,8 +52,7 @@ public class LikesServiceImpl implements LikesService {
     @Override
     public void removeLike(String memberId, Long campingId) {
         // 회원 조회
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+        Member member = memberRepository.findByMemberId(memberId);
 
         // 캠핑장 조회
         Camping camping = campingRepository.findById(campingId)

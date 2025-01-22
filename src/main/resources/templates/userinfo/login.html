@@ -3,6 +3,11 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="js/member.js"></script>
+    <meta charset="UTF-8">
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+    <!-- gsi 클라이언트 라이브러리 -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <title>로그인</title>
     <style>
         /* 전체 배경 및 컨텐츠 스타일 */
@@ -164,14 +169,22 @@
         <div>
             <button type="submit">로그인</button>
         </div>
+        <!--         <div th:if="!${userName}"> -->
+        <!-- Google Login -->
         <div>
-            <input type="button" value="회원가입" class="cancel" onclick="location.href='/contract'">
-            <input type="button" value="아이디 찾기" class="submit" onclick="location.href='/find_id_form'">
+            <a th:href="@{/oauth2/authorization/google}" class="btn btn-primary me-2 active" role="button"><img src="/images/google.png"></a>
         </div>
         <div>
-            <input type="button" value="비밀번호 찾기" class="submit" onclick="location.href='/find_pwd_form'">
+            <input type="button" value="회원가입" class="cancel" onclick="location='contract'">
+            <input type="button" value="아이디 찾기" class="submit" onclick="find_id_form()">
         </div>
+        <div>
+            <input type="button" value="비밀번호 찾기" class="submit" onclick="find_pwd_form()">
+        </div>
+
     </form>
 </div>
+<br>
+
+
 </body>
-</html>
