@@ -56,7 +56,9 @@ function reservation_check() {
             document.getElementById("checkoutValue").value = checkout;
 
             // 예약 폼 제출
- 			 document.getElementById("reservationform").submit();
+ 			 //document.getElementById("reservationform").submit();
+ 			 $("#reservationform").attr("action", "/reservation").submit();
+
         }
     }
 }

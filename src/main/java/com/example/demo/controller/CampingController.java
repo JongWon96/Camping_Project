@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import java.sql.Date;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,13 +45,18 @@ public class CampingController {
 
 
 	@GetMapping("/campinglist")
-	private String campingList(@RequestParam(value = "campingName", required = false) String campingName,
-			@RequestParam(value = "searchDo", required = false) String doNm,
+	private String campingList(
+			@RequestParam(value = "donm", required = false) String donm,
+			@RequestParam(value = "sigungunm", required = false) String sigungunm,
 			@RequestParam(value = "category", required = false) String category,
+			@RequestParam(value = "campingName", required = false) String campingName,
+			@RequestParam(value = "flooring", required = false) String flooring,
+			@RequestParam(value = "startDate", required = false) LocalDate startDate,
+			@RequestParam(value = "endDate", required = false) LocalDate endDate,
 			@RequestParam(value = "bonfire", required = false) String bonfire,
+			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
 			@RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
-			@RequestParam(value = "petAllowed", required = false) String petAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "9") int size, Model model,
 							   HttpSession session) {
@@ -60,6 +66,10 @@ public class CampingController {
 
 
 		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
+
+		//Page<Camping> PagingCampingPlaces = campingService.getSearhResult(doNm, sigungunm, category, campingName, flooring, null, null, bonfire, petAllowed, trailerAllowed, caravanAllowed, page, size);
+
+		model.addAttribute("pageInfo", CampingPlaces);
 		model.addAttribute("CampingPlaces", CampingPlaces);
 
 
@@ -104,6 +114,19 @@ public class CampingController {
 		String rate = result.toString();
 		model.addAttribute("rate", rate);
 
+		// 페이징에 필터 요인 추가
+		model.addAttribute("donm", donm);
+		model.addAttribute("sigungunm", sigungunm);
+		model.addAttribute("category", category);
+		model.addAttribute("campingName", campingName);
+		model.addAttribute("flooring", flooring);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
+		model.addAttribute("bonfire", bonfire);
+		model.addAttribute("petAllowed", petAllowed);
+		model.addAttribute("trailerAllowed", trailerAllowed);
+		model.addAttribute("caravanAllowed", caravanAllowed);
+
 		String campingPage = recommendationController.getCampingRecommendations(
 				session,
 				9, // 기본 추천 개수
@@ -132,24 +155,32 @@ public class CampingController {
 
 		// 남겨진 평점의 평균으로 평점 출력
 		List<Review> tmpReviews = reviewService.getRate(campingId);
-		Integer result = 0;
+
+
+		Float result = 0.0f;
 
 		if (!tmpReviews.isEmpty()) {
-			double sum = 0.0;
-			for (Review review : tmpReviews) {
-				sum += review.getRate();
-			}
-			double average = sum / tmpReviews.size();
-			result = (int) Math.round(average);
-		} else {
-			result = 0;
+            double sum = tmpReviews.stream()
+                    .mapToDouble(Review::getRate)
+                    .sum();
+
+            result = (float) (Math.round((sum / tmpReviews.size()) * 10) / 10.0);
+        }
+	     else {
+			result = 0f;
 		}
 		String rate = result.toString();
+
 		if ("0".equals(rate)) {
 			rate = "아직 리뷰가 등록되지 않음";
 		}
+
+
+		 rate = result == 0.0f ? "아직 리뷰가 등록되지 않음" : result.toString();
+
 		model.addAttribute("rate", rate);
 
+        //
 		String carav = campingPlace.getCaravacmpnyat();
 		String trler = campingPlace.getTrleracmpnyat();
 
@@ -211,10 +242,13 @@ public class CampingController {
 			model.addAttribute("isLiked", false); // 비로그인 시 기본값 false
 		}
 
+
+
+
+		model.addAttribute("math", Math.class);
+
 		return "Camping/DetailPage";
 	}
-
-
 
 
 	@PostMapping("/toggle-like")
@@ -276,4 +310,6 @@ public class CampingController {
 		model.addAttribute("loginUser", loginUser);
 		return "include/reviewExample";
 	}
-}
+    }
+
+

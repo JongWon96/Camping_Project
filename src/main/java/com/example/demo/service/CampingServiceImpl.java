@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Camping;
 import com.example.demo.persistence.CampingRepository;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,24 +37,24 @@ public class CampingServiceImpl implements CampingService{
 
 
 
-    @Autowired CampingRepository campRepo;
+	@Autowired CampingRepository campRepo;
 
-    @Override
-    public Camping findById(Long id) {
-        return campRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Camping not found"));
-    }
+	@Override
+	public Camping findById(Long id) {
+		return campRepo.findById(id)
+				.orElseThrow(() -> new RuntimeException("Camping not found"));
+	}
 	@Override
 	public Camping getCamping(long Id) {
 
 		return campingRepo.findById(Id).get();
 	}
 
-    @Override
-    public Camping getCampingDetail(Long campingId) {
+	@Override
+	public Camping getCampingDetail(Long campingId) {
 
-        return campRepo.findById(campingId).get();
-    }
+		return campRepo.findById(campingId).get();
+	}
 	@Override
 	public List<Camping> getCampingListByCategory(String category) {
 
@@ -67,7 +69,7 @@ public class CampingServiceImpl implements CampingService{
 		return campRepo.findAll(paging);
 	}
 
-		public List<Camping> getAllCampings(String facltnm) {
+	public List<Camping> getAllCampings(String facltnm) {
 
 		return campingRepo.findCampingsByFacltnmContainingOrderByFacltnm(facltnm);
 	}
@@ -92,6 +94,11 @@ public class CampingServiceImpl implements CampingService{
 		return campingRepo.findCampingByProductid(productId);
 	}
 
+	@Override
+	public Page<Camping> getSearhResult(String donm, String sigungunm, String category, String campingName, String flooring, LocalDate startDate, LocalDate endDate, String bonfire, String petAllowed, String trailerAllowed, String carananAllowed, int page, int size) {
+		return null;
+	}
+
 	public void updateCamping(Camping vo) {
 		// 기존 데이터 조회
 		Camping existingCamping = campingRepo.findById(vo.getId())
@@ -107,8 +114,8 @@ public class CampingServiceImpl implements CampingService{
 
 	@Override
 	public Page<Camping> getAllCampingsByFacltnm (String facltnm, int page, int size){
-			// page 번호는 0부터 시작함. 제품명(name)순으로 정렬
-			Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+		// page 번호는 0부터 시작함. 제품명(name)순으로 정렬
+		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
 
 		return campingRepo.findAllCampingsByFacltnmContaining(facltnm, paging);
 	}
@@ -118,5 +125,3 @@ public class CampingServiceImpl implements CampingService{
 		return campingRepo.findAll(pageable);
 	}
 }
-
-
