@@ -131,6 +131,17 @@
 			</div>
 		</section>
 
+<div class="dropdown mb-4">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        정렬 기준
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+        <li><a class="dropdown-item" href="/camping/list?sort=rating">평점순</a></li>
+        <li><a class="dropdown-item" href="/camping/list?sort=priceLow">낮은 가격순</a></li>
+        <li><a class="dropdown-item" href="/camping/list?sort=priceHigh">높은 가격순</a></li>
+    </ul>
+</div>
+
 		<div class="album py-5 bg-body-tertiary">
 			<div class="container">
 				<div th:if="${loginUser == null}">

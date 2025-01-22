@@ -82,6 +82,15 @@
 
 
 /* 섹션 스타일 */
+
+.detail_search_w {
+	display: flex; /* flex를 사용해 정렬 활성화 */
+    justify-content: center; /* 가로 중심 정렬 */
+    margin: 0 auto;
+     width: 70%;
+}
+
+
 .detail_search_w ul {
     list-style: none;
     margin: 0;

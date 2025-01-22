@@ -19,7 +19,7 @@ public interface CampingService {
 
 	public Camping findById(Long campingId);
 	
-	public Page<Camping> getSearhResult(
+	/*public Page<Camping> getSearhResult(
 			String donm, 
 			String sigungunm, 
 			String category, 
@@ -31,6 +31,10 @@ public interface CampingService {
 			String petAllowed, 
 			String trailerAllowed, 
 			String carananAllowed,
-			int page, int size);
+			int page, int size);*/
+	
+    List<Camping> getCampingByAvgRatingDesc();
+    List<Camping> getCampingByLowestPriceAsc();
+    List<Camping> getCampingByHighestPriceDesc();
 	
 }

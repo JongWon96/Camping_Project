@@ -13,15 +13,22 @@ import org.springframework.stereotype.Service;
 import com.example.demo.domain.Camping;
 import com.example.demo.persistence.CampingRepository;
 
+import jakarta.transaction.Transactional;
+
 
 @Service
+@Transactional
 public class CampingServiceImpl implements CampingService{
 
+    @Autowired 
+    CampingRepository campRepo;
 
-
-
-    @Autowired CampingRepository campRepo;
-
+    private final CampingRepository campingRepository;
+    
+    public CampingServiceImpl(CampingRepository campingRepository) {
+        this.campingRepository = campingRepository;
+    }
+    
     @Override
     public Camping findById(Long id) {
         return campRepo.findById(id)
@@ -54,7 +61,7 @@ public class CampingServiceImpl implements CampingService{
 		return campRepo.findCampingByProductid(productId);
 	}
 
-	@Override
+	/*@Override
 	public Page<Camping> getSearhResult(String donm, String sigungunm, String category, String campingName, String flooring,
 			LocalDate startDate, LocalDate endDate, String bonfire, String petAllowed, String trailerAllowed,
 			String carananAllowed,int page, int size) 
@@ -64,6 +71,21 @@ public class CampingServiceImpl implements CampingService{
 			
 		return campRepo.searchCampings(donm, sigungunm, category, campingName, flooring,
 			startDate, endDate, bonfire, petAllowed, trailerAllowed, carananAllowed, paging);
-	}
+	}*/
 
+
+    @Override
+    public List<Camping> getCampingByAvgRatingDesc() {
+        return campingRepository.findAllByAvgRatingDesc();
+    }
+
+    @Override
+    public List<Camping> getCampingByLowestPriceAsc() {
+        return campingRepository.findAllByLowestPriceAsc();
+    }
+
+    @Override
+    public List<Camping> getCampingByHighestPriceDesc() {
+        return campingRepository.findAllByHighestPriceDesc();
+    }
 }

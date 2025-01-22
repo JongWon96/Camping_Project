@@ -1,6 +1,7 @@
 package com.example.demo.persistence;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public interface CampingRepository extends JpaRepository<Camping, Long> {
 			+ " WHERE p.id = %?1%")
 	Camping findCampingByProductid(Long productId);
 	
-	@Query(value = """
+	/*@Query(value = """
 		    SELECT DISTINCT c.*
 		    FROM Camping c
 		    LEFT JOIN Product p ON c.id = p.camping_id
@@ -69,5 +70,29 @@ public interface CampingRepository extends JpaRepository<Camping, Long> {
 		    @Param("trailerAllowed") String trailerAllowed,
 		    @Param("caravanAllowed") String caravanAllowed,
 		    Pageable Pageable
-		);
+		);*/
+	
+    // 평점순 정렬 (내림차순)
+    @Query("SELECT c FROM Camping c ORDER BY c.avgRating DESC")
+    List<Camping> findAllByAvgRatingDesc();
+
+    // 낮은 가격순 정렬 (Product의 room 값이 1 기준, 올림차순)
+    @Query("""
+        SELECT c FROM Camping c
+        JOIN c.products p
+        WHERE p.room = 1
+        GROUP BY c.id
+        ORDER BY MIN(p.price) ASC
+        """)
+    List<Camping> findAllByLowestPriceAsc();
+
+    // 높은 가격순 정렬 (Product의 room 값이 1 기준, 내림차순)
+    @Query("""
+        SELECT c FROM Camping c
+        JOIN c.products p
+        WHERE p.room = 1
+        GROUP BY c.id
+        ORDER BY MAX(p.price) DESC
+        """)
+    List<Camping> findAllByHighestPriceDesc();
 }

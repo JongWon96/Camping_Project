@@ -34,6 +34,10 @@ public class CampingController {
 	@Autowired
 	private SearchService searchService;
 
+    public CampingController(CampingService campingService) {
+        this.campingService = campingService;
+    }
+	
 	@GetMapping("/landingpage")
 	private String landingPage() {
 
@@ -47,8 +51,6 @@ public class CampingController {
 	        @RequestParam(value = "sigungunm", required = false) String sigungunm,
 	        @RequestParam(value = "category", required = false) String category,
 	        @RequestParam(value = "flooring", required = false) String flooring,
-	        @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-	        @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
 	        @RequestParam(value = "bonfire", required = false) String bonfire,
 	        @RequestParam(value = "petAllowed", required = false) String petAllowed,
 	        @RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
@@ -60,7 +62,7 @@ public class CampingController {
 	    // 검색 조건에 따른 캠핑장 데이터 조회
 	    Page<Camping> campingPlaces = searchService.searchCampings(
 	            donm, sigungunm, category, campingName, flooring,
-	            startDate, endDate, bonfire, petAllowed, trailerAllowed, caravanAllowed,page, size
+	             bonfire, petAllowed, trailerAllowed, caravanAllowed, page, size
 	    );
 		
 		model.addAttribute("pageInfo", campingPlaces);
@@ -88,7 +90,9 @@ public class CampingController {
 		model.addAttribute("firstPlace", firstPlace);
 		model.addAttribute("secondPlace", secondPlace);
 		model.addAttribute("thirdPlace", thirdPlace);
-
+		
+		System.out.println(campingPlaces.getContent());
+		
 		return "Camping/ListPage";
 	}
 
@@ -182,19 +186,22 @@ public class CampingController {
 		return "Camping/DetailPage";
 	}
 
-	//임시 확인용
-	@GetMapping("/cheatsheet")
-	private String cheatSheet() {
+    @GetMapping("/camping/list")
+    public String listCampings(@RequestParam(required = false, defaultValue = "rating") String sort, Model model) {
+        List<Camping> campings;
 
-		return "Camping/cheatsheet";
-	}
+        switch (sort) {
+            case "priceLow":
+                campings = campingService.getCampingByLowestPriceAsc();
+                break;
+            case "priceHigh":
+                campings = campingService.getCampingByHighestPriceDesc();
+                break;
+            default:
+                campings = campingService.getCampingByAvgRatingDesc();
+        }
 
-
-
-	//임시 확인용
-	@GetMapping("/reviewpage")
-	private String reviewPage() {
-
-		return "include/reviewExample";
-	}
+        model.addAttribute("campings", campings);
+        return "camping/listPage";
+    }
 }

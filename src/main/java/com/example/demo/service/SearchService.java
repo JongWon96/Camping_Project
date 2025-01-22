@@ -13,8 +13,6 @@ public interface SearchService {
         String category,
         String campingName, // 캠핑장 이름 추가
         String flooring,
-        LocalDate startDate,
-        LocalDate endDate,
         String bonfire,
         String petAllowed,
         String trailerAllowed,
