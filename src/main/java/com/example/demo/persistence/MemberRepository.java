@@ -12,10 +12,12 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     // MemberRepository
-    Optional<Member> findByMemberId(String memberId);
-
+    Member findByMemberId(String memberId);
     // CampingRepository
     Optional<Member> findById(Long id);
+
+
+
 
     // Member ID로 회원 검색
     Member findMemberByMemberId(String memberId);
@@ -30,4 +32,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByNameContaining(String name);
 
 	List<Member> findMemberByNameContaining(String name);
+
+    // 이메일로 회원 조회 (OAuth2 로그인 시 사용)
+    Member findByEmail(String email);  // 구글 OAuth2 로그인 시 이메일로 찾기
+
+
+
+
 }

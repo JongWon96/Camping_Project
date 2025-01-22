@@ -8,7 +8,7 @@
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #28a745, #1e7d34);
+        background: linear-gradient(135deg, #6c757d, #343a40); /* 어두운 회색 그라데이션 배경 */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -17,8 +17,8 @@
     }
 
     .content-wrapper {
-        background: white;
-        color: #333;
+        background: white; /* 흰색 배경 */
+        color: #343a40; /* 어두운 글자 색상 */
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         padding: 30px 40px;
@@ -30,7 +30,7 @@
     h1 {
         font-size: 1.8em;
         margin-bottom: 20px;
-        color: #28a745;
+        color: #007bff; /* 파란색 */
     }
 
     form {
@@ -42,7 +42,7 @@
         margin-bottom: 10px;
         font-weight: bold;
         font-size: 1em;
-        color: #333;
+        color: #343a40; /* 어두운 글자 색상 */
     }
 
     input[type="text"] {
@@ -53,13 +53,13 @@
         border-radius: 4px;
         font-size: 1em;
         text-align: center;
-        color: #555;
+        color: #555; /* 중간 톤 글자 색상 */
     }
 
     input[type="text"]:focus {
-        border-color: #28a745;
+        border-color: #007bff; /* 파란색 */
         outline: none;
-        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
 
     input[type="button"] {
@@ -67,7 +67,7 @@
         padding: 10px;
         border: none;
         border-radius: 4px;
-        background-color: #28a745;
+        background-color: #007bff; /* 파란색 */
         color: white;
         font-size: 1.1em;
         cursor: pointer;
@@ -75,7 +75,7 @@
     }
 
     input[type="button"]:hover {
-        background-color: #218838;
+        background-color: #0056b3; /* 더 어두운 파란색 */
     }
 
     .message {
@@ -85,37 +85,39 @@
     }
 
     .success {
-        color: #28a745;
+        color: #007bff; /* 파란색 */
     }
 
     .error {
-        color: #dc3545;
+        color: #dc3545; /* 빨간색 */
     }
   </style>
-  <script>
-    // 창 닫기 함수
-    function idok() {
-        self.close();
+  <script type="text/javascript">
+    function idok(){
+      self.close();
     }
   </script>
 </head>
 <body>
-<div class="content-wrapper">
+<div id="wrap">
   <h1>ID 찾기 결과</h1>
-  <form method="post" name="formm" action="id_check_form">
-    <label for="uid">User ID</label>
-    <input type="text" name="uid" id="uid" th:value="${uid}" readonly>
+  <form method=post name=formm style="margin-right:0 "
+        action="id_check_form" >
+    User ID <input type=text name="memberId" th:value="${memberId}">
+    <div style="margin-top: 20px">
 
-    <div class="message">
       <th:block th:if="${message == 1}">
-        <p class="success">요청하신 ID는 <span th:text="${uid}"></span>입니다.</p>
+        <script type="text/javascript">
+          opener.document.formm.id.value="";
+        </script>
+        요청하신 ID는 [[${memberId}]]입니다.
       </th:block>
+
       <th:block th:if="${message == -1}">
-        <p class="error">가입하지 않은 ID입니다.</p>
+        가입하지 않은 ID입니다.
       </th:block>
     </div>
-
-    <input type="button" value="확인" onclick="idok()">
+    <input type="button" value="확인" class="cancel" onclick="idok()">
   </form>
 </div>
 </body>
