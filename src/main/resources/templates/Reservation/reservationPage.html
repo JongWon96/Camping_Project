@@ -58,6 +58,7 @@ checkin: checkinDate,
 checkout: checkoutDate
 },
 success: function(response) {
+	
 $('#remainingRoomCount').text(response.remainingRooms); // 서버로부터 받은 남은 방 개수 업데이트
 },
 error: function() {

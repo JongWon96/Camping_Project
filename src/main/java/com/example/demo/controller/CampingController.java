@@ -1,17 +1,21 @@
 package com.example.demo.controller;
 
 import java.text.NumberFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.example.demo.domain.Member;
+import com.example.demo.service.LikesService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Camping;
@@ -37,13 +41,13 @@ public class CampingController {
     public CampingController(CampingService campingService) {
         this.campingService = campingService;
     }
-	
-	@GetMapping("/landingpage")
-	private String landingPage() {
 
-		return "Camping/landingPage";
-	}
-	
+	@Autowired
+	private RecommendationController recommendationController;
+
+	@Autowired
+	private LikesService likesService;
+
 	@GetMapping("/campinglist")
 	private String campingList(
 	        @RequestParam(value = "campingName", required = false) String campingName,
@@ -57,7 +61,7 @@ public class CampingController {
 	        @RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "9") int size,
-	        Model model
+	        Model model, HttpSession session
 	) {
 	    // 검색 조건에 따른 캠핑장 데이터 조회
 	    Page<Camping> campingPlaces = searchService.searchCampings(
@@ -68,9 +72,9 @@ public class CampingController {
 		model.addAttribute("pageInfo", campingPlaces);
 		model.addAttribute("CampingPlaces", campingPlaces);
 
-		/*
-		 * / 추천 목록에 띄울 임시 캠핑장 리스트
-		 */
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
+
 		List<Camping> tmpPlaces = campingService.getTmpCamping();
 
 		List<Camping> firstPlace = new ArrayList<>();
@@ -93,52 +97,99 @@ public class CampingController {
 		
 		System.out.println(campingPlaces.getContent());
 		
+		Integer result = 0;
+		for (Camping place : campingPlaces) {
+			Long campingId = place.getId();
+			List<Review> tmpReviews = reviewService.getRate(campingId);
+
+			if (tmpReviews.size() != 0) {
+				for (Review review : tmpReviews) {
+					result += review.getRate();
+				}
+				result = Math.round(result / (Integer) tmpReviews.size());
+			} else {
+				result = 0;
+			}
+		}
+		String rate = result.toString();
+		model.addAttribute("rate", rate);
+
+		// 페이징에 필터 요인 추가
+		model.addAttribute("donm", donm);
+		model.addAttribute("sigungunm", sigungunm);
+		model.addAttribute("category", category);
+		model.addAttribute("campingName", campingName);
+		model.addAttribute("flooring", flooring);
+		model.addAttribute("bonfire", bonfire);
+		model.addAttribute("petAllowed", petAllowed);
+		model.addAttribute("trailerAllowed", trailerAllowed);
+		model.addAttribute("caravanAllowed", caravanAllowed);
+
+		String campingPage = recommendationController.getCampingRecommendations(
+				session,
+				9, // 기본 추천 개수
+				0.5, // 리뷰 가중치
+				0.3, // 예약 가중치
+				0.2, // 위시리스트 가중치
+				model
+		);
+
 		return "Camping/ListPage";
 	}
 
 	@GetMapping("/detailpage")
 	private String campingDetail(@RequestParam("campingid") Long campingId,
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
+								 @RequestParam(value = "page", defaultValue = "1") int page,
+								 @RequestParam(value = "size", defaultValue = "10") int size, Model model,
+								 HttpSession session) {
+
+		// 로그인 사용자 정보
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
 
 		Camping campingPlace = campingService.getCampingDetail(campingId);
 		List<Product> products = productService.getProducts(campingId);
 
 		// 남겨진 평점의 평균으로 평점 출력
-		List<Review> tmpReviews = reviewService.getReviewsByCampingId(campingId);
-		
-		Integer result = 0;
-		
+		List<Review> tmpReviews = reviewService.getRate(campingId);
+
+
+		Float result = 0.0f;
+
 		if (!tmpReviews.isEmpty()) {
-			double sum = 0.0;
-			for(Review review : tmpReviews) {
-				 sum += review.getRate();
-			}
-			double average = sum / tmpReviews.size();		
-			result = (int) Math.round(average);
-		} else {
-			result = 0;
-		} 
+            double sum = tmpReviews.stream()
+                    .mapToDouble(Review::getRate)
+                    .sum();
+
+            result = (float) (Math.round((sum / tmpReviews.size()) * 10) / 10.0);
+        }
+	     else {
+			result = 0f;
+		}
 		String rate = result.toString();
 
 		if ("0".equals(rate)) {
 			rate = "아직 리뷰가 등록되지 않음";
-		} 
+		}
+
+
+		 rate = result == 0.0f ? "아직 리뷰가 등록되지 않음" : result.toString();
 
 		model.addAttribute("rate", rate);
 
+        //
 		String carav = campingPlace.getCaravacmpnyat();
 		String trler = campingPlace.getTrleracmpnyat();
 
 		String caravResult = "";
 		String trlerResult = "";
-		if (carav == "Y") {
+		if ("Y".equals(carav)) {
 			caravResult = "가능";
 		} else {
 			caravResult = "불가능";
 		}
 
-		if (trler == "Y") {
+		if ("Y".equals(trler)) {
 			trlerResult = "가능";
 		} else {
 			trlerResult = "불가능";
@@ -150,58 +201,99 @@ public class CampingController {
 
 		String[] Sbrscl = campingPlace.getSbrscl().split(",");
 		model.addAttribute("Sbrscl", Sbrscl);
-		System.out.println(Sbrscl);
-		
-		//리뷰 전달
-		//Page<Review> reviews = reviewService.getReview(campingId, page, size);
 
-		//model.addAttribute("reviews", reviews);
-		
-		//방 출력
+		// 리뷰 전달
+		Page<Review> reviews = reviewService.getReview(campingId, page, size);
+		model.addAttribute("reviews", reviews);
+
+		// 방 출력
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
-		
+
 		Product Room1 = products.get(0);
 		model.addAttribute("Room1", Room1);
-		
-		int price1 = (int)Room1.getPrice().doubleValue();
+
+		int price1 = (int) Room1.getPrice().doubleValue();
 		String formattedPrice1 = numberFormat.format(price1);
 		model.addAttribute("price1", formattedPrice1);
-		
+
 		Product Room2 = products.get(1);
 		model.addAttribute("Room2", Room2);
-		
-		int price2 = (int)Room2.getPrice().doubleValue();
+
+		int price2 = (int) Room2.getPrice().doubleValue();
 		String formattedPrice2 = numberFormat.format(price2);
 		model.addAttribute("price2", formattedPrice2);
-		
+
 		Product Room3 = products.get(2);
 		model.addAttribute("Room3", Room3);
-		
-		int price3 = (int)Room3.getPrice().doubleValue();		
+
+		int price3 = (int) Room3.getPrice().doubleValue();
 		String formattedPrice3 = numberFormat.format(price3);
 		model.addAttribute("price3", formattedPrice3);
-		
+
+		// **찜 상태 확인 추가**
+		if (loginUser != null) {
+			Long memberId = loginUser.getId();
+			boolean isLiked = likesService.isLiked(memberId, campingId);
+			model.addAttribute("isLiked", isLiked); // 찜 상태 추가
+		} else {
+			model.addAttribute("isLiked", false); // 비로그인 시 기본값 false
+		}
+
+
+
+
 		model.addAttribute("math", Math.class);
-		
+
 		return "Camping/DetailPage";
 	}
 
-    @GetMapping("/camping/list")
-    public String listCampings(@RequestParam(required = false, defaultValue = "rating") String sort, Model model) {
-        List<Camping> campings;
+	@PostMapping("/toggle-like")
+	public ResponseEntity<String> toggleLike(@RequestParam("campingid") Long campingId, HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+		}
 
-        switch (sort) {
-            case "priceLow":
-                campings = campingService.getCampingByLowestPriceAsc();
-                break;
-            case "priceHigh":
-                campings = campingService.getCampingByHighestPriceDesc();
-                break;
-            default:
-                campings = campingService.getCampingByAvgRatingDesc();
-        }
+		Long memberId = loginUser.getId();
 
-        model.addAttribute("campings", campings);
-        return "camping/listPage";
-    }
+		try {
+			System.out.println("Processing toggle-like for Member ID: " + memberId + ", Camping ID: " + campingId);
+
+			// 찜 상태 확인
+			boolean alreadyLiked = likesService.isLiked(memberId, campingId);
+			if (alreadyLiked) {
+				// 찜 삭제
+				System.out.println("Removing like...");
+				likesService.removeLike(memberId, campingId);
+				return ResponseEntity.ok("찜이 삭제되었습니다.");
+			} else {
+				// 찜 추가
+				System.out.println("Adding like...");
+				likesService.saveLike(memberId, campingId);
+				return ResponseEntity.ok("찜이 추가되었습니다.");
+			}
+		} catch (IllegalArgumentException e) {
+			System.err.println("IllegalArgumentException: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			System.err.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("찜 상태 변경 중 오류가 발생했습니다.");
+		}
+	}
+	
+	@GetMapping("/landingpage")
+	private String landingPage(HttpSession session , Model model) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
+		return "Camping/landingPage";
+	}
+
+	//임시 확인용
+	@GetMapping("/reviewpage")
+	private String reviewPage(HttpSession session , Model model) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
+		return "include/reviewExample";
+	}
 }

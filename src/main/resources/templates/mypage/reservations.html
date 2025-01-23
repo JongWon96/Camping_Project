@@ -204,7 +204,7 @@
 <main class="content-wrapper">
     <nav class="side-menu">
         <ul>
-            <li><a th:href="@{/main}">메인페이지</a></li>
+            <li><a href="/landingpage">메인페이지</a>
             <li>
                 <form th:action="@{/mypage}" method="get">
                     <button type="submit">마이페이지</button>
@@ -241,12 +241,20 @@
     <div class="main-content">
         <div class="container">
             <div class="reservation-list">
+
+                <div th:if="${reservations.isEmpty()}">
+                    <h2>예약 목록이 없습니다.</h2>
+                </div>
+
                 <div th:each="reservation : ${reservations}" class="reservation-card"
                      th:data-checkin-date="${reservation.checkin}"
                      th:data-checkout-date="${reservation.checkout}">
                     <div class="reservation-header">
                         <div>
-                            <p><strong>캠핑장 이름:</strong> <span th:text="${reservation.product.camping.facltnm}">캠핑장 이름</span></p>
+                            <p><strong>캠핑장 이름:</strong>
+                                <a th:href="@{/detailpage(campingid=${reservation.product.camping.id})}"
+                                   th:text="${reservation.product.camping.facltnm}">캠핑장 이름</a>
+                            </p>
                             <p><strong>예약자 이름:</strong> <span th:text="${reservation.member.name}">예약자 이름</span></p>
                         </div>
                         <div class="reservation-image">
@@ -268,9 +276,11 @@
                             <a th:href="@{/write?campingId={campingId}&memberId={memberId}(campingId=${reservation.product.camping.id}, memberId=${reservation.member.id})}"
                                class="button review-button">후기 작성하기</a>
                         </span>
+                        <!--
                         <span th:if="${reservation.hasreview}">
                             <button class="button review-disabled-button" disabled>후기 작성 불가</button>
                         </span>
+                        -->
                     </div>
                 </div>
             </div>
@@ -291,24 +301,35 @@
         const today = new Date();
         const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식으로 오늘 날짜
 
+        // 후기 작성 버튼 처리
         reviewButtons.forEach(function(button, index) {
             const checkoutDateString = button.closest('.reservation-card').getAttribute("data-checkout-date");
             const disabledButton = reviewDisabledButtons[index];
 
-            if (checkoutDateString) {
+            if (checkoutDateString && button) { // 요소가 존재할 때만 작업
                 const checkoutDate = new Date(checkoutDateString);
                 const checkoutDateStringFormatted = checkoutDate.toISOString().split('T')[0];
 
+                // 체크아웃 날짜가 오늘 날짜보다 이전일 때 후기 작성 버튼 활성화
                 if (checkoutDateStringFormatted < todayString) {
                     button.style.display = 'inline-block';
-                    disabledButton.style.display = 'none';
+
+                    // disabledButton이 존재할 경우에만 스타일 변경
+                    if (disabledButton) {
+                        disabledButton.style.display = 'none';
+                    }
                 } else {
                     button.style.display = 'none';
-                    disabledButton.style.display = 'inline-block';
+
+                    // disabledButton이 존재할 경우에만 스타일 변경
+                    if (disabledButton) {
+                        disabledButton.style.display = 'inline-block';
+                    }
                 }
             }
         });
 
+        // 예약 취소 버튼 처리
         cancelButtons.forEach(function(button, index) {
             const checkinDateString = button.closest('.reservation-card').getAttribute("data-checkin-date");
             const checkinDate = new Date(checkinDateString);
@@ -321,13 +342,15 @@
             const diffInTime = checkinDate - today;
             const diffInDays = diffInTime / (1000 * 3600 * 24);
 
-            if (diffInDays >= 10) {
+            // 체크인 날짜가 오늘로부터 10일 이상 남아있는 경우 예약 취소 버튼 활성화
+            if (diffInDays >= 7) {
                 button.disabled = false;
             } else {
-                button.disabled = true;
+                button.style.display = 'none';
             }
         });
     });
+
 </script>
 
 </body>

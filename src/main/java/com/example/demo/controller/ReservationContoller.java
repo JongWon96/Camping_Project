@@ -25,6 +25,7 @@ import com.example.demo.service.ProductService;
 import com.example.demo.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class ReservationContoller {
@@ -42,15 +43,20 @@ public class ReservationContoller {
     private String reservationPage(@RequestParam("campingid") Long campingId, 
                                    @RequestParam("room") Integer roomNum, 
                                    @RequestParam(required = false) String checkin, 
-                                   @RequestParam(required = false) String checkout, 
+                                   @RequestParam(required = false) String checkout,
+                                   @SessionAttribute("loginUser") Member member,
+                                   HttpSession session,
                                    Model model) {
     	  System.out.println("Received room number: " + roomNum);  // 디버깅을 위한 로그
         // 날짜 형식 변환
     	 Date checkinDate = new Date(System.currentTimeMillis()); // 오늘
          Date checkoutDate = new Date(System.currentTimeMillis() + 86400000L); // 하루 후 (1일: 86400000ms
-         
 
-         if (checkin != null && checkout != null) {
+
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        model.addAttribute("loginUser", loginUser);
+
+        if (checkin != null && checkout != null) {
              try {
                  // 사용자가 날짜를 입력한 경우, 날짜 형식 변환
                  checkinDate = Date.valueOf(checkin);
@@ -87,6 +93,7 @@ public class ReservationContoller {
         // 모델에 데이터 추가
         model.addAttribute("product", product);
         model.addAttribute("remainingRoomCount", remainingRoomCount);  // 남은 방 개수
+        model.addAttribute("room", product.getRoom());
         
         model.addAttribute("otherRoom1", otherRoom1);
         model.addAttribute("price1", formattedPrice1);
@@ -113,7 +120,15 @@ public class ReservationContoller {
                                                                    @RequestParam int room, 
                                                                    @RequestParam String checkin, 
                                                                    @RequestParam String checkout) {
-        Date checkinDate = Date.valueOf(checkin);
+        
+    
+			System.out.println("Check-in: " + checkin);
+			System.out.println("Check-out: " + checkout);
+			System.out.println("Camping ID: " + campingId);
+			System.out.println("Room: " + room);
+
+
+    	Date checkinDate = Date.valueOf(checkin);
         Date checkoutDate = Date.valueOf(checkout);
 
         // 남은 방 개수 계산
@@ -128,8 +143,8 @@ public class ReservationContoller {
 
     // 예약 처리
     @PostMapping("/reservation")
-    public String reserve(@RequestParam Long campingId, 
-                          @RequestParam int room, 
+    public String reserve(@RequestParam("campingid") Long campingid, 
+                          @RequestParam("room") int room, 
                           @RequestParam String checkin, 
                           @RequestParam String checkout, 
                           @RequestParam int person, 
@@ -145,10 +160,10 @@ public class ReservationContoller {
         }
 
         // 캠핑장 정보 가져오기
-        Camping camping = campingService.findById(campingId);
+        Camping camping = campingService.findById(campingid);
 
         // 방 정보 가져오기 (Product에서 캠핑장 ID와 방 타입으로 찾기)
-        Product product = productService.findByCamping_IdAndRoom(campingId, room);
+        Product product = productService.findByCamping_IdAndRoom(campingid, room);
 
         // 날짜 형식 검증
         Date checkinDate;
@@ -162,51 +177,26 @@ public class ReservationContoller {
         }
 
         // 방 갯수 확인 (날짜별로 남은 방 수 계산)
-        int remainingRoomCount = reservationService.getRemainingRooms(campingId, room, checkinDate, checkoutDate);
+        int remainingRoomCount = reservationService.getRemainingRooms(campingid, room, checkinDate, checkoutDate);
 
         if (remainingRoomCount <= 0) {
             model.addAttribute("message", "현재 예약 가능한 방이 없습니다.");
-            return "noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
+            return "/Camping/noAvailableRooms"; // noAvailableRooms 페이지에서 메시지 출력
         }
 
         // 예약 처리
         Reservation reservation = new Reservation();
-        reservation.setProduct(product);  
-        reservation.setMember(member);    
-        reservation.setCheckin(checkinDate);  
-        reservation.setCheckout(checkoutDate);  
-        reservation.setPerson(person);  
-        reservation.setBottom(bottom); 
+        reservation.setProduct(product);
+        reservation.setMember(member);
+        reservation.setCheckin(checkinDate);
+        reservation.setCheckout(checkoutDate);
+        reservation.setPerson(person);
+        reservation.setBottom(bottom);
 
         // 예약 저장
         reservationService.save(reservation);
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
-        return "redirect:/Reservation/reservation_details";
-    }
-    @PostMapping("/reservation_success")
-    public String reservationSuccess(@RequestParam("id") Long id, Reservation reservation, HttpSession session) {
-
-        Member loginUser = (Member) session.getAttribute("loginUser");
-
-        String url = "";
-
-        if (loginUser == null) {
-            url = "member/login";  // 로그인되지 않으면 로그인 페이지로 리다이렉트
-        } else {
-            reservation.setMember(loginUser);
-
-            // 예약 처리
-            Product p = new Product();
-            p.setId(id);
-            reservation.setProduct(p);
-
-            // 예약 정보 저장
-            reservationService.save(reservation);
-
-            url = "mypage/reservation";  // 예약 완료 후 예약 내역 페이지로 리다이렉트
-        }
-
-        return url;
+        return "redirect:/reservationDetails";
     }
 }

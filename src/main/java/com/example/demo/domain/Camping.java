@@ -283,7 +283,7 @@ public class Camping {
     private String firstimageurl;
 
     @Column(name = "avg_rating")
-    private double avgRating; // 평균 평점 (소수점 첫째 자리)
+    private Double avgRating; // 평균 평점 (소수점 첫째 자리)
     
     @Column(name = "price")
     private Integer price;

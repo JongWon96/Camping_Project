@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.persistence.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Reservation;
+import com.example.demo.domain.ReservationDetail;
+
 
 import jakarta.transaction.Transactional;
 @Service
@@ -33,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findById(id).orElse(null);
     }
 
-    
+
     @Override
     public void cancelReservation(Long reservationId, Member member) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
@@ -41,6 +44,34 @@ public class ReservationServiceImpl implements ReservationService {
             reservationRepository.delete(reservation); // 예약 취소
         }
     }
+	@Autowired
+	private ReservationRepository reservationRepo;
+
+	@Override
+    public void insertReservation(Reservation Reservation) {
+
+		reservationRepo.save(Reservation);
+	}
+
+	@Override
+	public Reservation getReservation(long id) {
+
+
+		Optional<Reservation> reservation = reservationRepo.findById(id);
+	    return reservation.orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+
+		//return reservationRepo.findById(id).get();
+	}
+
+	public Optional<Reservation> findById(long id){
+		return reservationRepo.findById(id);
+	}
+
+	@Override
+	public List<Reservation> getAllReservation() {
+
+		return reservationRepo.findAll();
+	}
 
     // 예약 기간이 끝났는지 확인하고 후기 작성이 가능한지 확인
     @Override
@@ -59,12 +90,30 @@ public class ReservationServiceImpl implements ReservationService {
 
         return latestReservation.getCheckout().before(currentDate);  // checkout이 현재 날짜 이전이면 true
     }
+	@Override
+	public void updateReservation(Reservation vo) {
+		Optional<Reservation> result = reservationRepo.findById(vo.getId());
+
+		if (result.isPresent()) {
+			Reservation reservation = result.get();
+
+			//reservation.setReply(vo.getReply());
+
+			reservationRepo.save(reservation);
+		}
+
+	}
 
     // 캠핑장 ID와 회원 ID로 예약 정보 조회 (여러 개의 예약을 반환)
     @Override
     public List<Reservation> getReservationByIds(Long campingId, Long memberId) {
         return reservationRepository.findByCamping_IdAndMember_Id(campingId, memberId);
     }
+	@Override
+	public List<Reservation> getReservationList() {
+
+		return reservationRepo.getReservationList();
+	}
 
     // 특정 날짜 범위에 예약된 방 수 조회
     @Override
@@ -78,21 +127,54 @@ public class ReservationServiceImpl implements ReservationService {
 
         return totalRoomCount - reservedRooms; // 남은 방 수
     }
-    
-    
+
+
 
     // 날짜 범위 내 예약된 방 목록을 조회
     @Override
     public List<Reservation> findReservationsByCampingIdAndRoomAndDateRange(Long campingId, int room, Date checkinDate, Date checkoutDate) {
         return reservationRepository.findReservationsByCampingIdAndRoomAndDateRange(campingId, room, checkinDate, checkoutDate);
     }
-    
+
     @Override
     public List<Reservation> findReservationsByMember(Member member) {
         return reservationRepository.findByMember_Id(member.getId());
     }
+	@Override
+	public List<ReservationDetail> getListReservationById(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public void updateReservationResult(long id, String i) {
+		Optional<Reservation> result = reservationRepo.findById(id);
 
+		if (result.isPresent()) {
+			Reservation reservation = result.get();
 
-   
+			reservation.setResult(i);
+			reservationRepo.save(reservation);
+		}
+
+	}
+	public Reservation getReservationById(long id) {
+
+		Optional<Reservation> r =  reservationRepo.findById(id);
+		if (r.isPresent()) {
+			return r.get();
+		} else {
+			return null;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
