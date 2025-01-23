@@ -51,13 +51,19 @@ public class CampingController {
 			@RequestParam(value = "sort", defaultValue = "facltnm") String sort, Model model) {
 		
 		// 페이징 정렬 기본 설정 
-		// 이름순 : facltnm, 낮은 가격순: 
+		// 이름순 : facltnm
 		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, sort);
 		
 		// 결과 정렬을 위해 전용 변수 추가 : sort
 		// 이름순, 낮은 가격순, 높은 가격순, 평점순
-		if (sort == "높은 가격순" || sort == "avg_rating")/* -> 추후 들어온 변수 값에 따라 조건 변경*/ {
+		if (sort == "avgRating") {	//평점순
 			paging = PageRequest.of(page - 1, size, Direction.DESC, sort);
+		} else if (sort == "highPrice") {
+			sort = "price";		//합칠때 조절
+			paging = PageRequest.of(page - 1, size, Direction.DESC, sort);
+		} else if (sort == "lowPrice"){
+			sort = "price";		//합칠때 조절
+			paging = PageRequest.of(page - 1, size, Direction.ASC, sort);	
 		}
 			
 		
@@ -109,7 +115,7 @@ public class CampingController {
 		String rate = result.toString();
 		model.addAttribute("rate", rate);
 		
-		// 페이징에 필터 요인 추가
+		// 정렬과 페이징에 필터 요인 추가
 		model.addAttribute("donm", donm);
 		model.addAttribute("sigungunm", sigungunm);
 		model.addAttribute("category", category);
@@ -121,6 +127,7 @@ public class CampingController {
 		model.addAttribute("petAllowed", petAllowed);
 		model.addAttribute("trailerAllowed", trailerAllowed);
 		model.addAttribute("caravanAllowed", caravanAllowed);
+		model.addAttribute("sort", sort);
 
 		return "Camping/ListPage";
 	}
@@ -209,14 +216,6 @@ public class CampingController {
 		return "Camping/DetailPage";
 	}
 
-	//임시 확인용
-	@GetMapping("/cheatsheet")
-	private String cheatSheet() {
-
-		return "Camping/cheatsheet";
-	}
-
-	//임시 확인용
 	@GetMapping("/landingpage")
 	private String landingPage() {
 

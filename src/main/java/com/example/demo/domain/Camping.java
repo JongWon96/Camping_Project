@@ -293,6 +293,9 @@ public class Camping {
     @Column(name = "avg_rating")
     private Double avgRating; // 평균 평점 (소수점 첫째 자리)
     
+    @Column(name = "price")
+    private Integer price; // 가격 정보
+    
     @OneToMany(mappedBy = "camping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
 }
