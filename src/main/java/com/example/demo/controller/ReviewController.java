@@ -133,30 +133,10 @@ public class ReviewController {
         // 리뷰 저장 (이미지 파일을 전달)
         reviewService.saveReview(memberId, campingId, content, rate, imgFile ,danger);
 
-        return "redirect:/success"; // 리뷰 작성 후 성공 페이지로 이동
+        return "redirect:/detailpage?campingid=" + campingId;  // 리뷰 작성 후 성공 페이지로 이동
     }
 
-    // 후기 작성 성공 페이지
-    @GetMapping("/success")
-    public String reviewSuccess() {
-        return "review/review_success"; // 후기 작성 성공 페이지
-    }
-    @GetMapping("/camping/{campingId}/reviews")
-    public String viewReviews(@PathVariable Long campingId, HttpSession session, Model model) {
-        // 캠핑장 정보 가져오기
-        Camping camping = campingService.getCampingDetail(campingId); // 캠핑장 정보를 가져오는 서비스 호출
-        model.addAttribute("camping", camping);
 
-        // 로그인된 사용자 정보 가져오기
-        Member loginUser = (Member) session.getAttribute("loginUser");
-
-        // 해당 캠핑장에 대한 리뷰 목록 가져오기
-        List<Review> reviews = reviewService.getReviewsByCampingId(campingId);
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("loginUser", loginUser);  // 로그인한 사용자 정보를 모델에 추가
-
-        return "Camping/reviews"; // 캠핑장 리뷰 페이지 뷰 반환
-    }
 
 
     @GetMapping("/camping/{campingId}/reviews/{reviewId}/edit")
@@ -220,7 +200,7 @@ public class ReviewController {
         // 리뷰 수정 로직
         reviewService.updateReview(reviewId, content, rate, imgFile, danger); // danger 값을 함께 전달
 
-        return "redirect:/camping/" + campingId + "/reviews"; // 수정 후 리다이렉트
+        return "redirect:/detailpage?campingid=" + campingId;// 수정 후 리다이렉트
     }
 
     @PostMapping("/camping/{campingId}/reviews/{reviewId}/delete")
@@ -242,7 +222,7 @@ public class ReviewController {
 
         // 이미지를 삭제하는 로직 (이미지 삭제 메서드에서 처리)
         // 해당 리뷰가 이미지 파일을 가지고 있다면 이미지도 삭제
-        return "redirect:/camping/" + campingId + "/reviews";  // 삭제 후 리다이렉트
+        return "redirect:/detailpage?campingid=" + campingId;  // 삭제 후 리다이렉트
     }
 
 
@@ -254,7 +234,7 @@ public class ReviewController {
             review.setDanger(1);
             reviewService.dangerReview(review); // 변경된 리뷰 저장
         }
-        return "redirect:/camping/" + campingId + "/reviews"; // 리뷰 목록 페이지로 리다이렉트
+        return "redirect:/detailpage?campingid=" + campingId;
 
     }
 
