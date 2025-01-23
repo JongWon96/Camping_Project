@@ -285,6 +285,9 @@ public class Camping {
     @Column(name = "avg_rating")
     private double avgRating; // 평균 평점 (소수점 첫째 자리)
     
+    @Column(name = "price")
+    private Integer price;
+    
     @CreatedDate
     @Column(name = "createdtime", updatable = false)
     private LocalDateTime createdtime;
@@ -296,4 +299,6 @@ public class Camping {
     // Product와의 관계 추가
     @OneToMany(mappedBy = "camping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
+    
+    
 }
