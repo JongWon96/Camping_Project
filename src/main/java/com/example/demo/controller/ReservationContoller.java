@@ -198,30 +198,5 @@ public class ReservationContoller {
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
         return "redirect:/reservationDetails";
-//    @PostMapping("/reservation_success")
-//    public String reservationSuccess(@RequestParam("id") Long id, Reservation reservation, HttpSession session) {
-//
-//        Member loginUser = (Member) session.getAttribute("loginUser");
-//
-//        String url = "";
-//
-//        if (loginUser == null) {
-//            url = "member/login";  // 로그인되지 않으면 로그인 페이지로 리다이렉트
-//        } else {
-//            reservation.setMember(loginUser);
-//
-//            // 예약 처리
-//            Product p = new Product();
-//            p.setId(id);
-//            reservation.setProduct(p);
-//
-//            // 예약 정보 저장
-//            reservationService.save(reservation);
-//
-//            url = "mypage/reservation";  // 예약 완료 후 예약 내역 페이지로 리다이렉트
-//        }
-//
-//        return url;
-//    }
     }
 }

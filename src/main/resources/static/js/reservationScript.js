@@ -15,6 +15,7 @@ function reservation_check() {
 
     var systemDate = new Date();
     var systemDateString = systemDate.toISOString().split('T')[0];  // 현재 날짜
+	    
 
     // 유효성 검사
     if (checkin === "") {
@@ -45,12 +46,19 @@ function reservation_check() {
         // 날짜 비교
         var checkinDate = new Date(checkin);
         var checkoutDate = new Date(checkout);
+        
         var systemDateObj = new Date(systemDateString);
+   
 
-        if (checkinDate < systemDateObj || checkoutDate < checkinDate || checkoutDate < systemDateObj) {
+        if (checkinDate < systemDateObj  || checkoutDate < checkinDate || checkoutDate < systemDateObj) {
             alert('날짜를 확인해주세요');
             return false;
-        } else {
+        } else if (checkinDate.getFullYear() === checkoutDate.getFullYear() && 
+				    checkinDate.getMonth() === checkoutDate.getMonth() && 
+				    checkinDate.getDate() === checkoutDate.getDate()){
+			alert('체크인과 체크아웃 날짜는 동일할 수 없습니다.');
+   			return false;
+		}else {
             // 숨겨진 input에 체크인/체크아웃 값 설정
             document.getElementById("checkinValue").value = checkin;
             document.getElementById("checkoutValue").value = checkout;
