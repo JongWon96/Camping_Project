@@ -1,14 +1,29 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -274,4 +289,10 @@ public class Camping {
     @LastModifiedDate
     @Column(name = "modifiedtime")
     private LocalDateTime modifiedtime;
+    
+    @Column(name = "avg_rating")
+    private Double avgRating; // 평균 평점 (소수점 첫째 자리)
+    
+    @OneToMany(mappedBy = "camping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products;
 }

@@ -16,10 +16,7 @@
 
 	<script th:inline="javascript">
 		var CampingObject = [[${CampingPlace}]];
-		/*
-		var x = [[${CampingPlace.mapx != null ? CampingPlace.mapx : 127.105399}]]; // 경도
-		var y = [[${CampingPlace.mapy != null ? CampingPlace.mapy : 37.3595704}]]; // 위도
-		*/
+
 		var x = CampingObject.mapx;
 		var y = CampingObject.mapy;
 		
@@ -41,13 +38,13 @@
 		
 		var Name = CampingObject.facltnm;
 		
-		var addr1 = /*[[${CampingPlace.donm != null ? CampingPlace.donm : ''}]]*/"";
-		var addr2 = /*[[${CampingPlace.sigungunm != null ? CampingPlace.sigungunm : '""'}]]*/"";
-		var addr3 = /*[[${CampingPlace.addr1 != null ? CampingPlace.addr1 : ''}]]*/"";
+		var addr1 = CampingObject.addr1;
+		var addr2 = CampingObject.addr2;
+		var addr3 = CampingObject.addr3;
 
-		var tell = /*[[${CampingPlace.tel != null ? CampingPlace.tel : ''}]]*/"";
-		var homepage = /*[[${CampingPlace.homepage != null ? CampingPlace.homepage : ''}]]*/"";
-		var category = /*[[${CampingPlace.category != null ? CampingPlace.category : ''}]]*/"";
+		var tell = CampingObject.tel;
+		var homepage = CampingObject.hompage;
+		var category = CampingObject.category;
 
 		var contentString = [ '<div class="iw_inner">',
 				'   <h3>' + Name + '</h3>',

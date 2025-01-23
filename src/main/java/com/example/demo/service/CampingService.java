@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.example.demo.domain.Camping;
 
@@ -11,7 +12,7 @@ public interface CampingService {
 
 	public Camping getCampingDetail(Long campingId);
 
-	public Page<Camping> getAllCamping(int page, int size);
+	public Page<Camping> getAllCamping(int page, int size, Pageable paging);
 	
 	public List<Camping> getTmpCamping();
 	

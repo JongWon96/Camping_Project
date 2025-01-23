@@ -8,6 +8,9 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,9 +47,21 @@ public class CampingController {
 			@RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
 			@RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
 			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "size", defaultValue = "9") int size, Model model) {
-
-		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size);
+			@RequestParam(value = "size", defaultValue = "9") int size, 
+			@RequestParam(value = "sort", defaultValue = "facltnm") String sort, Model model) {
+		
+		// 페이징 정렬 기본 설정 
+		// 이름순 : facltnm, 낮은 가격순: 
+		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, sort);
+		
+		// 결과 정렬을 위해 전용 변수 추가 : sort
+		// 이름순, 낮은 가격순, 높은 가격순, 평점순
+		if (sort == "높은 가격순" || sort == "avg_rating")/* -> 추후 들어온 변수 값에 따라 조건 변경*/ {
+			paging = PageRequest.of(page - 1, size, Direction.DESC, sort);
+		}
+			
+		
+		Page<Camping> CampingPlaces = campingService.getAllCamping(page, size, paging);
 		
 		//Page<Camping> PagingCampingPlaces = campingService.getSearhResult(doNm, sigungunm, category, campingName, flooring, null, null, bonfire, petAllowed, trailerAllowed, caravanAllowed, page, size);
 		

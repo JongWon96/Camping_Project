@@ -26,9 +26,8 @@ public class CampingServiceImpl implements CampingService{
 	}
 
 	@Override
-	public Page<Camping> getAllCamping(int page, int size) {
-		
-		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+	public Page<Camping> getAllCamping(int page, int size, Pageable paging) {
+	
 		
 		return campRepo.findAll(paging);
 	}
