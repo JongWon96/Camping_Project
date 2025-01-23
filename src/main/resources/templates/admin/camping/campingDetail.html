@@ -208,12 +208,19 @@
                     <textarea readonly>[[${campingVO.featurenm}]]</textarea>
                 </td>
             </tr>
-            <tr>
-                <th>캠핑장 이미지</th>
-                <td colspan="5" align="center">
-                    <img th:src="${campingVO.firstimageurl}" width="50%">
-                </td>
-            </tr>
+             <tr>
+     <th>켐핑장이미지</th>
+     <td colspan="5" align="center">
+  <!--[7] 상품 이미지를 출력하기 -->
+  	 <th:block th:if="${#strings.contains(campingVO.firstimageurl,'https://')}">
+     	<img th:src="${campingVO.firstimageurl}" width="200pt">
+     </th:block>
+     <th:block th:unless="${#strings.contains(campingVO.firstimageurl,'https://')}">
+     	<img th:src="'/uploads/'+${campingVO.firstimageurl}" width="200pt">
+     </th:block>    
+     </td>
+    </tr>
+            
         </table>
         <div class="buttons">
             <input class="btn" type="button" value="수정" th:onClick="'javascript:go_mod('+${campingVO.id}+');'">

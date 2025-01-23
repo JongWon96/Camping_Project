@@ -23,102 +23,133 @@
 	<link rel="stylesheet"
 		  th:href="@{http://cdn.jsdelivr.net/npm/@docsearch/css@3}">
 
-	<style>
-		.bd-placeholder-img {
-           font-size: 1.125rem;
-           text-anchor: middle;
-           -webkit-user-select: none;
-           -moz-user-select: none;
-           user-select: none;
-        }
+	
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
 
-        @media ( min-width : 768px) {
-           .bd-placeholder-img-lg {
-              font-size: 3.5rem;
-           }
-        }
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
 
-        .b-example-divider {
-           width: 100%;
-           height: 3rem;
-           background-color: rgba(0, 0, 0, .1);
-           border: solid rgba(0, 0, 0, .15);
-           border-width: 1px 0;
-           box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
-              rgba(0, 0, 0, .15);
-        }
+.b-example-divider {
+	width: 100%;
+	height: 3rem;
+	background-color: rgba(0, 0, 0, .1);
+	border: solid rgba(0, 0, 0, .15);
+	border-width: 1px 0;
+	box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
+		rgba(0, 0, 0, .15);
+}
 
-        .b-example-vr {
-           flex-shrink: 0;
-           width: 1.5rem;
-           height: 100vh;
-        }
+.b-example-vr {
+	flex-shrink: 0;
+	width: 1.5rem;
+	height: 100vh;
+}
 
-        .bi {
-           vertical-align: -.125em;
-           fill: currentColor;
-        }
+.bi {
+	vertical-align: -.125em;
+	fill: currentColor;
+}
 
-        .nav-scroller {
-           position: relative;
-           z-index: 2;
-           height: 2.75rem;
-           overflow-y: hidden;
-        }
+.nav-scroller {
+	position: relative;
+	z-index: 2;
+	height: 2.75rem;
+	overflow-y: hidden;
+}
 
-        .nav-scroller .nav {
-           display: flex;
-           flex-wrap: nowrap;
-           padding-bottom: 1rem;
-           margin-top: -1px;
-           overflow-x: auto;
-           text-align: center;
-           white-space: nowrap;
-           -webkit-overflow-scrolling: touch;
-        }
+.nav-scroller .nav {
+	display: flex;
+	flex-wrap: nowrap;
+	padding-bottom: 1rem;
+	margin-top: -1px;
+	overflow-x: auto;
+	text-align: center;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+}
 
-        .btn-bd-primary {
-           --bd-violet-bg: #712cf9;
-           --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-           --bs-btn-font-weight: 600;
-           --bs-btn-color: var(--bs-white);
-           --bs-btn-bg: var(--bd-violet-bg);
-           --bs-btn-border-color: var(--bd-violet-bg);
-           --bs-btn-hover-color: var(--bs-white);
-           --bs-btn-hover-bg: #6528e0;
-           --bs-btn-hover-border-color: #6528e0;
-           --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-           --bs-btn-active-color: var(--bs-btn-hover-color);
-           --bs-btn-active-bg: #5a23c8;
-           --bs-btn-active-border-color: #5a23c8;
-        }
+.btn-bd-primary {
+	--bd-violet-bg: #712cf9;
+	--bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+	--bs-btn-font-weight: 600;
+	--bs-btn-color: var(--bs-white);
+	--bs-btn-bg: var(--bd-violet-bg);
+	--bs-btn-border-color: var(--bd-violet-bg);
+	--bs-btn-hover-color: var(--bs-white);
+	--bs-btn-hover-bg: #6528e0;
+	--bs-btn-hover-border-color: #6528e0;
+	--bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+	--bs-btn-active-color: var(--bs-btn-hover-color);
+	--bs-btn-active-bg: #5a23c8;
+	--bs-btn-active-border-color: #5a23c8;
+}
 
-        .bd-mode-toggle {
-           z-index: 1500;
-        }
+.bd-mode-toggle {
+	z-index: 1500;
+}
 
-        .bd-mode-toggle .dropdown-menu .active .bi {
-           display: block !important;
-        }
+.bd-mode-toggle .dropdown-menu .active .bi {
+	display: block !important;
+}
 
-        .index {
-           width: 650px;
-        }
+.index {
+	width: 650px;
+}
 
-        .bgbbox {
-           background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검은색 */
-           padding: 20px; /* 내부 여백 */
-           border-radius: 8px; /* 모서리 둥글게 */
-           color: white; /* 텍스트 색상 */
-        }
+.bgbbox {
+	background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검은색 */
+	padding: 20px; /* 내부 여백 */
+	border-radius: 8px; /* 모서리 둥글게 */
+	color: white; /* 텍스트 색상 */
+}
 
-        .tmp {
-           display: flex; /* Flexbox 활성화 */
-           justify-content: center; /* 수평 중앙 정렬 */
-           align-items: center; /* 수직 중앙 정렬 */
-           position: relative; /* 위치 설정 */
-        }
-	</style>
+.tmp {
+	display: flex; /* Flexbox 활성화 */
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+	position: relative; /* 위치 설정 */
+}
+
+.rating-container {
+    font-size: 24px; /* 별 크기 */
+	justify-content: center;
+	margin:30;
+}
+
+.filled-star {
+    color: gold; /* 노란색 별 */
+}
+
+.star {
+    font-size: 24px; /* 별 크기 조정 */
+    display: inline-block;
+    position: relative;
+}
+
+.half-star{
+	background: linear-gradient( to right, gold 0%, gold 50%, #A9A9A9 50% );
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	 font-size: 24px;
+}
+
+
+
+.empty-star {
+    color: #ccc; /* 회색 빈 별 */
+}
+
+</style>
 
 	<link th:href="@{/css/Camping/carousel.css}" rel="stylesheet">
 	<link th:href="@{css/Camping/bootstrap_tmp.min.css}" rel="stylesheet">
@@ -158,10 +189,20 @@
 					</svg>
 					<div class="carousel-caption bgbbox" align="center">
 						<h1 th:text="${CampingPlace.facltnm}">캠핑장 이름</h1>
+						
+					<p style="margin:0;">평점: </p> 
+					<p th:if="${rate} != '아직 리뷰가 등록되지 않음'" th:text="${rate} + ' / 5'" style="margin:0;">	
+						<div class="rating-container" th:if="${rate} != '아직 리뷰가 등록되지 않음'">				
+							<span th:each="i : ${#numbers.sequence(1, 5)}">
+								<span th:if="${i <= T(java.lang.Math).floor(rate)}" class="star filled-star">★</span>
+								<span th:if="${i == T(java.lang.Math).ceil(rate) and T(java.lang.Double).parseDouble(rate) - T(java.lang.Math).floor(rate) >= 0.5}" class="half-star">★</span>
+								<span th:if="${i > T(java.lang.Math).floor(rate) + (T(java.lang.Double).parseDouble(rate) - T(java.lang.Math).floor(rate) >= 0.5 ? 1 : 0)}" class="star empty-star">★</span>									
+							</span>
+								</div>
 						<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
 						<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
-						<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> <a
-						<a class="btn btn-lg btn-primary like-button" id="AddLike"
+						<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> 
+						<a class="btn btn-lg btn-primary like-button" id="AddLike"></a>
 						   th:data-id="${CampingPlace.id}"
 						   th:data-liked="${isLiked}"
 						   th:text="${isLiked} ? '찜 취소' : '찜에 추가'"></a>
