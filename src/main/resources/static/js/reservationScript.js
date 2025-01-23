@@ -56,9 +56,7 @@ function reservation_check() {
             document.getElementById("checkoutValue").value = checkout;
 
             // 예약 폼 제출
- 			 //document.getElementById("reservationform").submit();
- 			 $("#reservationform").attr("action", "/reservation").submit();
-
+           document.getElementById("reservationform").submit();
         }
     }
 }
@@ -97,7 +95,7 @@ function updateRemainingRooms() {
                 $('#remainingRoomCount').text(response.remainingRooms); // 서버로부터 받은 남은 방 개수 업데이트
             },
             error: function() {
-                alert('남은 방 개수를 가져s오는 데 실패했습니다.');
+                alert('남은 방 개수를 가져오는 데 실패했습니다.');
             },
             dataType: "json"
         });

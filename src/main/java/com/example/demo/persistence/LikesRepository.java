@@ -14,12 +14,10 @@ import java.util.Optional;
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
 
+    boolean existsByMemberIdAndCampingId(Long memberId, Long campingId); // ID 기반 존재 확인
 
     @Transactional
     void deleteByMemberIdAndCampingId(Long memberId, Long campingId); // ID 기반 삭제
-
-    @Query("SELECT r FROM Likes r WHERE r.member = :member ORDER BY r.id DESC")
-    boolean existsByMemberIdAndCampingId(Long memberId, Long campingId); // ID 기반 존재 확인
 
     @Query("SELECT r FROM Likes r WHERE r.member = :member ORDER BY r.id DESC")
     List<Likes> findByMember(Member member);

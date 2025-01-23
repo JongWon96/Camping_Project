@@ -186,19 +186,18 @@ public class ReservationContoller {
 
         // 예약 처리
         Reservation reservation = new Reservation();
-        reservation.setProduct(product);  
-        reservation.setMember(member);    
-        reservation.setCheckin(checkinDate);  
-        reservation.setCheckout(checkoutDate);  
-        reservation.setPerson(person);  
-        reservation.setBottom(bottom); 
+        reservation.setProduct(product);
+        reservation.setMember(member);
+        reservation.setCheckin(checkinDate);
+        reservation.setCheckout(checkoutDate);
+        reservation.setPerson(person);
+        reservation.setBottom(bottom);
 
         // 예약 저장
         reservationService.save(reservation);
 
         // 예약 완료 후 예약 내역 페이지로 리다이렉트
-        return "redirect:http://localhost:8080/reservations";
-    }
+        return "redirect:/reservationDetails";
 //    @PostMapping("/reservation_success")
 //    public String reservationSuccess(@RequestParam("id") Long id, Reservation reservation, HttpSession session) {
 //
@@ -224,4 +223,5 @@ public class ReservationContoller {
 //
 //        return url;
 //    }
+    }
 }
