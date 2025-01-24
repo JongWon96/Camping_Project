@@ -94,7 +94,7 @@ function go_reservation_save() {
 
 	  /* 선택된 항목이 없으면 알림 */
 	  if (count == 0) {
-	    alert("주문처리할 항목을 선택해 주세요.");
+	    alert("예약처리할 항목을 선택해 주세요.");
 	  } else {
 	    // 선택된 항목의 ID를 서버로 전송
 	    var form = document.frm;
@@ -112,12 +112,12 @@ function go_reservation_save() {
   }
 </script>
 <article>
-<h1>주문리스트</h1>
+<h1>예약리스트</h1>
 <form name="frm" method="post">
 <input type="hidden" name="selectedIds" />
   <table style="float: right;">
     <tr>
-      <td>주문자 이름 <input type="text" name="key"> 
+      <td>예약자 이름 <input type="text" name="key">
       <input class="btn" type="button" value="검색" onclick="go_search()">
       </td>
     </tr>

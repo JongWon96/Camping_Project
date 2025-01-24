@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+	<style>
+		.logo {
+              font-size: 5rem; /* 글씨 크기를 더 키움 */
+              color: #1266FF; /* 글씨 색상 유지 */
+              text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8); /* 텍스트 그림자 강조 */
+              font-weight: 500; /* 텍스트 굵게 유지 */
+              letter-spacing: 2px; /* 글자 간격 약간 증가 */
+              text-transform: uppercase; /* 모든 글자를 대문자로 유지 */
+              position: absolute; /* 위치를 절대값으로 지정 */
+              top: 50%; /* 화면의 중앙에 배치 */
+              left: 50%; /* 화면의 중앙에 배치 */
+              transform: translate(-50%, -50%); /* 중앙 정렬 */
+              text-align: center; /* 텍스트 정렬 */
+              padding: 4rem 3rem; /* 패딩을 더 크게 조정 */
+              background: rgba(0, 0, 0, 0.3); /* 반투명 검정 배경을 더 진하게 조정 */
+              border-radius: 20px; /* 배경 모서리를 더 둥글게 */
+              margin-top: 20%; /* 마진 유지 */
+              background-width: 80%; /* 배경 크기를 늘림 */
+            }
+	</style>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -8,7 +28,8 @@
 <meta name="author" content="" />
 <title>Landing Page - Start Bootstrap Theme</title>
 <!-- Bootstrap icons-->
-<link
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+	<link
 	th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css}"
 	rel="stylesheet" type="text/css" />
 <!-- Google fonts-->
@@ -34,10 +55,10 @@
 		<div class="container position-relative">
 			<div class="row justify-content-center">
 				<div class="col-xl-6">
-					<div class="text-center text-white">
-						
-						<h1 class="mb-5">캠핑 추천 및 예약 사이트</h1>
-						
+					<div>
+						<h1 class="mb-5 logo">캠핑 프렌즈 </h1>
+
+
 					</div>
 				</div>
 			</div>
@@ -48,15 +69,15 @@
 		<div class="container">
 			<!-- 상세검색 -->
 			<th:block th:insert="~{/include/SearchForm}"></th:block>
-			
+
 		</div>
 	</section>
 	<div style="width:70%; align-items:center; " class="container">
 		<div style=" justify-content:center;">
 			<th:block th:insert="~{/Camping/Recommend}"></th:block>
 		</div>
-	</div>	
-	
+	</div>
+
 	<footer class="footer bg-light">
 
 		<div class="container">
@@ -64,10 +85,10 @@
 				<a href="#landingPage">Back to top</a>
 			</p>
 			<p>&copy; Camping Product 2025</p>
-			
+
 		</div>
 	</footer>
-	
+
 	<!-- Bootstrap core JS-->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

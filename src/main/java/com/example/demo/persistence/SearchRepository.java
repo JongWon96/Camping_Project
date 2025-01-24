@@ -18,7 +18,7 @@ public interface SearchRepository extends JpaRepository<Camping, Long> {
 		    WHERE (:donm IS NULL OR c.donm = :donm)
 		      AND (:sigungunm IS NULL OR c.sigungunm = :sigungunm)
 		      AND (:category IS NULL OR c.category = :category)
-		      AND (:campingName IS NULL OR c.facltnm LIKE :campingName)
+		      AND (:campingName IS NULL OR c.facltnm LIKE CONCAT('%', :campingName, '%'))
 		      AND (:flooring IS NULL OR
 		           (:flooring = '잔디' AND c.sitebottomcl1 IS NOT NULL AND c.sitebottomcl1 <> '') OR
 		           (:flooring = '파쇄석' AND c.sitebottomcl2 IS NOT NULL AND c.sitebottomcl2 <> '') OR

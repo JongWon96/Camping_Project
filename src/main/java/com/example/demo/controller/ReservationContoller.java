@@ -40,11 +40,10 @@ public class ReservationContoller {
     private CampingService campingService;
 
     @GetMapping("/reservationpage")
-    private String reservationPage(@RequestParam("campingid") Long campingId, 
-                                   @RequestParam("room") Integer roomNum, 
-                                   @RequestParam(required = false) String checkin, 
+    private String reservationPage(@RequestParam("campingid") Long campingId,
+                                   @RequestParam("room") Integer roomNum,
+                                   @RequestParam(required = false) String checkin,
                                    @RequestParam(required = false) String checkout,
-                                   @SessionAttribute("loginUser") Member member,
                                    HttpSession session,
                                    Model model) {
     	  System.out.println("Received room number: " + roomNum);  // 디버깅을 위한 로그
@@ -52,9 +51,13 @@ public class ReservationContoller {
     	 Date checkinDate = new Date(System.currentTimeMillis()); // 오늘
          Date checkoutDate = new Date(System.currentTimeMillis() + 86400000L); // 하루 후 (1일: 86400000ms
 
-
+        // 세션에서 로그인 사용자 확인
         Member loginUser = (Member) session.getAttribute("loginUser");
-        model.addAttribute("loginUser", loginUser);
+        if (loginUser == null) {
+            // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
+        model.addAttribute("loginUser", loginUser); // 모델에 로그인 사용자 추가
 
         if (checkin != null && checkout != null) {
              try {
