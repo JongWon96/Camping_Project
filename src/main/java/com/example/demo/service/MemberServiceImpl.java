@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Inquiry;
-import dto.InquiryVo;
 import com.example.demo.domain.Member;
 import com.example.demo.persistence.InquiryRepository;
 import com.example.demo.persistence.MemberRepository;

@@ -4,9 +4,6 @@
 <th:block th:insert="~{/admin/sub_menu}"></th:block>
 
 <head>
-<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript" th:src="@{js/admin/product.js}"></script>
     <style>
         /* 전체 페이지 배경을 연한 회색으로 설정 */
         body {
@@ -96,7 +93,7 @@ function go_reservation_save() {
 
 	  /* 선택된 항목이 없으면 알림 */
 	  if (count == 0) {
-	    alert("주문처리할 항목을 선택해 주세요.");
+	    alert("예약처리할 항목을 선택해 주세요.");
 	  } else {
 	    // 선택된 항목의 ID를 서버로 전송
 	    var form = document.frm;
@@ -114,12 +111,12 @@ function go_reservation_save() {
   }
 </script>
 <article>
-<h1>주문리스트</h1>
+<h1>예약리스트</h1>
 <form name="frm" method="post">
 <input type="hidden" name="selectedIds" />
   <table style="float: right;">
     <tr>
-      <td>주문자 이름 <input type="text" name="key"> 
+      <td>예약자 이름 <input type="text" name="key"> 
       <input class="btn" type="button" value="검색" onclick="go_search()">
       </td>
     </tr>
