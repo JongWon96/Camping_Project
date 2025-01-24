@@ -312,7 +312,7 @@ public class AdminController {
 	public String adminReservationList(
 			Model model) {
 		
-	    
+	    System.out.println(">>>> /admin_reservation_lis");
 		List<Reservation> reservationList = reservationService.getReservationList();
 		
 		model.addAttribute("reservationList", reservationList);
@@ -461,5 +461,31 @@ public class AdminController {
 	/*
 	 * 제품별 판매실적 화면 표시
 	 */
+	 @PostMapping("/admin_reservation_delete")
+	    public String adminDeleteReservation(@RequestParam Long id) {
+	        try {
+	        	System.out.println("id="+id);
+	            reservationService.deleteReservation(id);  // 리뷰 삭제 서비스 호출
+	            return "redirect:/admin_reservation_list";  // 삭제 후 리뷰 리스트로 리다이렉트
+	        } catch (Exception e) {
+	            // 에러 처리
+	            return "redirect:/admin/reservation/reservationList?error=true";
+	        }
+	    }
+	 /*
+	 @GetMapping("/reservationList")
+	 public String getReservationList(Model model) {
+	     // 예약 리스트를 조회하여 모델에 추가
+		 List<Reservation> reservationList = reservationService.getAllReservation();
+	        
+	        if (reservationList.isEmpty()) {
+	            model.addAttribute("message", "리뷰가 없습니다.");
+	        } else {
+	            model.addAttribute("reservationList", reservationList);
+	        }
+	        		 
+	     return "admin/reservation/reservationList"; // 반환되는 뷰 이름 (HTML, JSP 등)
+	 }
 
+	 */
 }

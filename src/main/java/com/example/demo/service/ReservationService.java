@@ -28,5 +28,7 @@ public interface ReservationService {
 	void updateReservationResult(long id, String i);
 
 	Reservation getReservationById(long long1);
+
+	void deleteReservation(Long id);
 	
 }

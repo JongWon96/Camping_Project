@@ -37,7 +37,7 @@ public class ReservationDetail {
 	@ColumnDefault("1")
 	private String result;	// 예약/예약완료 처리 여부
     
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="reservation_id")
 	private Reservation reservation;
 	

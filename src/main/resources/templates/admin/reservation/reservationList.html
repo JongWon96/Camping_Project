@@ -3,6 +3,7 @@
 <meta charset="UTF-8">
 <th:block th:insert="~{/admin/sub_menu}"></th:block>
 
+<div th:unless="${reservationList == null or #lists.size(reservationList) == 0}">
 <head>
     <style>
         /* 전체 페이지 배경을 연한 회색으로 설정 */
@@ -109,6 +110,23 @@ function go_reservation_save() {
 	theForm.action =  "admin_reservation_list";
 	theForm.submit();
   }
+
+  function delete_reservation(id) {
+	    if (confirm("정말 이 예약을 삭제하시겠습니까?")) {
+	        var form = document.frm;
+	        form.action = "admin_reservation_delete"; // 삭제할 URL 설정
+	        
+	        // id 파라미터를 추가
+	        var input = document.createElement("input");
+	        input.type = "hidden";
+	        input.name = "id";  // 파라미터 이름은 "id"여야 함
+	        input.value = id;  // 예약의 id 값
+	        form.appendChild(input);
+	        
+	        form.submit();  // 폼 제출
+	    }
+	}
+  
 </script>
 <article>
 <h1>예약리스트</h1>
@@ -142,7 +160,8 @@ function go_reservation_save() {
     <td>[[${reservation.checkin}]]</td> <td>[[${reservation.checkout}]]</td>
     <td>[[${reservation.createddate}]]</td> <td>[[${reservation.member.name}]]</td>
     <td>[[${reservation.member.address}]]</td>  <td>[[${reservation.member.phone}]]</td>
-    <td>[[${reservation.member.email}]]
+    <td>[[${reservation.member.email}]]</td>   
+    
   </tr>
   </th:block>
   </table>
@@ -150,6 +169,7 @@ function go_reservation_save() {
       value="예약처리(예약확인)" onClick="go_reservation_save()">
 </form>
 </article>
+</div>
 <th:block th:insert="~{/admin/footer}"></th:block>
 </body>
 </html>

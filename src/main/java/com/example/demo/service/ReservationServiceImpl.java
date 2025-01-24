@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.Camping;
 import com.example.demo.domain.Reservation;
 import com.example.demo.domain.ReservationDetail;
 import com.example.demo.persistence.ReservationRepository;
@@ -40,7 +42,12 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public List<Reservation> getAllReservation() {
 		
-		return reservationRepo.findAll();
+		List<Reservation> reservation = reservationRepo.findAll();
+	     if (reservation.isEmpty()) {
+	            // 리뷰가 없다면 빈 리스트 반환
+	            return new ArrayList<>(); 
+	        }
+		return reservation;
 	}
 
 	@Override
@@ -88,6 +95,19 @@ public class ReservationServiceImpl implements ReservationService {
 			return r.get();
 		} else {
 			return null;
+		}
+	}
+
+	@Override
+	public void deleteReservation(Long id) {
+		
+		Optional<Reservation> result = reservationRepo.findById(id);
+		
+		if (result.isPresent()) {
+			reservationRepo.deleteById(id);
+			System.out.println("예약을 삭제하였습니다.");
+		} else {
+			System.out.println("예약 내역이 존재하지 않습니다.");
 		}
 	}
 }

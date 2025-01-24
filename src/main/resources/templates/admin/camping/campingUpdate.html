@@ -37,8 +37,9 @@
 
         table th {
             background-color: #e0e0e0; /* 헤더 배경색 */
+            width: 70px;
         }
-
+ 
         /* 버튼 스타일 */
         input[type="button"].btn {
             padding: 10px 20px;
@@ -126,7 +127,7 @@
      
     <th>만든날짜</th>
     <td width="72">
-      <input type="text" name="creadtedtime" id="creadtedtime" size="11" readonly onKeyUp='NumFormat(this)'>
+      <input type="text" name="creadtedtime" id="creadtedtime" size="11" readonly onKeyUp='NumFormat(this)' th:value="${campingVO.createdtime}">
     </td>
     
   </tr>
