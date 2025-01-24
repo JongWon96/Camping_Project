@@ -114,7 +114,7 @@ function go_reservation_save() {
   function delete_reservation(id) {
 	    if (confirm("정말 이 예약을 삭제하시겠습니까?")) {
 	        var form = document.frm;
-	        form.action = "admin_reservation_delete"; // 삭제할 URL 설정
+	        form.action = "/admin_reservation_delete"; // 삭제할 URL 설정
 	        
 	        // id 파라미터를 추가
 	        var input = document.createElement("input");
@@ -143,7 +143,7 @@ function go_reservation_save() {
   <table id="reservationList">
   <tr>
     <th>예약번호(처리여부)</th><th>체크인</th><th>체크아웃</th><th>예약일자</th>
-    <th>예약자</th><th>주소</th><th>전화</th><th>이메일</th>
+    <th>예약자</th><th>주소</th><th>전화</th><th>이메일</th> <!-- <th>삭제</th> -->
   </tr>
   <th:block th:each="reservation : ${reservationList}">
   <tr>
@@ -161,7 +161,9 @@ function go_reservation_save() {
     <td>[[${reservation.createddate}]]</td> <td>[[${reservation.member.name}]]</td>
     <td>[[${reservation.member.address}]]</td>  <td>[[${reservation.member.phone}]]</td>
     <td>[[${reservation.member.email}]]</td>   
-    
+    <!-- <td>
+      <button type="button" class="btn" th:onclick="|delete_reservation([[${reservation.id}]])|">삭제</button>
+    </td>-->
   </tr>
   </th:block>
   </table>
