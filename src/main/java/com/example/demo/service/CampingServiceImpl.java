@@ -97,17 +97,17 @@ public class CampingServiceImpl implements CampingService{
 	}
 
 
-	/*@Override
-	public Page<Camping> getSearhResult(String donm, String sigungunm, String category, String campingName, String flooring,
-			LocalDate startDate, LocalDate endDate, String bonfire, String petAllowed, String trailerAllowed,
-			String carananAllowed,int page, int size) 
-	{
-		
-			Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
-			
-		return campRepo.searchCampings(donm, sigungunm, category, campingName, flooring,
-			startDate, endDate, bonfire, petAllowed, trailerAllowed, carananAllowed, paging);
-	}*/
+//	@Override
+//	public Page<Camping> getSearhResult(String donm, String sigungunm, String category, String campingName, String flooring,
+//			LocalDate startDate, String petAllowed, String trailerAllowed,
+//			String carananAllowed, String sort, int page, int size) 
+//	{
+//		
+//			Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+//			
+//		return campRepo.searchCampings(donm, sigungunm, category, campingName, flooring,
+//			startDate, petAllowed, trailerAllowed, carananAllowed, paging);
+//	}
 
     @Override
     public List<Camping> getCampingByAvgRatingDesc() {

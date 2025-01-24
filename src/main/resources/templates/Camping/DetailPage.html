@@ -201,7 +201,7 @@
 								</div>
 						<!-- <strong style="color:yellow" th:text="${result}"></strong> -->
 						<p class="opacity-75" th:text="'평점: ' + ${rate}"></p>
-						<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a> <a
+						<a class="btn btn-lg btn-primary" href="#reservation">예약 정보</a>
 						<a class="btn btn-lg btn-primary like-button" id="AddLike"
 						   th:data-id="${CampingPlace.id}"
 						   th:data-liked="${isLiked}"
@@ -222,31 +222,9 @@
 				<button class="nav-link active" id="nav-home-tab"
 						data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
 						role="tab" aria-controls="nav-home" aria-selected="true">소개글</button>
-				<!--
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-                   data-bs-target="#nav-profile" type="button" role="tab"
-                   aria-controls="nav-profile" aria-selected="false">임시2</button>
-                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
-                   data-bs-target="#nav-contact" type="button" role="tab"
-                   aria-controls="nav-contact" aria-selected="false">임시3</button>
-                    -->
 			</div>
 		</nav>
-		<!--
-        <div class="tab-content" id="nav-tabContent">
-           <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-              aria-labelledby="nav-home-tab">
-              <p>임시 내용1</p>
-           </div>
-           <div class="tab-pane fade" id="nav-profile" role="tabpanel"
-              aria-labelledby="nav-profile-tab">
-              <p>임시 내용2</p>
-           </div>
-           <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-              aria-labelledby="nav-contact-tab">
-              <p>임시 내용3</p>
-           </div>
-        </div> -->
+
 
 		<div class="row">
 			<div>
@@ -342,20 +320,22 @@
 		</div>
 
 		<hr class="featurette-divider">
-
-		<div class="row featurette">
-			<div class="order-md-2">
-				<h2 class="featurette-heading fw-normal lh-1">캠핑장 시설 정보(부대시설)</h2>
-				<div th:each="feature : ${Sbrscl}"
-					 style="display: inline-block; text-align: center; margin: 10px; padding-right: 40px">
-					<p class="lead" th:text="${feature}"></p>
-					<img th:src="@{'/images/icon/' + ${feature} + '.png'}" alt="icon"
-						 width=80px height=80px>
+		
+		<div th:if="${Sbrscl} != null">
+			<div class="row featurette">
+				<div class="order-md-2">
+					<h2 class="featurette-heading fw-normal lh-1">캠핑장 시설 정보(부대시설)</h2>
+					
+						<div th:each="feature : ${Sbrscl}"
+							 style="display: inline-block; text-align: center; margin: 10px; padding-right: 40px">
+							<p class="lead" th:text="${feature}"></p>
+							<img th:src="@{'/images/icon/' + ${feature} + '.png'}" alt="icon"
+								 width=80px height=80px>
+						</div>
+					</div>
 				</div>
-			</div>
+			<hr class="featurette-divider">
 		</div>
-
-		<hr class="featurette-divider">
 
 		<div class="row" id="reservation">
 			<div class="col-lg-4">
@@ -405,10 +385,11 @@
 		</div>
 		<!-- /.row -->
 
-		<hr class="featurette-divider">
+		<hr class="featurette-divider" style="margin-bottom:5px">
 
 	
-
+		<h2 class="featurette-heading fw-normal lh-1" style="margin-top:3%">리뷰</h2>
+		
         <div id="review">
            <th:block th:insert="~{/include/reviewExample}"></th:block>
         </div>

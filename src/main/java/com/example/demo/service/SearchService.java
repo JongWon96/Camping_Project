@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
-import java.time.LocalDate;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.example.demo.domain.Camping;
 
 public interface SearchService {
+	
     Page<Camping> searchCampings(
         String donm,
         String sigungunm,
@@ -17,6 +17,6 @@ public interface SearchService {
         String petAllowed,
         String trailerAllowed,
         String caravanAllowed,
-		int page, int size
+		Pageable paging
     );
 }

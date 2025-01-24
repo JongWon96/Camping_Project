@@ -2,7 +2,6 @@ package com.example.demo.config.auth;
 
 import java.util.Collections;
 
-
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -12,7 +11,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.auth.dto.OAuthAttributes;
-import com.example.demo.config.auth.dto.SessionUser;
 import com.example.demo.domain.Member;
 import com.example.demo.service.MemberService;
 

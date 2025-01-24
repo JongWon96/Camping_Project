@@ -36,28 +36,25 @@ public interface CampingService {
 	public Camping getCampingByProductId(Long productId);
 	public Camping findById(Long campingId);
 	
-	/*public Page<Camping> getSearhResult(
+	/*
+	public Page<Camping> getSearhResult(
 			String donm, 
 			String sigungunm, 
 			String category, 
-=======
+=======*/
 
 
-	public Page<Camping> getSearhResult(
-			String donm,
-			String sigungunm,
-			String category,
->>>>>>> refs/remotes/origin/master
-			String campingName,
-			String flooring,
-			LocalDate startDate,
-			LocalDate endDate,
-			String bonfire,
-			String petAllowed,
-			String trailerAllowed,
-			String carananAllowed,
-<<<<<<< HEAD
-			int page, int size);*/
+//	public Page<Camping> getSearhResult(
+//			String donm,
+//			String sigungunm,
+//			String category,
+//			String campingName,
+//			String flooring,
+//			String bonfire,
+//			String petAllowed,
+//			String trailerAllowed,
+//			String carananAllowed,
+//			int page, int size);
 	
     List<Camping> getCampingByAvgRatingDesc();
     List<Camping> getCampingByLowestPriceAsc();

@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,9 +31,8 @@ public class SearchServiceImpl implements SearchService {
         String petAllowed,
         String trailerAllowed,
         String caravanAllowed,
-        int page, int size
+        Pageable paging
     )			{    
-    	Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
         
     	return searchRepository.searchCampings(
             donm,

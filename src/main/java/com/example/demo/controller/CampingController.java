@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.example.demo.domain.Member;
-import com.example.demo.service.LikesService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Camping;
+import com.example.demo.domain.Member;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.Review;
 import com.example.demo.service.CampingService;
+import com.example.demo.service.LikesService;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.ReviewService;
 import com.example.demo.service.SearchService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CampingController {
@@ -59,60 +63,59 @@ public class CampingController {
 	        @RequestParam(value = "petAllowed", required = false) String petAllowed,
 	        @RequestParam(value = "trailerAllowed", required = false) String trailerAllowed,
 	        @RequestParam(value = "caravanAllowed", required = false) String caravanAllowed,
+	        @RequestParam(value = "sort", defaultValue = "facltnm") String sort,
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "9") int size,
 	        Model model, HttpSession session
-	) {
-	    // 검색 조건에 따른 캠핑장 데이터 조회
+	) {		
+		// 결과 정렬을 위해 전용 변수 추가 : sort
+		// 이름순, 낮은 가격순, 높은 가격순, 평점순
+		System.out.println("sort:" + sort);
+		
+		Pageable paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+		
+		if ("avgRating".equals(sort)) {  
+		    paging = PageRequest.of(page - 1, size, Direction.DESC, "avgRating");
+		} else if ("highprice".equals(sort)) {
+		    paging = PageRequest.of(page - 1, size, Direction.DESC, "price");
+		} else if ("lowprice".equals(sort)) {
+		    paging = PageRequest.of(page - 1, size, Direction.ASC, "price");
+		} else if ("facltnm".equals(sort)) {
+		    paging = PageRequest.of(page - 1, size, Direction.ASC, "facltnm");
+		}
+		
+		System.out.println("pagnig:" + paging.getSort());
+		
 	    Page<Camping> campingPlaces = searchService.searchCampings(
 	            donm, sigungunm, category, campingName, flooring,
-	             bonfire, petAllowed, trailerAllowed, caravanAllowed, page, size
-	    );
-		
+	             bonfire, petAllowed, trailerAllowed, caravanAllowed, paging
+	    );	
 		model.addAttribute("pageInfo", campingPlaces);
-		model.addAttribute("CampingPlaces", campingPlaces);
+		model.addAttribute("CampingPlaces", campingPlaces.getContent());
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		model.addAttribute("loginUser", loginUser);
-
-		List<Camping> tmpPlaces = campingService.getTmpCamping();
-
-		List<Camping> firstPlace = new ArrayList<>();
-		List<Camping> secondPlace = new ArrayList<>();
-		List<Camping> thirdPlace = new ArrayList<>();
-
-		for (int a = 0; a < 9; a++) {
-			if (a < 3) {
-				firstPlace.add(tmpPlaces.get(a));
-			} else if (a < 6) {
-				secondPlace.add(tmpPlaces.get(a));
-			} else {
-				thirdPlace.add(tmpPlaces.get(a));
-			}
-		}
-
-		model.addAttribute("firstPlace", firstPlace);
-		model.addAttribute("secondPlace", secondPlace);
-		model.addAttribute("thirdPlace", thirdPlace);
 		
-		System.out.println(campingPlaces.getContent());
-		
-		Integer result = 0;
-		for (Camping place : campingPlaces) {
-			Long campingId = place.getId();
-			List<Review> tmpReviews = reviewService.getRate(campingId);
-
-			if (tmpReviews.size() != 0) {
-				for (Review review : tmpReviews) {
-					result += review.getRate();
-				}
-				result = Math.round(result / (Integer) tmpReviews.size());
-			} else {
-				result = 0;
-			}
-		}
-		String rate = result.toString();
-		model.addAttribute("rate", rate);
+		//임시로 출력했던 부분(파이썬 프로그램이 없음)
+//		List<Camping> tmpPlaces = campingService.getTmpCamping();
+//		
+//		List<Camping> firstPlace = new ArrayList<>();
+//		List<Camping> secondPlace = new ArrayList<>();
+//		List<Camping> thirdPlace = new ArrayList<>();
+//
+//		for (int a = 0; a < 9; a++) {
+//			if (a < 3) {
+//				firstPlace.add(tmpPlaces.get(a));
+//			} else if (a < 6) {
+//				secondPlace.add(tmpPlaces.get(a));
+//			} else {
+//				thirdPlace.add(tmpPlaces.get(a));
+//			}
+//		}
+//
+//		model.addAttribute("firstPlace", firstPlace);
+//		model.addAttribute("secondPlace", secondPlace);
+//		model.addAttribute("thirdPlace", thirdPlace);
 
 		// 페이징에 필터 요인 추가
 		model.addAttribute("donm", donm);
@@ -124,7 +127,9 @@ public class CampingController {
 		model.addAttribute("petAllowed", petAllowed);
 		model.addAttribute("trailerAllowed", trailerAllowed);
 		model.addAttribute("caravanAllowed", caravanAllowed);
+		model.addAttribute("sort", sort);
 
+		// 파이썬 프로그렘이 없어서 출력안됨
 		String campingPage = recommendationController.getCampingRecommendations(
 				session,
 				9, // 기본 추천 개수
@@ -198,10 +203,18 @@ public class CampingController {
 		model.addAttribute("CampingPlace", campingPlace);
 		model.addAttribute("caravResult", caravResult);
 		model.addAttribute("trlerResult", trlerResult);
-
-		String[] Sbrscl = campingPlace.getSbrscl().split(",");
-		model.addAttribute("Sbrscl", Sbrscl);
-
+		
+		//String[] Sbrscl = campingPlace.getSbrscl().split(",");
+		String[] splitValues = new String[15];
+		
+		String sbrscl = campingPlace.getSbrscl();
+		if (sbrscl != null) {
+			splitValues = sbrscl.split(",");
+		} else {
+		    splitValues = null;
+		}
+		model.addAttribute("Sbrscl", splitValues);
+		
 		// 리뷰 전달
 		Page<Review> reviews = reviewService.getReview(campingId, page, size);
 		model.addAttribute("reviews", reviews);
@@ -284,8 +297,42 @@ public class CampingController {
 	
 	@GetMapping("/landingpage")
 	private String landingPage(HttpSession session , Model model) {
+		
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		model.addAttribute("loginUser", loginUser);
+		
+		//임시 출력용
+		//임시로 출력했던 부분(파이썬 프로그램이 없음)
+//		List<Camping> tmpPlaces = campingService.getTmpCamping();
+//		
+//		List<Camping> firstPlace = new ArrayList<>();
+//		List<Camping> secondPlace = new ArrayList<>();
+//		List<Camping> thirdPlace = new ArrayList<>();
+//
+//		for (int a = 0; a < 9; a++) {
+//			if (a < 3) {
+//				firstPlace.add(tmpPlaces.get(a));
+//			} else if (a < 6) {
+//				secondPlace.add(tmpPlaces.get(a));
+//			} else {
+//				thirdPlace.add(tmpPlaces.get(a));
+//			}
+//		}
+//
+//		model.addAttribute("firstPlace", firstPlace);
+//		model.addAttribute("secondPlace", secondPlace);
+//		model.addAttribute("thirdPlace", thirdPlace);
+		
+		//렌딩 페이지에 추천 결과 추가(추천 프로그램 없음)
+		String campingPage = recommendationController.getCampingRecommendations(
+				session,
+				9, // 기본 추천 개수
+				0.5, // 리뷰 가중치
+				0.3, // 예약 가중치
+				0.2, // 위시리스트 가중치
+				model
+		);
+
 		return "Camping/landingPage";
 	}
 
