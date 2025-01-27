@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService{
 
     @Autowired
     private ProductRepository productRepository; // Product 저장용 리포지토리
     @Autowired
-    private ReservationRepository reservationRepository; 
+    private ReservationRepository reservationRepository;
     @Autowired
     private CampingRepository campingRepository; // Camping 조회용 리포지토리
 
@@ -140,4 +140,26 @@ public class ProductServiceImpl implements ProductService {
         // 예약된 방 수를 반환
         return reservations.size();
     }
+	@Autowired
+	private ProductRepository productRepo;
+
+	@Override
+	public List<Product> getProducts(Long campingId) {
+
+		return productRepo.findByCampingId(campingId);
+	}
+
+	@Override
+	public Product getProduct(Long productId) {
+
+		return productRepo.findById(productId).get();
+	}
+
+	@Override
+	public Product getProductByRoom(Long campingId, Integer roomNum) {
+
+		return productRepo.findByCamping_idAndRoom(campingId, roomNum);
+	}
+
+
 }

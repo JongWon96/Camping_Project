@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admin/header}"></th:block>
+<th:block th:insert="~{/admin/sub_menu}"></th:block>  
+
+<div th:unless="${reviewList == null or #lists.size(reviewList) == 0}">
+<head>
+<style>
+        /* 전체 페이지 배경을 연한 회색으로 설정 */
+        body {
+            background-color: #f4f4f4; /* 연한 회색 배경 */
+            color: #333; /* 기본 글자 색 어두운 회색 */
+            font-family: Arial, sans-serif; /* 글꼴 설정 */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 헤더, 서브 메뉴, 페이지 상단과 하단 스타일 */
+        header, footer, .sub-menu {
+            background-color: #333; /* 짙은 회색 배경 */
+            color: white; /* 흰색 글자 */
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #ffffff; /* 테이블 배경 색상 */
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc; /* 연한 회색 테두리 */
+        }
+
+        table th {
+            background-color: #666; /* 테이블 헤더 배경색 */
+            color: white;
+        }
+
+        /* 링크 스타일 */
+        a {
+            color: #555; /* 어두운 회색 텍스트 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+        }
+
+        a:hover {
+            color: #333; /* 링크 hover 시 색상 */
+            text-decoration: underline;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            padding: 6px 12px;
+            background-color: #888; /* 회색 버튼 */
+            border: 1px solid #ccc;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #777; /* 버튼 hover 색상 변경 */
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            padding-top: 20px;
+        }
+
+        /* 메시지 스타일 */
+        .message {
+            color: #d9534f; /* 빨간색 */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* 숨겨진 필드 스타일(숨겨진 필드는 스타일을 적용할 필요가 없으므로 기본값 유지) */
+        input[type="hidden"] {
+            display: none;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+  // 리뷰 상세 보기 함수
+  function go_view(id) {
+    var theForm = document.frm;
+    theForm.id.value = id;  // 리뷰 id를 폼에 설정
+    theForm.action = "admin_review_detail";  // 상세 페이지로 이동
+    theForm.submit();
+  }
+
+  // 리뷰 삭제 함수
+  function delete_review(id) {
+    if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+      var theForm = document.frm;
+      theForm.id.value = id;  // 리뷰 id를 폼에 설정
+      theForm.action = "/admin_review_delete";  // 리뷰 삭제를 처리할 액션으로 폼 제출
+      theForm.submit();  // 폼 제출
+    }
+  }
+</script>
+<!-- 리뷰 리스트가 없을 경우 처리 메시지 -->
+<div th:if="${message != null}">
+    <p th:text="${message}"></p>
+</div>
+
+<article>
+<h1>신고된 리뷰 리스트</h1>  
+<form name="frm" method="post">
+<input type="hidden" name="id">  <!-- 리뷰 id를 담을 숨겨진 필드 -->
+<table id="reviewList">
+  <tr>
+    <th>번호(답변여부)</th> 
+    <th>제목</th> 
+    <th>작성자</th> 
+    <th>작성일</th>    
+    <th>조치</th> <!-- 삭제 버튼을 위한 추가 열 -->
+  </tr>
+  <th:block th:each="reviewVO : ${reviewList}">
+    <tr>
+      <td>
+        [[${reviewVO.id}]]
+        <span th:if="${reviewVO.danger == 1}">(신고됨)</span>  
+        <span th:unless="${reviewVO.danger == 1}">(삭제완료)</span> 
+      </td>
+      <td>
+        <a href="#" th:onClick="'javascript:go_view(' + ${reviewVO.id} + ');'">
+          [[${reviewVO.content}]] 
+        </a>
+      </td>
+      <td>[[${reviewVO.member.id}]]</td>
+      <td>[[${reviewVO.reviewdate}]]</td>
+      <td>
+        <!-- danger가 1인 경우 삭제 버튼 표시 -->
+        <span th:if="${reviewVO.danger == 1}">
+          <button type="button" th:onClick="|delete_review(${reviewVO.id})|">삭제</button>
+        </span>
+      </td>
+    </tr>
+  </th:block>
+</table>
+</form> 
+</article>
+</div>
+<th:block th:insert="~{/admin/footer}"></th:block>
+</body>
+</html>

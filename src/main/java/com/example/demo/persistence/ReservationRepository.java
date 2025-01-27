@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
+import java.util.Date;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     // 캠핑장 ID와 회원 ID로 예약 조회 (여러 개의 예약을 반환)
     @Query("SELECT r FROM Reservation r WHERE r.product.camping.id = :campingId AND r.member.id = :memberId")
-    List<Reservation> findByCamping_IdAndMember_Id(@Param("campingId") Long campingId, 
+    List<Reservation> findByCamping_IdAndMember_Id(@Param("campingId") Long campingId,
                                                    @Param("memberId") Long memberId);
 
     // 캠핑장 ID, 방, 날짜 범위에 따른 예약 조회
@@ -30,6 +32,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("room") int room,
             @Param("checkin") Date checkin,
             @Param("checkout") Date checkout);
-    
+
     Optional<Reservation> findFirstByMember_Id(Long memberId);
+	@Query("SELECT r FROM Reservation r ORDER BY r.createddate DESC")
+	List<Reservation> getReservationList();
+
+
+
 }

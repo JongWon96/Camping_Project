@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+</head>
+<style>
+	.rating-container {
+        font-size: 24px; /* 별 크기 */
+        display: flex;
+    }
+
+    .filled-star {
+        color: gold; /* 노란색 별 */
+    }
+
+    .half-star {
+        color: gold;
+        position: relative;
+        display: inline-block;
+    }
+
+    .half-star::after {
+        content: '★';
+        color: #ccc; /* 빈 별 색상 */
+        position: absolute;
+        left: 50%; /* 반쪽 채우기 */
+        width: 50%;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .empty-star {
+        color: #ccc; /* 회색 빈 별 */
+    }
+
+    .content {
+
+        width: 100%;
+        justify-content: space-between; /* 내용 배치: 양쪽 끝 */
+    }
+
+    #reviewImg {
+        max-width: 400px; /* 최대 크기 제한 */
+        overflow: hidden; /* 이미지가 넘칠 경우 숨기기 */
+        display: flex;
+        justify-content: center;
+        width: 30%;
+    }
+
+    #reviewImg img {
+        height: auto;
+        object-fit: cover; /* 비율 유지하며 컨테이너 채우기 */
+    }
+
+    .check_w {
+        text-align: center;
+    }
+
+    .review {
+        display:flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+    }
+
+
+    .report-button{
+        width:4%;
+        border-radius:10px;
+        background-color:#FF2424;
+        font-size:12px;
+    }
+
+    .edit-delete a {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .edit-delete a:hover {
+        background-color: #f0f0f0;
+        color: #0056b3;
+    }
+
+    .edit-delete a:active {
+        background-color: #e0e0e0;
+        color: #003d7a;
+    }
+
+    .edit-delete form button {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: white;
+        border: 1px solid #e74c3c;
+        border-radius: 12px;
+        color: #e74c3c;
+        font-weight: bold;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .edit-delete form button:hover {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .edit-delete form button:active {
+        background-color: #c0392b;
+        color: white;
+    }
+</style>
+
+<body>
+
+	<section class="mb-5">
+		<div class="card bg-light">
+			<div class="card-body">
+
+				<div class="content">
+					<section th:each="review : ${reviews}" style="width: 100%;">
+						<div class="review">
+							<div class="ms-3" style="width: 65%">
+								<div class="fw-bold" th:text="'작성자: ' + ${review.member.name}"></div>
+								<div class="star-rating">
+									<div class="stars">
+										<span>평점: </span> <span
+											th:each="i : ${#numbers.sequence(1, 5)}"> 
+											<span
+											th:if="${i<= T(java.lang.Math).floor(review.rate)}"
+											class="star filled-star">★</span> 
+											<span
+											th:if="${i > review.rate}" class="star empty-star">★</span>
+										</span>
+									</div>
+								</div>
+								<div>
+									<span th:text="${review.content}"></span>
+								</div>
+							</div>
+
+							<!-- 리뷰 이미지 - 이미지 저장 경로에 맞게 변경 필요-->
+							<div th:if="${review.img != null}" id="reviewImg">
+								<img th:src="${review.img}" style="width: 140px; height: 140px;" />
+							</div>
+
+						</div>
+
+						<div th:unless="${loginUser != null and review.member.id == loginUser.id}">
+
+							<form th:if="${review != null}"
+								th:action="@{/camping/{campingId}/reviews/{reviewId}/report(campingId=${CampingPlace.id}, reviewId=${review.id})}"
+								method="post">
+								<button type="submit" class="report-button">신고</button>
+							</form>
+						</div>
+
+						<div th:if="${loginUser != null and review.member != null and review.member.id == loginUser.id}">
+							<div class="edit-delete">
+								<a th:href="@{/camping/{campingId}/reviews/{reviewId}/edit(campingId=${CampingPlace.id}, reviewId=${review.id})}">
+									수정
+								</a>
+								<form th:action="@{/camping/{campingId}/reviews/{reviewId}/delete(campingId=${CampingPlace.id}, reviewId=${review.id})}"
+									  method="post" style="display: inline;">
+									<input type="hidden" name="_method" value="DELETE">
+									<button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+								</form>
+							</div>
+						</div>
+
+
+						<hr>
+
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

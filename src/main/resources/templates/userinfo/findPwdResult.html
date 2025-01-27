@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <title>비밀번호 변경</title>
   <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+  <script src="js/member.js"></script>
   <style>
     /* 전체 배경 및 컨텐츠 스타일 */
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #28a745, #1e7d34);
+        background: linear-gradient(135deg, #6c757d, #343a40); /* 어두운 회색 그라데이션 배경 */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -18,8 +19,8 @@
     }
 
     .content-wrapper {
-        background: white;
-        color: #333;
+        background: white; /* 흰색 배경 */
+        color: #343a40; /* 어두운 글자 색상 */
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         padding: 30px;
@@ -31,7 +32,7 @@
     h1 {
         font-size: 1.8em;
         margin-bottom: 20px;
-        color: #28a745;
+        color: #007bff; /* 파란색 */
     }
 
     form {
@@ -44,7 +45,7 @@
         text-align: left;
         font-weight: bold;
         font-size: 1em;
-        color: #333;
+        color: #343a40; /* 어두운 글자 색상 */
         margin-bottom: 10px;
     }
 
@@ -60,9 +61,9 @@
 
     input[type="text"]:focus,
     input[type="password"]:focus {
-        border-color: #28a745;
+        border-color: #007bff; /* 파란색 */
         outline: none;
-        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
 
     input[type="button"] {
@@ -70,7 +71,7 @@
         padding: 10px;
         border: none;
         border-radius: 4px;
-        background-color: #28a745;
+        background-color: #007bff; /* 파란색 */
         color: white;
         font-size: 1.1em;
         cursor: pointer;
@@ -78,59 +79,42 @@
     }
 
     input[type="button"]:hover {
-        background-color: #218838;
+        background-color: #0056b3; /* 더 어두운 파란색 */
     }
 
     .error-message {
-        color: #dc3545;
+        color: #dc3545; /* 빨간색 */
         font-weight: bold;
         margin-top: 10px;
     }
   </style>
-  <script>
-    // 비밀번호 변경 확인 함수
-    function changePassword() {
-        const upw = document.getElementById("upw").value;
-        const pwdCheck = document.getElementById("pwdcheck").value;
-
-        if (upw === "" || pwdCheck === "") {
-            alert("비밀번호를 입력해주세요.");
-            return false;
-        }
-
-        if (upw !== pwdCheck) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return false;
-        }
-
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        document.getElementById("pwd_form").submit();
+  <script type="text/javascript">
+    function idok(){
+      self.close();
     }
   </script>
 </head>
 <body>
-<div class="content-wrapper">
-  <h1>비밀번호 변경</h1>
-  <form method="post" name="form" action="change_pwd" id="pwd_form">
-    <label for="uid">User ID</label>
-    <input type="text" name="uid" id="uid" th:value="${uid}" readonly="readonly">
+<div id="wrap">
+  <h1>새로운 비밀번호</h1>
+  <form method="post" name="formm" action="change_pwd" id="pwd_form" style="margin-right:0" >
+    <label>User ID</label><input type=text name="memberId" th:value="${memberId}" readonly="readonly">
+    <div style="margin-top: 20px">
 
-    <div>
       <th:block th:if="${message == 1}">
-        <label for="upw">New Password</label>
-        <input type="password" name="upw" id="upw">
-
-        <label for="pwdcheck">Retype Password</label>
-        <input type="password" name="pwdCheck" id="pwdcheck">
-
-        <input type="button" value="확인" onclick="changePassword()">
+        <label>Password</label>
+        <input type="password"  name="password" id="password"><br>
+        <label>Retype Password</label>
+        <input type="password"  name="pwdCheck" id="pwdCheck"><br>
+        <input type="button" value="확인" class="cancel" onclick="changePassword()">
       </th:block>
 
       <th:block th:if="${message == -1}">
-        <p class="error-message">잘못된 사용자 정보입니다.</p>
-        <input type="button" value="확인" onclick="self.close()">
+        잘못된 사용자 정보입니다.
+        <input type="button" value="확인" class="cancel" onclick="idok()">
       </th:block>
     </div>
+
   </form>
 </div>
 </body>

@@ -12,10 +12,12 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     // MemberRepository
-    Optional<Member> findByMemberId(String memberId);
-
+    Member findByMemberId(String memberId);
     // CampingRepository
     Optional<Member> findById(Long id);
+
+
+
 
     // Member ID로 회원 검색
     Member findMemberByMemberId(String memberId);
@@ -29,7 +31,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 이름에 특정 문자열이 포함된 회원 목록 검색
     List<Member> findByNameContaining(String name);
 
-    public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
-        List<Inquiry> findByMemberId(String memberId);
-    }
+	List<Member> findMemberByNameContaining(String name);
+
+    // 이메일로 회원 조회 (OAuth2 로그인 시 사용)
+    Member findByEmail(String email);  // 구글 OAuth2 로그인 시 이메일로 찾기
+
+
+
+
 }

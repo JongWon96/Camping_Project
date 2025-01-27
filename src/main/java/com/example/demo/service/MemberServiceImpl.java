@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import com.example.demo.config.auth.dto.SessionUser;
 import com.example.demo.domain.Inquiry;
 import com.example.demo.domain.Member;
 import com.example.demo.persistence.InquiryRepository;
@@ -27,17 +28,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private InquiryRepository inquiryRepository;
-    
+
     @Autowired
     public MemberServiceImpl(MemberRepository memberRepository) {
+
         this.memberRepository = memberRepository;
     }
 
     public Optional<Member> findByUsername(String memberId) {
-        return memberRepository.findByMemberId(memberId);
+        return Optional.ofNullable(memberRepository.findByMemberId(memberId));
     }
-    
-    
+
+
     @Transactional
     @Override
     public Member updateMemberInfo(String memberId, String phone) {
@@ -83,18 +85,81 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.delete(member);
     }
 
+
+
+    // 회원 로그인
     @Override
-    public int login(String memberId, String password) {
-        Member member = memberRepository.findMemberByMemberId(memberId);
+    public int loginMemberId(Member vo) {
+        int result = -1;
+        Member member = memberRepository.findByMemberId(vo.getMemberId());
         if (member == null) {
-            return -1; // ID가 존재하지 않음
+            result = -1;
+        } else if (vo.getPassword().equals(member.getPassword())) {
+            result = 1;  // id, pw가 모두 일치
+        } else {
+            result = 0;  // 비밀번호 불일치
         }
-        if (member.getPassword().equals(password)) {
-            return 1; // 로그인 성공
-        }
-        return 0; // 비밀번호 불일치
+        return result;
     }
 
+    // 이메일로 회원 조회 (OAuth2 로그인 후 사용)
+    @Override
+    public Member getMemberByEmail(String email) {
+
+        return memberRepository.findByEmail(email);
+    }
+
+    // OAuth2 로그인 시 회원 저장 또는 업데이트
+    @Override
+    public Member saveOrUpdate(Member member) {
+        // 이메일로 회원을 찾고, 없으면 새로 생성하고, 있으면 업데이트
+        Member existingMember = memberRepository.findByEmail(member.getEmail());
+        if (existingMember == null) {
+            // 새로 생성
+            return memberRepository.save(member);
+        } else {
+            // 이메일로 회원이 이미 존재하면 이름만 업데이트
+            existingMember.setName(member.getName());
+            // 비밀번호는 OAuth2 로그인에서는 필요 없을 경우 null 처리하거나 처리 안함
+            return memberRepository.save(existingMember);
+        }
+    }
+
+    // 회원 ID 확인
+    @Override
+    public int confirmMemberId(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId);
+        return (member == null) ? -1 : 1;
+    }
+
+    // 회원정보 상세 조회
+    @Override
+    public Member getMember(String memberId) {
+        return memberRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    public void insertMember(Member vo) {
+        memberRepository.save(vo);
+    }
+
+    // Name과 Phone으로 id 찾기
+    @Override
+    public Member getMemberIdByNameAndPhone(String name, String phone) {
+        return memberRepository.findByNameAndPhone(name, phone);
+    }
+
+    // Id와 Name과 Phone으로 pw 찾기
+    @Override
+    public Member getPasswordByMemberIdNamePhone(String memberId, String name, String phone) {
+        return memberRepository.findByMemberIdAndNameAndPhone(memberId, name, phone);
+    }
+
+    // 비밀번호 변경
+    @Override
+    public void changePassword(Member vo) {
+        memberRepository.save(vo);
+    }
     @Override
     public boolean isMemberIdExists(String memberId) {
         return memberRepository.findMemberByMemberId(memberId) != null;
@@ -176,6 +241,14 @@ public class MemberServiceImpl implements MemberService {
 
         return "/uploads/" + fileName; // 저장된 파일 경로 반환
     }
-    }
+
+	@Override
+	public List<Member> getMemberList(String name) {
+
+		return memberRepository.findMemberByNameContaining(name);
+	}
+
+
+}
 
 

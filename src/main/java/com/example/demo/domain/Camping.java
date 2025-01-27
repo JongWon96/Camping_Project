@@ -1,14 +1,31 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -19,7 +36,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude="products")
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "camping")
 public class Camping {
@@ -267,6 +284,12 @@ public class Camping {
     @Column(name = "firstimageurl", length=1000)
     private String firstimageurl;
 
+    @Column(name = "avg_rating")
+    private Double avgRating; // 평균 평점 (소수점 첫째 자리)
+    
+    @Column(name = "price")
+    private Integer price;
+    
     @CreatedDate
     @Column(name = "createdtime", updatable = false)
     private LocalDateTime createdtime;
@@ -274,4 +297,11 @@ public class Camping {
     @LastModifiedDate
     @Column(name = "modifiedtime")
     private LocalDateTime modifiedtime;
+    
+    // Product와의 관계 추가
+    @OneToMany(mappedBy = "camping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Product> products;
+    
+    
 }

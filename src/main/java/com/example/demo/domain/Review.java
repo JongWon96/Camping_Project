@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -26,22 +28,23 @@ public class Review {
     @Column(length=2000)
     private String content;
 
+    // 데이터가 생성될 때(리뷰 작성시) 자동으로 시스템 날짜가 입력됨
+    @Temporal(value=TemporalType.TIMESTAMP)
+	@ColumnDefault("sysdate")
     private Date reviewdate;
 
     private String img;
 
-    @Column(name = "danger" ,nullable = false)
+    @ColumnDefault("0")
     private Integer danger;
 
     private Integer rate;
 
     @ManyToOne
-    @JoinColumn(name = "camping_id")
-    private Camping camping;
-    
-
-    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name = "camping_id")
+    private Camping camping;
 }

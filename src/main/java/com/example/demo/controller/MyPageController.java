@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.example.demo.config.auth.dto.SessionUser;
 import java.util.List;
 
 @Controller
@@ -279,6 +279,13 @@ public class MyPageController {
     // 로그아웃
     @PostMapping("/logout")
     public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
+        return "redirect:/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout1(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
         redirectAttributes.addFlashAttribute("successMessage", "로그아웃이 성공적으로 완료되었습니다.");
         return "redirect:/login";

@@ -4,12 +4,13 @@
 	<meta charset="UTF-8">
 	<title>아이디 찾기</title>
 	<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+	<script src="js/member.js"></script>
 	<style>
 		/* 전체 배경 및 컨텐츠 스타일 */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #28a745, #1e7d34);
+            background: linear-gradient(135deg, #6c757d, #343a40); /* 어두운 회색 그라데이션 배경 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,8 +19,8 @@
         }
 
         .content-wrapper {
-            background: white;
-            color: #333;
+            background: white; /* 흰색 배경 */
+            color: #343a40; /* 어두운 글자 색상 */
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 30px 40px;
@@ -31,7 +32,7 @@
         h1 {
             font-size: 1.8em;
             margin-bottom: 20px;
-            color: #28a745;
+            color: #007bff; /* 파란색 */
         }
 
         form table {
@@ -41,47 +42,55 @@
 
         form table td {
             padding: 10px 5px;
+            text-align: center; /* 텍스트와 입력 필드 중앙 정렬 */
         }
 
         form table td label {
             font-weight: bold;
             font-size: 1em;
-            color: #333;
+            color: #343a40; /* 어두운 글자 색상 */
+            display: inline-block;
+            text-align: center;
+            width: 100%; /* 가운데 정렬 */
         }
 
         form table td input[type="text"],
         form table td input[type="tel"] {
-            width: 100%;
+            width: 80%; /* 입력 필드를 가운데로 위치시키고 크기 조정 */
             padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1em;
+            display: inline-block; /* 필드를 중앙 정렬 */
         }
 
         form table td input[type="text"]:focus,
         form table td input[type="tel"]:focus {
-            border-color: #28a745;
+            border-color: #007bff; /* 파란색 */
             outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
         form table td input[type="button"] {
-            width: 100%;
+            width: 50%; /* 버튼을 중앙 정렬하고 크기 조정 */
             padding: 10px;
             border: none;
             border-radius: 4px;
-            background-color: #28a745;
+            background-color: #007bff; /* 파란색 */
             color: white;
             font-size: 1.1em;
             cursor: pointer;
             margin-top: 15px;
+            display: inline-block; /* 중앙 정렬 */
         }
 
         form table td input[type="button"]:hover {
-            background-color: #218838;
+            background-color: #0056b3; /* 더 어두운 파란색 */
         }
 	</style>
+
+
 	<script>
 		// 아이디 찾기 함수
         function findMemberId() {
@@ -108,22 +117,21 @@
 	</script>
 </head>
 <body>
-<div class="content-wrapper">
+<div id="wrap">
 	<h1>아이디 찾기</h1>
-	<form name="findId" id="findId" action="find_id" method="post">
+	<br>
+	<form name="findMemberId" id="findMemberId" action="find_id" method="post">
 		<table>
 			<tr>
-				<td align="right"><label for="uname">이름</label></td>
-				<td><input type="text" name="uname" id="uname" placeholder="이름을 입력하세요"></td>
+				<td align="right"><label> 이름</label></td>
+				<td><input type="text" name="name" id="name" value=""></td>
 			</tr>
 			<tr>
-				<td align="right"><label for="uphone">전화번호</label></td>
-				<td><input type="tel" name="uphone" id="uphone" maxlength="13" placeholder="- 없이 숫자만 입력하세요" oninput="autoHyphen(this)"></td>
+				<td align="right"><label> 전화번호</label></td>
+				<td><input type="tel" name="phone" id="phone" maxlength="13" placeholder="- 없이 숫자만 입력하세요" class="form-control" oninput="autoHyphen(this)"></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center">
-					<input type="button" value="아이디 찾기" onclick="findMemberId()">
-				</td>
+				<td align="center" colspan="2"><input type="button" value="아이디 찾기" onclick="fc_findMemberId()"></td> <!-- onclick 을 th:onclick 로 사용해도 됨 -->
 			</tr>
 		</table>
 	</form>

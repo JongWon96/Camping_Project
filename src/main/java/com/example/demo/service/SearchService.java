@@ -1,22 +1,22 @@
 package com.example.demo.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.demo.domain.Camping;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public interface SearchService {
-    List<Camping> searchCampings(
+	
+    Page<Camping> searchCampings(
         String donm,
         String sigungunm,
         String category,
         String campingName, // 캠핑장 이름 추가
         String flooring,
-        LocalDate startDate,
-        LocalDate endDate,
         String bonfire,
         String petAllowed,
         String trailerAllowed,
-        String caravanAllowed
+        String caravanAllowed,
+		Pageable paging
     );
 }

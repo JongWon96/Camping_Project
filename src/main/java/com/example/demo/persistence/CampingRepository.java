@@ -1,14 +1,123 @@
 package com.example.demo.persistence;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.demo.domain.Camping;
 
+import java.time.LocalDate;
+import java.util.List;
+import com.example.demo.domain.Product;
+import org.springframework.data.repository.query.Param;
+
+
 public interface CampingRepository extends JpaRepository<Camping, Long> {
 
-	Page<Camping> findAllById(Long campingId, Pageable Pageable);
+	Page<Camping> findByFacltnmContainingIgnoreCase(String facltnm, Pageable pageable);
 
+
+	// 상품 종류별 조회(상품명으로 검색 지금은. kind였으나, kind가 undefined in productRepo)
+	List<Camping> findCampingByFacltnmContaining(String facltnm);
+
+	// 전체상품 조회(상품명으로 검색 포함)
+	List<Camping> findCampingsByFacltnmContainingOrderByFacltnm(String facltnm);
+
+	// 전체상품 조회(페이징 처리 포함)
+	Page<Camping> findAllCampingsByFacltnmContaining(String facltnm, Pageable pageable);
+
+	Page<Camping> findAllById(Long campingId, Pageable Pageable);
+	//
+	List<Camping> findCampingByCategoryContaining(String category);
+
+
+	// camping 테이블에서 다음 id값을 얻는다.
+	@Query(value="SELECT MAX(id)+1 FROM camping", nativeQuery = true)
+	Long getMaxId();
+
+	Page<Camping> findAll(Pageable Pageable);
+
+	@Query("SELECT c FROM Camping c"
+			+ " INNER JOIN Product p ON p.camping.id=c.id"
+			+ " WHERE p.id = %?1%")
+	Camping findCampingByProductid(Long productId);
 	
+	/*@Query(value = """
+		    SELECT DISTINCT c.*
+		    FROM Camping c
+		    LEFT JOIN Product p ON c.id = p.camping_id
+		    LEFT JOIN Reservation r ON r.product_id = p.id
+		    WHERE (:donm IS NULL OR c.donm = :donm)
+		      AND (:sigungunm IS NULL OR c.sigungunm = :sigungunm)
+		      AND (:category IS NULL OR c.category = :category)
+		      AND (:campingName IS NULL OR c.facltnm LIKE %:campingName%)
+		      AND (:flooring IS NULL OR 
+		           (CASE :flooring
+		                WHEN '잔디' THEN c.sitebottomcl1
+		                WHEN '파쇄석' THEN c.sitebottomcl2
+		                WHEN '데크' THEN c.sitebottomcl3
+		                WHEN '자갈' THEN c.sitebottomcl4
+		                WHEN '맨흙' THEN c.sitebottomcl5
+		                ELSE NULL END) <> '0')
+		      AND (:bonfire IS NULL OR (:bonfire = 'Y' AND c.eqpmnlendcl LIKE '%화로대%'))
+		      AND (:petAllowed IS NULL OR c.animalcmgcl = :petAllowed)
+		      AND (:trailerAllowed IS NULL OR c.trleracmpnyat = :trailerAllowed)
+		      AND (:caravanAllowed IS NULL OR c.caravacmpnyat = :caravanAllowed)
+		      AND (:startDate IS NULL OR :endDate IS NULL OR
+		           NOT EXISTS (
+		               SELECT 1 FROM Reservation r
+		               WHERE r.product_id = p.id
+		                 AND ((r.checkin BETWEEN :startDate AND :endDate) OR
+		                      (r.checkout BETWEEN :startDate AND :endDate))
+		           ))
+		      AND (p.roomcount -
+		          COALESCE(
+		              (SELECT COUNT(*) FROM Reservation r
+		               WHERE r.product_id = p.id
+		                 AND ((r.checkin BETWEEN :startDate AND :endDate) OR
+		                      (r.checkout BETWEEN :startDate AND :endDate))), 0) > 0)
+		    """, nativeQuery = true)
+		Page<Camping> searchCampings(
+		    @Param("donm") String donm,
+		    @Param("sigungunm") String sigungunm,
+		    @Param("category") String category,
+		    @Param("campingName") String campingName,
+		    @Param("flooring") String flooring,
+		    @Param("startDate") LocalDate startDate,
+		    @Param("endDate") LocalDate endDate,
+		    @Param("bonfire") String bonfire,
+		    @Param("petAllowed") String petAllowed,
+		    @Param("trailerAllowed") String trailerAllowed,
+		    @Param("caravanAllowed") String caravanAllowed,
+		    Pageable Pageable
+		);*/
+	
+    // 평점순 정렬 (내림차순)
+    @Query("SELECT c FROM Camping c ORDER BY c.avgRating DESC")
+    List<Camping> findAllByAvgRatingDesc();
+
+    // 낮은 가격순 정렬 (Product의 room 값이 1 기준, 올림차순)
+    @Query("""
+        SELECT c FROM Camping c
+        JOIN c.products p
+        WHERE p.room = 1
+        GROUP BY c.id
+        ORDER BY MIN(p.price) ASC
+        """)
+    List<Camping> findAllByLowestPriceAsc();
+
+    // 높은 가격순 정렬 (Product의 room 값이 1 기준, 내림차순)
+    @Query("""
+        SELECT c FROM Camping c
+        JOIN c.products p
+        WHERE p.room = 1
+        GROUP BY c.id
+        ORDER BY MAX(p.price) DESC
+        """)
+    List<Camping> findAllByHighestPriceDesc();
 }

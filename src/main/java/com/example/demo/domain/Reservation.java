@@ -1,11 +1,32 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -24,13 +45,19 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int person;  //인원수
+    private int person;
 
-    private Date checkin;	//체크인
-    
-    private Date checkout;	//체크아웃
+    private Date checkin;
+
+    private Date checkout;
 
     private String bottom;
+
+    private Date createddate;	// 예약 생성일자
+
+	@ColumnDefault("1")
+	private String result;	// 예약/예약완료 처리 여부
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -42,10 +69,8 @@ public class Reservation {
     @Column(name = "hasreview")
     private Boolean hasreview;
 
-		
-	}
-
-    
-    
-
-
+    @OneToMany(mappedBy="reservation", fetch=FetchType.EAGER)
+	@ToString.Exclude
+	@JsonIgnore
+	private List<ReservationDetail> reservationDetail = new ArrayList<ReservationDetail>();
+}
