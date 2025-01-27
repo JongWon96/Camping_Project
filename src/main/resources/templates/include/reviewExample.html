@@ -153,7 +153,8 @@
 
 						</div>
 
-						<div>
+						<div th:unless="${loginUser != null and review.member.id == loginUser.id}">
+
 							<form th:if="${review != null}"
 								th:action="@{/camping/{campingId}/reviews/{reviewId}/report(campingId=${CampingPlace.id}, reviewId=${review.id})}"
 								method="post">
